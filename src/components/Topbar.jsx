@@ -1,27 +1,47 @@
 import { useLocation } from 'react-router-dom'
 
-const titles = {
-    '/admin/users':          'User Management',
-    '/admin/reports':        'Fleet Reports',
-    '/fleet/vehicles':       'Vehicles',
-    '/fleet/maintenance':    'Maintenance Flags',
-    '/fleet/trips':          'Trip Requests',
-    '/staff/trips':          'My Trips',
-    '/staff/mileage':        'Mileage Log',
-    '/maintenance/flags':    'Assigned Flags',
+const routes = {
+    '/admin/users':          { title: 'Users',          subtitle: 'Manage accounts and system roles' },
+    '/admin/reports':        { title: 'Reports',         subtitle: 'Fleet performance and health metrics' },
+    '/fleet/vehicles':       { title: 'Vehicles',        subtitle: 'Register and manage the fleet' },
+    '/fleet/maintenance':    { title: 'Maintenance',     subtitle: 'Review and assign reported issues' },
+    '/fleet/trips':          { title: 'Trip Requests',   subtitle: 'Review and manage pending approvals' },
+    '/staff/trips':          { title: 'My Trips',        subtitle: 'Available vehicles and your trip requests' },
+    '/staff/mileage':        { title: 'Mileage Log',     subtitle: 'Record mileage for assigned vehicles' },
+    '/maintenance/flags':    { title: 'Assigned Flags',  subtitle: 'Track and update your maintenance tasks' },
 }
 
 export default function Topbar() {
     const { pathname } = useLocation()
-    const title = titles[pathname] ?? 'FleetOps'
+    const route = routes[pathname] ?? { title: 'FleetOps', subtitle: '' }
+
+    const dateStr = new Date().toLocaleDateString('en-GB', {
+        weekday: 'short',
+        day:     '2-digit',
+        month:   'short',
+        year:    'numeric',
+    })
 
     return (
-        <header className="h-14 bg-gray-900 border-b border-gray-800 flex items-center px-6 flex-shrink-0">
-            <h1 className="text-base font-semibold text-gray-200 tracking-tight">{title}</h1>
-            <div className="ml-auto flex items-center gap-3">
-        <span className="text-xs text-gray-600 font-mono">
-          {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}
-        </span>
+        <header className="h-[60px] bg-gray-900 border-b border-gray-800/70 flex items-center px-6 shrink-0 gap-4">
+            <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2.5">
+                    <h1 className="text-[14px] font-semibold text-gray-100 tracking-tight leading-none">
+                        {route.title}
+                    </h1>
+                    {route.subtitle && (
+                        <span className="text-[12px] text-gray-600 leading-none hidden sm:block truncate">
+                            {route.subtitle}
+                        </span>
+                    )}
+                </div>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+                <div className="h-4 w-px bg-gray-800" />
+                <span className="text-[11px] text-gray-600 tabular-nums">
+                    {dateStr}
+                </span>
             </div>
         </header>
     )

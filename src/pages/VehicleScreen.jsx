@@ -48,7 +48,7 @@ export default function VehiclesScreen() {
             render: (row) => (
                 <button
                     onClick={() => setSelectedId(row.id)}
-                    className="text-xs text-primary hover:text-primary-hover font-semibold transition-colors"
+                    className="text-[12px] text-primary hover:text-primary-hover font-medium transition-colors duration-150"
                 >
                     View Details →
                 </button>
@@ -64,7 +64,7 @@ export default function VehiclesScreen() {
                 action={
                     <button
                         onClick={() => setAddOpen(true)}
-                        className="bg-primary hover:bg-primary-hover text-gray-900 text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                        className="bg-primary hover:bg-primary-hover text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
                     >
                         + Register Vehicle
                     </button>

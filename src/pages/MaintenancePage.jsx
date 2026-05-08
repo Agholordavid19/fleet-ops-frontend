@@ -47,7 +47,7 @@ export default function MaintenanceScreen() {
                 row.status === 'OPEN' ? (
                     <button
                         onClick={() => setSelectedFlag(row)}
-                        className="text-xs text-amber-400 hover:text-amber-300 font-semibold transition-colors"
+                        className="text-[12px] text-amber-400 hover:text-amber-300 font-medium transition-colors duration-150"
                     >
                         Assign →
                     </button>
@@ -70,9 +70,9 @@ export default function MaintenanceScreen() {
             <Modal open={!!selectedFlag} onClose={() => setSelectedFlag(null)} title="Assign Flag">
                 {selectedFlag && (
                     <form onSubmit={handleAssign}>
-                        <div className="bg-gray-800/60 rounded-lg px-4 py-3 mb-4">
-                            <p className="text-xs text-gray-500">Issue</p>
-                            <p className="text-sm text-gray-200 mt-0.5">{selectedFlag.description}</p>
+                        <div className="bg-gray-800/40 rounded-xl px-4 py-3.5 mb-4">
+                            <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-1">Issue</p>
+                            <p className="text-[13px] text-gray-200 leading-snug">{selectedFlag.description}</p>
                         </div>
                         <FormField label="Technician ID">
                             <Input

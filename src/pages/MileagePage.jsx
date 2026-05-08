@@ -68,17 +68,17 @@ export default function MileageScreen() {
                 {/* Recent logs in this session */}
                 {submitted.length > 0 && (
                     <div className="mt-6">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
+                        <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
                             Submitted this session
                         </p>
                         <div className="space-y-2">
                             {submitted.map((log) => (
                                 <div
                                     key={log.id}
-                                    className="flex items-center justify-between bg-gray-900 border border-gray-800 rounded-lg px-4 py-3"
+                                    className="flex items-center justify-between border border-gray-800/60 rounded-xl px-4 py-3"
                                 >
-                                    <span className="text-sm text-gray-300">Vehicle #{log.vehicleId}</span>
-                                    <span className="text-sm font-semibold text-emerald-400">+{log.mileageAdded} km</span>
+                                                    <span className="text-[13px] text-gray-400">Vehicle #{log.vehicleId}</span>
+                                    <span className="text-[13px] font-semibold text-emerald-400">+{log.mileageAdded} km</span>
                                 </div>
                             ))}
                         </div>

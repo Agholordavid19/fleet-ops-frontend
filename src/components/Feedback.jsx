@@ -1,15 +1,19 @@
 export function LoadingSpinner() {
     return (
         <div className="flex items-center justify-center py-16">
-            <div className="w-8 h-8 border-2 border-gray-700 border-t-primary rounded-full animate-spin" />
+            <div className="w-5 h-5 border-[1.5px] border-gray-800 border-t-primary rounded-full animate-spin" />
         </div>
     )
 }
 
 export function ErrorAlert({ message }) {
     return (
-        <div className="flex items-center gap-3 bg-red-900/30 border border-red-800 text-red-300 text-sm rounded-xl px-4 py-3">
-            <span className="text-lg">⚠</span>
+        <div className="flex items-start gap-3 bg-red-500/8 border border-red-500/15 text-red-400 text-[13px] rounded-xl px-4 py-3.5 leading-relaxed">
+            <svg className="w-4 h-4 mt-0.5 shrink-0" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M8 5v3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <circle cx="8" cy="11" r="0.75" fill="currentColor"/>
+            </svg>
             <span>{message || 'Something went wrong. Please try again.'}</span>
         </div>
     )
@@ -17,16 +21,21 @@ export function ErrorAlert({ message }) {
 
 export function StatCard({ label, value, color = 'blue' }) {
     const colors = {
-        blue:   'bg-primary/10 border-primary/30 text-primary',
-        green:  'bg-emerald-900/30 border-emerald-800 text-emerald-300',
-        amber:  'bg-amber-900/30 border-amber-800 text-amber-300',
-        red:    'bg-red-900/30 border-red-800 text-red-300',
-        purple: 'bg-purple-900/30 border-purple-800 text-purple-300',
+        blue:   { wrap: 'border-gray-800/60',  value: 'text-primary',       label: 'text-gray-500' },
+        green:  { wrap: 'border-gray-800/60',  value: 'text-emerald-400',   label: 'text-gray-500' },
+        amber:  { wrap: 'border-gray-800/60',  value: 'text-amber-400',     label: 'text-gray-500' },
+        red:    { wrap: 'border-gray-800/60',  value: 'text-red-400',       label: 'text-gray-500' },
+        purple: { wrap: 'border-gray-800/60',  value: 'text-purple-400',    label: 'text-gray-500' },
     }
+    const c = colors[color] ?? colors.blue
     return (
-        <div className={`rounded-xl border p-4 ${colors[color]}`}>
-            <p className="text-xs font-semibold uppercase tracking-widest opacity-70 mb-1">{label}</p>
-            <p className="text-3xl font-bold">{value}</p>
+        <div className={`bg-gray-900 border ${c.wrap} rounded-xl px-5 py-4`}>
+            <p className={`text-[11px] font-medium uppercase tracking-[0.1em] ${c.label} mb-2`}>
+                {label}
+            </p>
+            <p className={`text-[28px] font-bold tracking-tight leading-none ${c.value}`}>
+                {value}
+            </p>
         </div>
     )
 }

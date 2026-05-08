@@ -61,7 +61,7 @@ export default function TripsScreen() {
                 action={
                     <button
                         onClick={() => setOpen(true)}
-                        className="bg-primary hover:bg-primary-hover text-gray-900 text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                        className="bg-primary hover:bg-primary-hover text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
                     >
                         + Request Trip
                     </button>
@@ -70,7 +70,7 @@ export default function TripsScreen() {
 
             {/* Available vehicles */}
             <section className="mb-8">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-3">
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
                     Available Vehicles
                 </h2>
                 <Table columns={vehicleCols} data={availableVehicles} emptyMessage="No vehicles currently available." />
@@ -78,7 +78,7 @@ export default function TripsScreen() {
 
             {/* My trip requests */}
             <section>
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-3">
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
                     My Trip Requests
                 </h2>
                 {isLoading && <LoadingSpinner />}

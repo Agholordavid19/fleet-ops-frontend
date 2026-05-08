@@ -1,85 +1,101 @@
 import { NavLink } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useAuth } from '../utils/useAuth.jsx'
-import Badge from '../components/Badge.jsx'
 
 const navByRole = {
     ADMIN: [
-        { to: '/admin/users', label: 'Users', icon: '👥' },
-        { to: '/admin/reports', label: 'Reports', icon: '📊' },
+        { to: '/admin/users',   label: 'Users'   },
+        { to: '/admin/reports', label: 'Reports' },
     ],
     FLEET_MANAGER: [
-        { to: '/fleet/vehicles', label: 'Vehicles', icon: '🚗' },
-        { to: '/fleet/maintenance', label: 'Maintenance', icon: '🔧' },
-        { to: '/fleet/trips', label: 'Trip Requests', icon: '📋' },
+        { to: '/fleet/vehicles',    label: 'Vehicles'      },
+        { to: '/fleet/maintenance', label: 'Maintenance'   },
+        { to: '/fleet/trips',       label: 'Trip Requests' },
     ],
     FIELD_STAFF: [
-        { to: '/staff/trips', label: 'My Trips', icon: '🗺️' },
-        { to: '/staff/mileage', label: 'Mileage Log', icon: '📏' },
+        { to: '/staff/trips',   label: 'My Trips'    },
+        { to: '/staff/mileage', label: 'Mileage Log' },
     ],
     MAINTENANCE: [
-        { to: '/maintenance/flags', label: 'My Flags', icon: '🚩' },
+        { to: '/maintenance/flags', label: 'My Flags' },
     ],
 }
 
 export default function Sidebar() {
     const { role, name, logout } = useAuth()
     const navItems = navByRole[role] ?? []
+    const initials = name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? 'U'
 
     return (
-        <aside className="w-60 min-w-60 bg-gray-900 border-r border-gray-800 flex flex-col">
-            {/* Logo */}
-            <div className="px-5 py-5 border-b border-gray-800">
-                <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-gray-900 text-sm font-bold">
-                        F
-                    </div>
-                    <div>
-                        <p className="text-sm font-bold text-gray-100 tracking-tight">FleetOps</p>
-                        <p className="text-xs text-gray-600">Management System</p>
-                    </div>
-                </div>
-            </div>
+        <aside className="w-[220px] min-w-[220px] bg-gray-900 border-r border-gray-800/70 flex flex-col">
 
-            {/* User info */}
-            <div className="px-4 py-4 border-b border-gray-800">
-                <p className="text-sm font-semibold text-gray-200 truncate">{name ?? 'User'}</p>
-                <div className="mt-1.5">
-                    <Badge status={role} />
+            {/* Logo */}
+            <div className="px-5 pt-6 pb-5">
+                <div className="flex items-center gap-2.5">
+                    <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center shrink-0">
+                        <span className="text-[10px] font-bold text-gray-900 tracking-tight">F</span>
+                    </div>
+                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">FleetOps</span>
                 </div>
             </div>
 
             {/* Nav */}
-            <nav className="flex-1 px-3 py-4 space-y-0.5">
-                <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 px-2 mb-2">
-                    Navigation
+            <nav className="flex-1 px-3 space-y-0.5">
+                <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-gray-600 px-2.5 mb-2.5">
+                    Menu
                 </p>
                 {navItems.map((item) => (
                     <NavLink
                         key={item.to}
                         to={item.to}
                         className={({ isActive }) =>
-                            `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                            `group relative flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[13px] transition-colors duration-150 ${
                                 isActive
-                                    ? 'bg-primary/15 text-primary border border-primary/30'
-                                    : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                                    ? 'text-gray-100 font-medium'
+                                    : 'text-gray-500 hover:text-gray-300 font-normal'
                             }`
                         }
                     >
-                        <span className="text-base">{item.icon}</span>
-                        {item.label}
+                        {({ isActive }) => (
+                            <>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="nav-active"
+                                        className="absolute inset-0 bg-gray-800 rounded-lg"
+                                        transition={{ type: 'spring', bounce: 0.15, duration: 0.35 }}
+                                    />
+                                )}
+                                <span className={`relative z-10 w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-150 ${
+                                    isActive ? 'bg-primary' : 'bg-gray-700 group-hover:bg-gray-500'
+                                }`} />
+                                <span className="relative z-10">{item.label}</span>
+                            </>
+                        )}
                     </NavLink>
                 ))}
             </nav>
 
-            {/* Logout */}
-            <div className="px-3 py-4 border-t border-gray-800">
+            {/* User + Logout */}
+            <div className="px-4 py-5 border-t border-gray-800/70">
+                <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-7 h-7 rounded-full bg-gray-800 border border-gray-700/60 flex items-center justify-center shrink-0">
+                        <span className="text-[10px] font-semibold text-gray-300">{initials}</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="text-[12px] font-semibold text-gray-200 truncate leading-tight">{name ?? 'User'}</p>
+                        <p className="text-[10px] text-gray-600 leading-tight mt-0.5 truncate">
+                            {role?.replace(/_/g, ' ')}
+                        </p>
+                    </div>
+                </div>
                 <button
                     onClick={logout}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-red-900/30 hover:text-red-400 transition-colors"
+                    className="text-[11px] text-gray-600 hover:text-gray-400 transition-colors duration-150"
                 >
-                    <span>🚪</span> Sign out
+                    Sign out
                 </button>
             </div>
+
         </aside>
     )
 }

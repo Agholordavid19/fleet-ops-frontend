@@ -51,14 +51,14 @@ export default function ReportsScreen() {
 
             {/* Fleet Utilisation */}
             <section className="mb-8">
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4">
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-4">
                     Fleet Utilisation
                 </h2>
                 {loadingUtil && <LoadingSpinner />}
                 {errorUtil && <ErrorAlert message="Failed to load utilisation report." />}
                 {!loadingUtil && !errorUtil && (
                     <>
-                        <div className="grid grid-cols-3 gap-4 mb-5">
+                        <div className="grid grid-cols-3 gap-3 mb-6">
                             <StatCard label="Total Vehicles" value={util?.totalVehicles ?? '—'} color="blue" />
                             <StatCard label="Avg Utilisation" value={`${util?.avgUtilisation ?? '—'}%`} color="green" />
                             <StatCard label="Total Trips" value={util?.totalTrips ?? '—'} color="purple" />
@@ -70,14 +70,14 @@ export default function ReportsScreen() {
 
             {/* Vehicle Health */}
             <section>
-                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4">
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-4">
                     Vehicle Health Summary
                 </h2>
                 {loadingHealth && <LoadingSpinner />}
                 {errorHealth && <ErrorAlert message="Failed to load health report." />}
                 {!loadingHealth && !errorHealth && (
                     <>
-                        <div className="grid grid-cols-3 gap-4 mb-5">
+                        <div className="grid grid-cols-3 gap-3 mb-6">
                             <StatCard label="Healthy" value={health?.healthy ?? '—'} color="green" />
                             <StatCard label="In Maintenance" value={health?.inMaintenance ?? '—'} color="amber" />
                             <StatCard label="Critical Flags" value={health?.criticalFlags ?? '—'} color="red" />

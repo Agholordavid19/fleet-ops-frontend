@@ -45,13 +45,17 @@ function App() {
                 position="top-right"
                 toastOptions={{
                     style: {
-                        background: '#241B08',
-                        color: '#F5ECD8',
-                        border: '1px solid #4A3D1A',
-                        fontSize: '14px',
+                        background: '#151210',
+                        color: '#F0EBE5',
+                        border: '1px solid #2C2722',
+                        fontSize: '13px',
+                        fontFamily: 'Inter, sans-serif',
+                        borderRadius: '10px',
+                        padding: '10px 14px',
+                        boxShadow: '0 4px 24px rgba(0,0,0,0.35)',
                     },
-                    success: { iconTheme: { primary: '#22c55e', secondary: '#241B08' } },
-                    error:   { iconTheme: { primary: '#ef4444', secondary: '#241B08' } },
+                    success: { iconTheme: { primary: '#22c55e', secondary: '#151210' } },
+                    error:   { iconTheme: { primary: '#ef4444', secondary: '#151210' } },
                 }}
             />
             <Routes>
@@ -78,11 +82,14 @@ function App() {
 
                 {/* Unauthorized */}
                 <Route path="/unauthorized" element={
-                    <div className="min-h-screen flex items-center justify-center bg-gray-950 text-gray-400">
+                    <div className="min-h-screen flex items-center justify-center bg-gray-950">
                         <div className="text-center">
-                            <p className="text-4xl mb-3">🚫</p>
-                            <p className="text-lg font-semibold text-gray-200">Access Denied</p>
-                            <p className="text-sm mt-1">You don't have permission to view this page.</p>
+                            <p className="text-[15px] font-semibold text-gray-200 mb-1.5 tracking-tight">
+                                Access Denied
+                            </p>
+                            <p className="text-[13px] text-gray-600">
+                                You don't have permission to view this page.
+                            </p>
                         </div>
                     </div>
                 } />

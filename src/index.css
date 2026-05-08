@@ -4,31 +4,42 @@
   --color-primary: #B3E3E9;
   --color-primary-hover: #93D2D7;
 
-  /* Dark amber palette — replaces Tailwind's cold gray scale */
-  --color-gray-950: #1A1204;
-  --color-gray-900: #241B08;
-  --color-gray-800: #352910;
-  --color-gray-700: #4A3D1A;
-  --color-gray-600: #5A4E2C;
-  --color-gray-500: #7A6840;
-  --color-gray-400: #A8935E;
-  --color-gray-300: #CCBA90;
-  --color-gray-200: #E8D9B8;
-  --color-gray-100: #F5ECD8;
+  /* Muted warm-neutral dark palette — Linear/Raycast quality */
+  --color-gray-950: #0E0C0A;
+  --color-gray-900: #151210;
+  --color-gray-800: #1E1A17;
+  --color-gray-700: #2C2722;
+  --color-gray-600: #48433E;
+  --color-gray-500: #6B6560;
+  --color-gray-400: #9A9490;
+  --color-gray-300: #C2BCB6;
+  --color-gray-200: #DDD8D2;
+  --color-gray-100: #F0EBE5;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
 body {
     @apply bg-gray-950 text-gray-100;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    letter-spacing: -0.01em;
 }
 
 ::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
 }
 ::-webkit-scrollbar-track {
-    @apply bg-gray-900;
+    background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    @apply bg-gray-700 rounded;
+    @apply bg-gray-700 rounded-full;
 }

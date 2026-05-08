@@ -45,20 +45,20 @@ export default function TripManagementScreen() {
                         <button
                             onClick={() => handleApprove(row.id)}
                             disabled={approving}
-                            className="text-xs bg-emerald-900/50 text-emerald-300 border border-emerald-700 hover:bg-emerald-800/50 px-3 py-1 rounded-md font-semibold transition-colors disabled:opacity-50"
+                            className="text-[11px] bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
                         >
                             Approve
                         </button>
                         <button
                             onClick={() => handleReject(row.id)}
                             disabled={rejecting}
-                            className="text-xs bg-red-900/50 text-red-300 border border-red-700 hover:bg-red-800/50 px-3 py-1 rounded-md font-semibold transition-colors disabled:opacity-50"
+                            className="text-[11px] bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
                         >
                             Reject
                         </button>
                     </div>
                 ) : (
-                    <span className="text-xs text-gray-600">—</span>
+                    <span className="text-[13px] text-gray-700">—</span>
                 ),
         },
     ]
