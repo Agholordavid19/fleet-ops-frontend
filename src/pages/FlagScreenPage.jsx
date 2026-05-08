@@ -1,0 +1,127 @@
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import { useGetMaintenanceFlagsQuery, useUpdateFlagProgressMutation, useResolveFlagMutation } from '../apis/fleetApi.jsx'
+import Table from '../components/Table.jsx'
+import Modal, { ConfirmModal } from '../components/Modal.jsx'
+import Badge from '../components/Badge.jsx'
+import PageHeader from '../components/PageHeader.jsx'
+import { FormField, Textarea, SubmitButton } from '../components/Form.jsx'
+import { LoadingSpinner, ErrorAlert } from '../components/Feedback.jsx'
+import { getErrorMessage } from '../utils/format.js'
+
+export default function FlagsScreen() {
+    const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery()
+    const [updateProgress, { isLoading: updating }] = useUpdateFlagProgressMutation()
+    const [resolveFlag,   { isLoading: resolving }] = useResolveFlagMutation()
+
+    const [selectedFlag, setSelectedFlag] = useState(null)
+    const [notes, setNotes] = useState('')
+    const [confirmId, setConfirmId] = useState(null)
+
+    const myFlags = flags?.filter((f) => f.status !== 'OPEN') ?? []
+
+    const handleUpdateProgress = async (e) => {
+        e.preventDefault()
+        try {
+            await updateProgress({ id: selectedFlag.id, notes }).unwrap()
+            toast.success('Progress notes updated')
+            setSelectedFlag(null)
+            setNotes('')
+        } catch {
+            toast.error('Failed to update notes')
+        }
+    }
+
+    const handleResolve = async (id) => {
+        try {
+            await resolveFlag(id).unwrap()
+            toast.success('Flag resolved')
+        } catch (err) {
+            toast.error(getErrorMessage(err))
+        } finally {
+            setConfirmId(null)
+        }
+    }
+
+    const columns = [
+        { key: 'vehiclePlate', label: 'Vehicle' },
+        { key: 'description',  label: 'Issue' },
+        {
+            key: 'status',
+            label: 'Status',
+            render: (row) => <Badge status={row.status} />,
+        },
+        {
+            key: 'notes',
+            label: 'Latest Notes',
+            render: (row) => (
+                <span className="text-gray-400 text-xs">{row.notes ?? 'No notes yet'}</span>
+            ),
+        },
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (row) => (
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => { setSelectedFlag(row); setNotes(row.notes ?? '') }}
+                        className="text-xs text-primary hover:text-primary-hover font-semibold transition-colors"
+                    >
+                        Update
+                    </button>
+                    {row.status !== 'RESOLVED' && (
+                        <button
+                            onClick={() => setConfirmId(row.id)}
+                            disabled={resolving}
+                            className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors disabled:opacity-50"
+                        >
+                            Resolve
+                        </button>
+                    )}
+                </div>
+            ),
+        },
+    ]
+
+    return (
+        <>
+            <PageHeader
+                title="Assigned Flags"
+                subtitle="Manage your maintenance tasks and update progress"
+            />
+
+            {isLoading && <LoadingSpinner />}
+            {isError && <ErrorAlert message="Failed to load flags." />}
+            {!isLoading && !isError && (
+                <Table columns={columns} data={myFlags} emptyMessage="No flags assigned to you." />
+            )}
+
+            <ConfirmModal
+                open={!!confirmId}
+                message="Mark this flag as resolved?"
+                onConfirm={() => handleResolve(confirmId)}
+                onCancel={() => setConfirmId(null)}
+            />
+
+            <Modal open={!!selectedFlag} onClose={() => setSelectedFlag(null)} title="Update Progress">
+                {selectedFlag && (
+                    <form onSubmit={handleUpdateProgress}>
+                        <div className="bg-gray-800/60 rounded-lg px-4 py-3 mb-4">
+                            <p className="text-xs text-gray-500">Issue</p>
+                            <p className="text-sm text-gray-200 mt-0.5">{selectedFlag.description}</p>
+                        </div>
+                        <FormField label="Progress Notes">
+                            <Textarea
+                                placeholder="Describe what work has been done..."
+                                value={notes}
+                                onChange={(e) => setNotes(e.target.value)}
+                                required
+                            />
+                        </FormField>
+                        <SubmitButton loading={updating}>Save Notes</SubmitButton>
+                    </form>
+                )}
+            </Modal>
+        </>
+    )
+}

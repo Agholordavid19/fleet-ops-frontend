@@ -1,0 +1,91 @@
+import { useGetUtilisationReportQuery, useGetVehicleHealthReportQuery } from '../apis/fleetApi.jsx'
+import PageHeader from '../components/PageHeader'
+import Table from '../components/Table.jsx'
+import Badge from '../components/Badge'
+import { LoadingSpinner, ErrorAlert, StatCard } from '../components/Feedback'
+import { formatDate } from '../utils/format.js'
+
+export default function ReportsScreen() {
+    const { data: util, isLoading: loadingUtil, isError: errorUtil } = useGetUtilisationReportQuery()
+    const { data: health, isLoading: loadingHealth, isError: errorHealth } = useGetVehicleHealthReportQuery()
+
+    const utilisationCols = [
+        { key: 'vehiclePlate', label: 'Plate' },
+        { key: 'make',         label: 'Make' },
+        { key: 'model',        label: 'Model' },
+        { key: 'totalTrips',   label: 'Total Trips' },
+        { key: 'totalMileage', label: 'Total Mileage (km)' },
+        {
+            key: 'utilisationRate',
+            label: 'Utilisation %',
+            render: (row) => (
+                <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-gray-800 rounded-full h-1.5 w-20">
+                        <div
+                            className="bg-primary h-1.5 rounded-full"
+                            style={{ width: `${Math.min(row.utilisationRate ?? 0, 100)}%` }}
+                        />
+                    </div>
+                    <span>{row.utilisationRate ?? 0}%</span>
+                </div>
+            ),
+        },
+    ]
+
+    const healthCols = [
+        { key: 'vehiclePlate', label: 'Plate' },
+        { key: 'make',         label: 'Make' },
+        { key: 'model',        label: 'Model' },
+        {
+            key: 'status',
+            label: 'Status',
+            render: (row) => <Badge status={row.status} />,
+        },
+        { key: 'openFlags',     label: 'Open Flags' },
+        { key: 'lastMaintained', label: 'Last Maintained', render: (row) => formatDate(row.lastMaintained) },
+    ]
+
+    return (
+        <>
+            <PageHeader title="Fleet Reports" subtitle="Operational overview and health metrics" />
+
+            {/* Fleet Utilisation */}
+            <section className="mb-8">
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4">
+                    Fleet Utilisation
+                </h2>
+                {loadingUtil && <LoadingSpinner />}
+                {errorUtil && <ErrorAlert message="Failed to load utilisation report." />}
+                {!loadingUtil && !errorUtil && (
+                    <>
+                        <div className="grid grid-cols-3 gap-4 mb-5">
+                            <StatCard label="Total Vehicles" value={util?.totalVehicles ?? '—'} color="blue" />
+                            <StatCard label="Avg Utilisation" value={`${util?.avgUtilisation ?? '—'}%`} color="green" />
+                            <StatCard label="Total Trips" value={util?.totalTrips ?? '—'} color="purple" />
+                        </div>
+                        <Table columns={utilisationCols} data={util?.vehicles} emptyMessage="No utilisation data." />
+                    </>
+                )}
+            </section>
+
+            {/* Vehicle Health */}
+            <section>
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4">
+                    Vehicle Health Summary
+                </h2>
+                {loadingHealth && <LoadingSpinner />}
+                {errorHealth && <ErrorAlert message="Failed to load health report." />}
+                {!loadingHealth && !errorHealth && (
+                    <>
+                        <div className="grid grid-cols-3 gap-4 mb-5">
+                            <StatCard label="Healthy" value={health?.healthy ?? '—'} color="green" />
+                            <StatCard label="In Maintenance" value={health?.inMaintenance ?? '—'} color="amber" />
+                            <StatCard label="Critical Flags" value={health?.criticalFlags ?? '—'} color="red" />
+                        </div>
+                        <Table columns={healthCols} data={health?.vehicles} emptyMessage="No health data." />
+                    </>
+                )}
+            </section>
+        </>
+    )
+}
