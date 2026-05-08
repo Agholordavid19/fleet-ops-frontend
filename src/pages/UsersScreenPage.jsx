@@ -37,7 +37,7 @@ export default function UsersScreen() {
         {
             key: 'role',
             label: 'Role',
-            render: (row) => <Badge status={row.role} />,
+            render: (row) => <Badge status={row.role} type="role" />,
         },
         { key: 'createdAt', label: 'Joined', render: (row) => formatDate(row.createdAt) },
     ]
