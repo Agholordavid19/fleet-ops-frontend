@@ -71,7 +71,7 @@ export default function MaintenanceScreen() {
                 {selectedFlag && (
                     <form onSubmit={handleAssign}>
                         <div className="bg-gray-800/40 rounded-xl px-4 py-3.5 mb-4">
-                            <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-1">Issue</p>
+                            <p className="text-[10px] font-medium uppercase tracking-widest text-gray-600 mb-1">Issue</p>
                             <p className="text-[13px] text-gray-200 leading-snug">{selectedFlag.description}</p>
                         </div>
                         <FormField label="Technician ID">

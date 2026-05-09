@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+  console.log('base url:', import.meta.env.VITE_API_BASE_URL)
 export const fleetApi = createApi({
     reducerPath: 'fleetApi',
     baseQuery: fetchBaseQuery({
@@ -35,11 +36,15 @@ export const fleetApi = createApi({
             providesTags: (result, error, id) => [{ type: 'Vehicles', id }],
         }),
         getVehicleAssignments: builder.query({
-            query: (id) => `/vehicles/${id}/assignments`,
+            query: (id) => `/assignments/vehicle/${id}`,
         }),
         createVehicle: builder.mutation({
             query: (body) => ({ url: '/vehicles', method: 'POST', body }),
             invalidatesTags: ['Vehicles'],
+        }),
+        getAvailableVehicles: builder.query({
+            query: () => '/vehicles/available',
+            providesTags: ['Vehicles'],
         }),
 
         // ── Trip Requests ─────────────────────────────────────
@@ -50,6 +55,10 @@ export const fleetApi = createApi({
         createTripRequest: builder.mutation({
             query: (body) => ({ url: '/trip-requests', method: 'POST', body }),
             invalidatesTags: ['Trips'],
+        }),
+        getMyTripRequests: builder.query({
+            query: () => '/trip-requests/my',
+            providesTags: ['Trips'],
         }),
         approveTrip: builder.mutation({
             query: (id) => ({ url: `/trip-requests/${id}/approve`, method: 'PATCH' }),
@@ -135,4 +144,6 @@ export const {
     useCreateUserMutation,
     useGetUtilisationReportQuery,
     useGetVehicleHealthReportQuery,
+    useGetAvailableVehiclesQuery,
+    useGetMyTripRequestsQuery
 } = fleetApi

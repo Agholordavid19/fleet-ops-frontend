@@ -31,14 +31,14 @@ export default function VehicleDetailModal({ vehicleId, onClose }) {
                             ['Status', <Badge key="s" status={vehicle.status} />],
                         ].map(([label, val]) => (
                             <div key={label} className="bg-gray-800/40 rounded-xl px-3 py-3">
-                                <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-1">{label}</p>
+                                <p className="text-[10px] font-medium uppercase tracking-widest text-gray-600 mb-1">{label}</p>
                                 <p className="text-[13px] font-semibold text-gray-200">{val}</p>
                             </div>
                         ))}
                     </div>
 
                     <div>
-                        <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
+                        <p className="text-[10px] font-medium uppercase tracking-widest text-gray-600 mb-3">
                             Assignment History
                         </p>
                         {loadingAss ? (

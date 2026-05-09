@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useGetTripRequestsQuery, useApproveTripMutation, useRejectTripMutation } from '../apis/fleetApi.jsx'
 import Table from '../components/Table'
@@ -8,34 +9,41 @@ import { formatDate } from '../utils/format.js'
 
 export default function TripManagementScreen() {
     const { data: trips, isLoading, isError } = useGetTripRequestsQuery()
-    const [approveTrip, { isLoading: approving }] = useApproveTripMutation()
-    const [rejectTrip,  { isLoading: rejecting }]  = useRejectTripMutation()
+    const [approveTrip] = useApproveTripMutation()
+    const [rejectTrip]  = useRejectTripMutation()
+    const [loadingId, setLoadingId] = useState(null)
 
     const handleApprove = async (id) => {
+        setLoadingId(`approve-${id}`)
         try {
             await approveTrip(id).unwrap()
             toast.success('Trip approved')
         } catch {
             toast.error('Failed to approve trip')
+        } finally {
+            setLoadingId(null)
         }
     }
 
     const handleReject = async (id) => {
+        setLoadingId(`reject-${id}`)
         try {
             await rejectTrip(id).unwrap()
             toast.success('Trip rejected')
         } catch {
             toast.error('Failed to reject trip')
+        } finally {
+            setLoadingId(null)
         }
     }
 
     const columns = [
-        { key: 'staffName',   label: 'Requested By' },
-        { key: 'vehiclePlate', label: 'Vehicle' },
-        { key: 'destination', label: 'Destination' },
-        { key: 'startDate',   label: 'Start', render: (r) => formatDate(r.startDate) },
-        { key: 'endDate',     label: 'End',   render: (r) => formatDate(r.endDate) },
-        { key: 'status',      label: 'Status', render: (r) => <Badge status={r.status} /> },
+        { key: 'fieldStaffName', label: 'Requested By' },
+        { key: 'plateNumber',    label: 'Vehicle' },
+        { key: 'destination',    label: 'Destination' },
+        { key: 'startDate',      label: 'Start', render: (r) => formatDate(r.startDate) },
+        { key: 'endDate',        label: 'End',   render: (r) => formatDate(r.endDate) },
+        { key: 'status',         label: 'Status', render: (r) => <Badge status={r.status} /> },
         {
             key: 'actions',
             label: 'Actions',
@@ -44,17 +52,17 @@ export default function TripManagementScreen() {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => handleApprove(row.id)}
-                            disabled={approving}
+                            disabled={loadingId !== null}
                             className="text-[11px] bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
                         >
-                            Approve
+                            {loadingId === `approve-${row.id}` ? '...' : 'Approve'}
                         </button>
                         <button
                             onClick={() => handleReject(row.id)}
-                            disabled={rejecting}
+                            disabled={loadingId !== null}
                             className="text-[11px] bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
                         >
-                            Reject
+                            {loadingId === `reject-${row.id}` ? '...' : 'Reject'}
                         </button>
                     </div>
                 ) : (

@@ -27,7 +27,7 @@ export default function Sidebar() {
     const initials = name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? 'U'
 
     return (
-        <aside className="w-[220px] min-w-[220px] bg-gray-900 border-r border-gray-800/70 flex flex-col">
+        <aside className="w-55 min-w-55 bg-gray-900 border-r border-gray-800/70 flex flex-col">
 
             {/* Logo */}
             <div className="px-5 pt-6 pb-5">
@@ -49,7 +49,7 @@ export default function Sidebar() {
                         key={item.to}
                         to={item.to}
                         className={({ isActive }) =>
-                            `group relative flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[13px] transition-colors duration-150 ${
+                            `group relative flex items-center gap-2.5 px-2.5 py-1.75 rounded-lg text-[13px] transition-colors duration-150 ${
                                 isActive
                                     ? 'text-gray-100 font-medium'
                                     : 'text-gray-500 hover:text-gray-300 font-normal'

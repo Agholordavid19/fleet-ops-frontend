@@ -23,7 +23,7 @@ export default function Topbar() {
     })
 
     return (
-        <header className="h-[60px] bg-gray-900 border-b border-gray-800/70 flex items-center px-6 shrink-0 gap-4">
+        <header className="h-15 bg-gray-900 border-b border-gray-800/70 flex items-center px-6 shrink-0 gap-4">
             <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2.5">
                     <h1 className="text-[14px] font-semibold text-gray-100 tracking-tight leading-none">

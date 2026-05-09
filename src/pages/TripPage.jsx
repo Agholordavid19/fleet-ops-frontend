@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { useGetVehiclesQuery, useGetTripRequestsQuery, useCreateTripRequestMutation } from '../apis/fleetApi'
+import {  useGetAvailableVehiclesQuery, useGetTripRequestsQuery,useGetMyTripRequestsQuery, useCreateTripRequestMutation } from '../apis/fleetApi'
 import { useAuth } from '../utils/useAuth.jsx'
 import Table from '../components/Table.jsx'
 import Modal from '../components/Modal'
@@ -13,16 +13,16 @@ import { formatDate, getErrorMessage } from '../utils/format.js'
 const emptyForm = { vehicleId: '', destination: '', startDate: '', endDate: '' }
 
 export default function TripsScreen() {
-    const { data: vehicles } = useGetVehiclesQuery()
-    const { data: trips, isLoading, isError } = useGetTripRequestsQuery()
+    const { data: vehicles } = useGetAvailableVehiclesQuery()
+    const { data: trips, isLoading, isError } = useGetMyTripRequestsQuery()
     const [createTripRequest, { isLoading: submitting }] = useCreateTripRequestMutation()
     const { email } = useAuth()
 
     const [open, setOpen] = useState(false)
     const [form, setForm] = useState(emptyForm)
 
-    const availableVehicles = vehicles?.filter((v) => v.status === 'AVAILABLE') ?? []
-    const myTrips = trips?.filter((t) => t.staffEmail === email) ?? []
+    const availableVehicles = vehicles ?? []
+    const myTrips = trips ?? []
 
     const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
@@ -39,7 +39,7 @@ export default function TripsScreen() {
     }
 
     const myCols = [
-        { key: 'vehiclePlate', label: 'Vehicle' },
+        { key: 'plateNumber', label: 'Vehicle' },
         { key: 'destination',  label: 'Destination' },
         { key: 'startDate',    label: 'Start', render: (r) => formatDate(r.startDate) },
         { key: 'endDate',      label: 'End',   render: (r) => formatDate(r.endDate) },
@@ -70,7 +70,7 @@ export default function TripsScreen() {
 
             {/* Available vehicles */}
             <section className="mb-8">
-                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
+                <h2 className="text-[11px] font-medium uppercase tracking-widest text-gray-600 mb-3">
                     Available Vehicles
                 </h2>
                 <Table columns={vehicleCols} data={availableVehicles} emptyMessage="No vehicles currently available." />
@@ -78,7 +78,7 @@ export default function TripsScreen() {
 
             {/* My trip requests */}
             <section>
-                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
+                <h2 className="text-[11px] font-medium uppercase tracking-widest text-gray-600 mb-3">
                     My Trip Requests
                 </h2>
                 {isLoading && <LoadingSpinner />}

@@ -33,7 +33,7 @@ export default function ReportsScreen() {
     ]
 
     const healthCols = [
-        { key: 'vehiclePlate', label: 'Plate' },
+        { key: 'plateNumber', label: 'Plate' },
         { key: 'make',         label: 'Make' },
         { key: 'model',        label: 'Model' },
         {
@@ -41,7 +41,7 @@ export default function ReportsScreen() {
             label: 'Status',
             render: (row) => <Badge status={row.status} />,
         },
-        { key: 'openFlags',     label: 'Open Flags' },
+        { key: 'openMaintenanceFlags', label: 'Open Flags' },
         { key: 'lastMaintained', label: 'Last Maintained', render: (row) => formatDate(row.lastMaintained) },
     ]
 
@@ -51,7 +51,7 @@ export default function ReportsScreen() {
 
             {/* Fleet Utilisation */}
             <section className="mb-8">
-                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-4">
+                <h2 className="text-[11px] font-medium uppercase tracking-widest text-gray-600 mb-4">
                     Fleet Utilisation
                 </h2>
                 {loadingUtil && <LoadingSpinner />}
@@ -60,8 +60,8 @@ export default function ReportsScreen() {
                     <>
                         <div className="grid grid-cols-3 gap-3 mb-6">
                             <StatCard label="Total Vehicles" value={util?.totalVehicles ?? '—'} color="blue" />
-                            <StatCard label="Avg Utilisation" value={`${util?.avgUtilisation ?? '—'}%`} color="green" />
-                            <StatCard label="Total Trips" value={util?.totalTrips ?? '—'} color="purple" />
+                            <StatCard label="Pending Requests" value={util?.pendingTripRequests ?? '—'} color="green" />
+                            <StatCard label="Total Trips" value={util?.totalTripsAllTime ?? '—'} color="purple" />
                         </div>
                         <Table columns={utilisationCols} data={util?.vehicles} emptyMessage="No utilisation data." />
                     </>
@@ -70,7 +70,7 @@ export default function ReportsScreen() {
 
             {/* Vehicle Health */}
             <section>
-                <h2 className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-4">
+                <h2 className="text-[11px] font-medium uppercase tracking-widest text-gray-600 mb-4">
                     Vehicle Health Summary
                 </h2>
                 {loadingHealth && <LoadingSpinner />}
@@ -78,11 +78,11 @@ export default function ReportsScreen() {
                 {!loadingHealth && !errorHealth && (
                     <>
                         <div className="grid grid-cols-3 gap-3 mb-6">
-                            <StatCard label="Healthy" value={health?.healthy ?? '—'} color="green" />
-                            <StatCard label="In Maintenance" value={health?.inMaintenance ?? '—'} color="amber" />
-                            <StatCard label="Critical Flags" value={health?.criticalFlags ?? '—'} color="red" />
+                            <StatCard label="Healthy" value={health?.filter(v => v.status === 'AVAILABLE').length ?? '—'} color="green" />
+                            <StatCard label="In Maintenance" value={health?.filter(v => v.status === 'MAINTENANCE').length ?? '—'} color="amber" />
+                            <StatCard label="Critical Flags" value={health?.reduce((sum, v) => sum + (v.openMaintenanceFlags ?? 0), 0) ?? '—'} color="red" />
                         </div>
-                        <Table columns={healthCols} data={health?.vehicles} emptyMessage="No health data." />
+                        <Table columns={healthCols} data={health} emptyMessage="No health data." />
                     </>
                 )}
             </section>

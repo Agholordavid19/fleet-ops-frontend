@@ -30,7 +30,7 @@ export function StatCard({ label, value, color = 'blue' }) {
     const c = colors[color] ?? colors.blue
     return (
         <div className={`bg-gray-900 border ${c.wrap} rounded-xl px-5 py-4`}>
-            <p className={`text-[11px] font-medium uppercase tracking-[0.1em] ${c.label} mb-2`}>
+            <p className={`text-[11px] font-medium uppercase tracking-widest ${c.label} mb-2`}>
                 {label}
             </p>
             <p className={`text-[28px] font-bold tracking-tight leading-none ${c.value}`}>

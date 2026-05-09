@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { useGetVehiclesQuery, useCreateMileageLogMutation } from '../apis/fleetApi.jsx'
+import { useGetAvailableVehiclesQuery, useCreateMileageLogMutation } from '../apis/fleetApi.jsx'
 import PageHeader from '../components/PageHeader'
 import { FormField, Input, Select, SubmitButton } from '../components/Form'
 import { ErrorAlert } from '../components/Feedback'
@@ -9,7 +9,7 @@ import { getErrorMessage } from '../utils/format.js'
 const emptyForm = { vehicleId: '', mileageAdded: '' }
 
 export default function MileageScreen() {
-    const { data: vehicles } = useGetVehiclesQuery()
+    const { data: vehicles } = useGetAvailableVehiclesQuery()
     const [createMileageLog, { isLoading }] = useCreateMileageLogMutation()
     const [form, setForm] = useState(emptyForm)
     const [submitted, setSubmitted] = useState([])
@@ -31,7 +31,7 @@ export default function MileageScreen() {
         }
     }
 
-    const assignedVehicles = vehicles?.filter((v) => v.status === 'ASSIGNED') ?? []
+   const assignedVehicles = vehicles ?? []
 
     return (
         <>
@@ -68,7 +68,7 @@ export default function MileageScreen() {
                 {/* Recent logs in this session */}
                 {submitted.length > 0 && (
                     <div className="mt-6">
-                        <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-3">
+                        <p className="text-[11px] font-medium uppercase tracking-widest text-gray-600 mb-3">
                             Submitted this session
                         </p>
                         <div className="space-y-2">

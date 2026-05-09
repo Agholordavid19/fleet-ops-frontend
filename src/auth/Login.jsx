@@ -36,10 +36,8 @@ export default function LoginScreen() {
         try {
             const res = await login(form).unwrap()
             dispatch(setCredentials({ token: res.token }))
-            const { jwtDecode } = await import('jwt-decode')
-            const { role } = jwtDecode(res.token)
             toast.success('Signed in')
-            navigate(roleRedirects[role] ?? '/')
+            navigate(roleRedirects[res.role] ?? '/')
         } catch (err) {
             toast.error(err?.data?.message ?? 'Invalid credentials')
         }
@@ -48,7 +46,7 @@ export default function LoginScreen() {
     return (
         <div className="min-h-screen bg-gray-950 flex items-center justify-center px-6">
             <motion.div
-                className="w-full max-w-[340px]"
+                className="w-full max-w-85"
                 variants={container}
                 initial="hidden"
                 animate="show"

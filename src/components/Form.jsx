@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export function FormField({ label, error, children }) {
     return (
         <div className="mb-4">
-            <label className="block text-[11px] font-medium uppercase tracking-[0.1em] text-gray-500 mb-1.5">
+            <label className="block text-[11px] font-medium uppercase tracking-widest text-gray-500 mb-1.5">
                 {label}
             </label>
             {children}
