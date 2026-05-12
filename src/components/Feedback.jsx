@@ -1,7 +1,7 @@
 export function LoadingSpinner() {
     return (
         <div className="flex items-center justify-center py-16">
-            <div className="w-5 h-5 border-[1.5px] border-gray-800 border-t-primary rounded-full animate-spin" />
+            <div className="w-5 h-5 border-[1.5px] border-gray-700 border-t-primary rounded-full animate-spin" />
         </div>
     )
 }
@@ -21,15 +21,15 @@ export function ErrorAlert({ message }) {
 
 export function StatCard({ label, value, color = 'blue' }) {
     const colors = {
-        blue:   { wrap: 'border-gray-800/60',  value: 'text-primary',       label: 'text-gray-500' },
-        green:  { wrap: 'border-gray-800/60',  value: 'text-emerald-400',   label: 'text-gray-500' },
-        amber:  { wrap: 'border-gray-800/60',  value: 'text-amber-400',     label: 'text-gray-500' },
-        red:    { wrap: 'border-gray-800/60',  value: 'text-red-400',       label: 'text-gray-500' },
-        purple: { wrap: 'border-gray-800/60',  value: 'text-purple-400',    label: 'text-gray-500' },
+        blue:   { wrap: 'border-gray-700/60',  value: 'text-primary',       label: 'text-gray-500' },
+        green:  { wrap: 'border-gray-700/60',  value: 'text-emerald-400',   label: 'text-gray-500' },
+        amber:  { wrap: 'border-gray-700/60',  value: 'text-amber-400',     label: 'text-gray-500' },
+        red:    { wrap: 'border-gray-700/60',  value: 'text-red-400',       label: 'text-gray-500' },
+        purple: { wrap: 'border-gray-700/60',  value: 'text-purple-400',    label: 'text-gray-500' },
     }
     const c = colors[color] ?? colors.blue
     return (
-        <div className={`bg-gray-900 border ${c.wrap} rounded-xl px-5 py-4`}>
+        <div className={`bg-gray-900 border ${c.wrap} rounded-xl px-5 py-4 shadow-sm shadow-black/4`}>
             <p className={`text-[11px] font-medium uppercase tracking-widest ${c.label} mb-2`}>
                 {label}
             </p>

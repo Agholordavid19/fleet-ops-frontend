@@ -11,7 +11,7 @@ const routes = {
     '/maintenance/flags':    { title: 'Assigned Flags',  subtitle: 'Track and update your maintenance tasks' },
 }
 
-export default function Topbar() {
+export default function Topbar({ onMenuClick }) {
     const { pathname } = useLocation()
     const route = routes[pathname] ?? { title: 'FleetOps', subtitle: '' }
 
@@ -23,7 +23,19 @@ export default function Topbar() {
     })
 
     return (
-        <header className="h-15 bg-gray-900 border-b border-gray-800/70 flex items-center px-6 shrink-0 gap-4">
+        <header className="h-15 bg-gray-900 border-b border-gray-700 flex items-center px-4 md:px-6 shrink-0 gap-3 md:gap-4">
+
+            {/* Hamburger — mobile only */}
+            <button
+                onClick={onMenuClick}
+                className="md:hidden flex flex-col justify-center gap-1.5 w-6 h-6 shrink-0"
+                aria-label="Open menu"
+            >
+                <span className="block h-px w-full bg-gray-400" />
+                <span className="block h-px w-full bg-gray-400" />
+                <span className="block h-px w-5 bg-gray-400" />
+            </button>
+
             <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2.5">
                     <h1 className="text-[14px] font-semibold text-gray-100 tracking-tight leading-none">
@@ -38,8 +50,8 @@ export default function Topbar() {
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
-                <div className="h-4 w-px bg-gray-800" />
-                <span className="text-[11px] text-gray-600 tabular-nums">
+                <div className="h-4 w-px bg-gray-700" />
+                <span className="text-[11px] text-gray-600 tabular-nums hidden sm:block">
                     {dateStr}
                 </span>
             </div>

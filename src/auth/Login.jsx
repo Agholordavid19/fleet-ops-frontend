@@ -35,7 +35,7 @@ export default function LoginScreen() {
         e.preventDefault()
         try {
             const res = await login(form).unwrap()
-            dispatch(setCredentials({ token: res.token }))
+            dispatch(setCredentials({ token: res.token, email: res.email }))
             toast.success('Signed in')
             navigate(roleRedirects[res.role] ?? '/')
         } catch (err) {
@@ -46,13 +46,13 @@ export default function LoginScreen() {
     return (
         <div className="min-h-screen bg-gray-950 flex items-center justify-center px-6">
             <motion.div
-                className="w-full max-w-85"
+                className="w-full max-w-85 bg-gray-900 rounded-2xl border border-gray-700/40 shadow-xl shadow-black/8 px-8 py-10"
                 variants={container}
                 initial="hidden"
                 animate="show"
             >
                 {/* Wordmark */}
-                <motion.div variants={item} className="flex items-center gap-2 mb-12">
+                <motion.div variants={item} className="flex items-center gap-2 mb-8">
                     <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center shrink-0">
                         <span className="text-[10px] font-bold text-gray-900 leading-none">F</span>
                     </div>

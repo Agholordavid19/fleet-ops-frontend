@@ -39,7 +39,7 @@ export function SubmitButton({ loading, children }) {
             type="submit"
             disabled={loading}
             whileTap={loading ? {} : { scale: 0.98 }}
-            className="w-full mt-3 bg-primary hover:bg-primary-hover disabled:opacity-40 disabled:cursor-not-allowed text-gray-900 font-semibold text-[13px] py-2.5 rounded-lg transition-all duration-150 tracking-tight"
+            className="w-full mt-3 bg-red-500 hover:bg-red-800 disabled:opacity-40 disabled:cursor-not-allowed text-gray-900 font-semibold text-[13px] py-2.5 rounded-lg transition-all duration-150 tracking-tight"
         >
             {loading ? 'Saving…' : children}
         </motion.button>

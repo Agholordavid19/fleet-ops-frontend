@@ -61,7 +61,7 @@ export default function TripsScreen() {
                 action={
                     <button
                         onClick={() => setOpen(true)}
-                        className="bg-primary hover:bg-primary-hover text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
+                        className="bg-yellow-400 hover:bg-yellow-800 text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
                     >
                         + Request Trip
                     </button>

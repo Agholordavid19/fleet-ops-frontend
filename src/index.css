@@ -4,17 +4,17 @@
   --color-primary: #B3E3E9;
   --color-primary-hover: #93D2D7;
 
-  /* Muted warm-neutral dark palette — Linear/Raycast quality */
-  --color-gray-950: #0E0C0A;
-  --color-gray-900: #151210;
-  --color-gray-800: #1E1A17;
-  --color-gray-700: #2C2722;
-  --color-gray-600: #48433E;
-  --color-gray-500: #6B6560;
-  --color-gray-400: #9A9490;
-  --color-gray-300: #C2BCB6;
-  --color-gray-200: #DDD8D2;
-  --color-gray-100: #F0EBE5;
+  /* Soft neutral light palette — Apple-like */
+  --color-gray-950: #f5f5f7;
+  --color-gray-900: #ffffff;
+  --color-gray-800: #f0f0f2;
+  --color-gray-700: #e5e5e7;
+  --color-gray-600: #86868b;
+  --color-gray-500: #6e6e73;
+  --color-gray-400: #48484a;
+  --color-gray-300: #3d3d3f;
+  --color-gray-200: #2d2d2f;
+  --color-gray-100: #1d1d1f;
 }
 
 *, *::before, *::after {
@@ -41,5 +41,5 @@ body {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    @apply bg-gray-700 rounded-full;
+    @apply bg-gray-600 rounded-full;
 }

@@ -1,9 +1,9 @@
 export default function Table({ columns, data, emptyMessage = 'No records found.' }) {
     return (
-        <div className="w-full overflow-x-auto rounded-xl border border-gray-800/60">
+        <div className="w-full overflow-x-auto rounded-xl border border-gray-700/50 bg-gray-900 shadow-sm shadow-black/4">
             <table className="w-full text-[13px]">
                 <thead>
-                    <tr className="border-b border-gray-800/60">
+                    <tr className="border-b border-gray-700/50">
                         {columns.map((col) => (
                             <th
                                 key={col.key}
@@ -28,7 +28,7 @@ export default function Table({ columns, data, emptyMessage = 'No records found.
                         data.map((row, i) => (
                             <tr
                                 key={row.id ?? i}
-                                className="border-b border-gray-800/40 last:border-0 hover:bg-gray-800/20 transition-colors duration-100"
+                                className="border-b border-gray-700/30 last:border-0 hover:bg-gray-800/50 transition-colors duration-100"
                             >
                                 {columns.map((col) => (
                                     <td key={col.key} className="px-4 py-3.5 text-gray-300 leading-snug">

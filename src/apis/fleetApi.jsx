@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-  console.log('base url:', import.meta.env.VITE_API_BASE_URL)
+console.log('base url:', import.meta.env.VITE_API_BASE_URL)
+
 export const fleetApi = createApi({
     reducerPath: 'fleetApi',
     baseQuery: fetchBaseQuery({
@@ -11,7 +12,7 @@ export const fleetApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Vehicles', 'Trips', 'Flags', 'Users', 'Reports'],
+    tagTypes: ['Vehicles', 'Trips', 'Flags', 'Users', 'Reports', 'Profile', 'ActivityLogs'],
     endpoints: (builder) => ({
 
         // ── Auth ──────────────────────────────────────────────
@@ -121,6 +122,149 @@ export const fleetApi = createApi({
             query: () => '/admin/reports/vehicle-health',
             providesTags: ['Reports'],
         }),
+
+        // ── Profile ───────────────────────────────────────────
+        getMyProfile: builder.query({
+            query: () => '/users/me',
+            providesTags: ['Profile'],
+        }),
+        updateMyProfile: builder.mutation({
+            query: (body) => ({ url: '/users/me', method: 'PATCH', body }),
+            invalidatesTags: ['Profile'],
+        }),
+        setMyProfileMedia: builder.mutation({
+            query: (body) => ({ url: '/users/me/media', method: 'PATCH', body }),
+            invalidatesTags: ['Profile'],
+        }),
+        removeMyProfileMedia: builder.mutation({
+            query: () => ({ url: '/users/me/media', method: 'DELETE' }),
+            invalidatesTags: ['Profile'],
+        }),
+
+        changePassword: builder.mutation({
+            query: (body) => ({
+                url: '/auth/change-password',
+                method: 'PATCH',
+                body,
+            }),
+        }),
+        getActivityLogs: builder.query({
+            query: ({ plateNumber, date } = {}) => {
+                const params = {}
+
+                if (plateNumber) params.plateNumber = plateNumber
+                if (date) params.date = date
+
+                return {
+                    url: '/admin/activity-logs',
+                    params,
+                }
+            },
+            providesTags: ['ActivityLogs'],
+        }),
+        deactivateUser: builder.mutation({
+            query: (id) => ({
+                url: `/admin/users/${id}/deactivate`,
+                method: 'PATCH',
+            }),
+            invalidatesTags: ['Users'],
+        }),
+        reactivateUser: builder.mutation({
+            query: (id) => ({
+                url: `/admin/users/${id}/reactivate`,
+                method: 'PATCH',
+            }),
+            invalidatesTags: ['Users'],
+        }),
+        getMyMaintenanceFlags: builder.query({
+            query: () => '/maintenance-flags/my',
+            providesTags: ['Flags'],
+        }),
+
+        markFlagDone: builder.mutation({
+            query: (id) => ({
+                url: `/maintenance-flags/${id}/done`,
+                method: 'PATCH',
+            }),
+            invalidatesTags: ['Flags'],
+        }),
+
+        approveFlag: builder.mutation({
+            query: ({ id, ...body }) => ({
+                url: `/maintenance-flags/${id}/approve`,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: ['Flags', 'Vehicles'],
+        }),
+        addVehicleMedia: builder.mutation({
+            query: ({ id, media }) => ({
+                url: `/vehicles/${id}/media`,
+                method: 'POST',
+                body: media,
+            }),
+            invalidatesTags: ['Vehicles'],
+        }),
+        removeVehicleMedia: builder.mutation({
+            query: ({ id, mediaId }) => ({
+                url: `/vehicles/${id}/media/${mediaId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Vehicles'],
+        }),
+        getAllTripRequests: builder.query({
+            query: () => '/trip-requests/all',
+            providesTags: ['Trips'],
+        }),
+
+        getMyApprovedTripRequests: builder.query({
+            query: () => '/trip-requests/my/approved',
+            providesTags: ['Trips'],
+        }),
+
+        completeTrip: builder.mutation({
+            query: ({ id, ...body }) => ({
+                url: `/trip-requests/${id}/complete`,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: ['Trips', 'Vehicles'],
+        }),
+        getMileageLogsByVehicle: builder.query({
+            query: (vehicleId) => `/mileage-logs/vehicle/${vehicleId}`,
+            providesTags: ['Vehicles'],
+        }),
+        getUserById: builder.query({
+            query: (id) => `/admin/users/${id}`,
+            providesTags: (result, error, id) => [{ type: 'Users', id }],
+        }),
+
+        resetUserPassword: builder.mutation({
+            query: ({ id, ...body }) => ({
+                url: `/admin/users/${id}/reset-password`,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: ['Users'],
+        }),
+
+        setUserMedia: builder.mutation({
+            query: ({ id, media }) => ({
+                url: `/admin/users/${id}/media`,
+                method: 'PATCH',
+                body: media,
+            }),
+            invalidatesTags: ['Users'],
+        }),
+
+        removeUserMedia: builder.mutation({
+            query: (id) => ({
+                url: `/admin/users/${id}/media`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Users'],
+        }),
+
     }),
 })
 
@@ -145,5 +289,26 @@ export const {
     useGetUtilisationReportQuery,
     useGetVehicleHealthReportQuery,
     useGetAvailableVehiclesQuery,
-    useGetMyTripRequestsQuery
+    useGetMyTripRequestsQuery,
+    useGetMyProfileQuery,
+    useUpdateMyProfileMutation,
+    useSetMyProfileMediaMutation,
+    useRemoveMyProfileMediaMutation,
+    useChangePasswordMutation,
+    useGetActivityLogsQuery,
+    useDeactivateUserMutation,
+    useReactivateUserMutation,
+    useGetMyMaintenanceFlagsQuery,
+    useMarkFlagDoneMutation,
+    useApproveFlagMutation,
+    useAddVehicleMediaMutation,
+    useRemoveVehicleMediaMutation,
+    useGetAllTripRequestsQuery,
+    useGetMyApprovedTripRequestsQuery,
+    useCompleteTripMutation,
+    useGetMileageLogsByVehicleQuery,
+    useGetUserByIdQuery,
+    useResetUserPasswordMutation,
+    useSetUserMediaMutation,
+    useRemoveUserMediaMutation,
 } = fleetApi

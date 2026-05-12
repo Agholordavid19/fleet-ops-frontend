@@ -21,6 +21,7 @@ const authSlice = createSlice({
         token: validToken,
         role: user?.role?.replace('ROLE_', '') ?? null,
         name: user?.name ?? null,
+        email: user?.sub ?? null
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -28,12 +29,14 @@ const authSlice = createSlice({
             const decoded = jwtDecode(action.payload.token)
             state.role = decoded.role?.replace('ROLE_', '')
             state.name = decoded.name
+            state.email = action.payload.email
             localStorage.setItem('token', action.payload.token)
         },
         logout: (state) => {
             state.token = null
             state.role = null
             state.name = null
+            state.email = null
             localStorage.removeItem('token')
         },
     },

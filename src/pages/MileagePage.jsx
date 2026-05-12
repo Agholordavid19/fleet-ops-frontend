@@ -21,7 +21,7 @@ export default function MileageScreen() {
         try {
             const res = await createMileageLog({
                 vehicleId: form.vehicleId,
-                mileageAdded: Number(form.mileageAdded),
+                reportedMileage: Number(form.mileageAdded),
             }).unwrap()
             toast.success('Mileage log submitted')
             setSubmitted((prev) => [{ ...form, id: Date.now(), ...res }, ...prev])
@@ -61,7 +61,7 @@ export default function MileageScreen() {
                                 required
                             />
                         </FormField>
-                        <SubmitButton loading={isLoading}>Submit Log</SubmitButton>
+                        <SubmitButton loading={isLoading} className="bg-red-400">Submit Log</SubmitButton>
                     </form>
                 </div>
 

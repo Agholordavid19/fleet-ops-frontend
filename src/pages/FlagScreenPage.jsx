@@ -92,8 +92,60 @@ export default function FlagsScreen() {
 
             {isLoading && <LoadingSpinner />}
             {isError && <ErrorAlert message="Failed to load flags." />}
+
             {!isLoading && !isError && (
-                <Table columns={columns} data={myFlags} emptyMessage="No flags assigned to you." />
+                <>
+                    {/* Mobile card layout */}
+                    <div className="block md:hidden space-y-3">
+                        {myFlags.length === 0 ? (
+                            <p className="text-[13px] text-gray-600 text-center py-8">No flags assigned to you.</p>
+                        ) : (
+                            myFlags.map((row) => (
+                                <div
+                                    key={row.id}
+                                    className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-4 space-y-3"
+                                >
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div>
+                                            <p className="text-[13px] font-semibold text-gray-100">{row.plateNumber ?? row.vehiclePlate}</p>
+                                            <p className="text-[12px] text-gray-400 mt-0.5 leading-snug">{row.description ?? '—'}</p>
+                                        </div>
+                                        <Badge status={row.status} />
+                                    </div>
+
+                                    {row.notes && (
+                                        <p className="text-[11px] text-gray-500 leading-snug border-t border-gray-800 pt-2">
+                                            {row.notes}
+                                        </p>
+                                    )}
+
+                                    <div className="flex items-center gap-3 border-t border-gray-800 pt-2">
+                                        <button
+                                            onClick={() => { setSelectedFlag(row); setNotes(row.notes ?? '') }}
+                                            className="text-[12px] text-primary hover:text-primary-hover font-medium transition-colors duration-150"
+                                        >
+                                            Update Notes
+                                        </button>
+                                        {row.status !== 'RESOLVED' && (
+                                            <button
+                                                onClick={() => setConfirmId(row.id)}
+                                                disabled={resolving}
+                                                className="text-[12px] text-emerald-400 hover:text-emerald-300 font-medium transition-colors duration-150 disabled:opacity-40"
+                                            >
+                                                Resolve
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    {/* Desktop table layout */}
+                    <div className="hidden md:block">
+                        <Table columns={columns} data={myFlags} emptyMessage="No flags assigned to you." />
+                    </div>
+                </>
             )}
 
             <ConfirmModal
