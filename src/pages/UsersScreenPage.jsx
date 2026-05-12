@@ -12,6 +12,7 @@ import Table from '../components/Table'
 import Modal from '../components/Modal'
 import Badge from '../components/Badge'
 import PageHeader from '../components/PageHeader'
+import UserDetailModal from '../components/UserDetailModal.jsx'
 
 import {
     FormField,
@@ -38,24 +39,13 @@ const emptyForm = {
 }
 
 export default function UsersScreen() {
-
-    const {
-        data: users,
-        isLoading,
-        isError
-    } = useGetUsersQuery()
-
-    const [createUser, { isLoading: creating }] =
-        useCreateUserMutation()
-
-    const [deactivateUser] =
-        useDeactivateUserMutation()
-
-    const [reactivateUser] =
-        useReactivateUserMutation()
+    const { data: users, isLoading, isError } = useGetUsersQuery()
+    const [createUser, { isLoading: creating }] = useCreateUserMutation()
+    const [deactivateUser] = useDeactivateUserMutation()
+    const [reactivateUser] = useReactivateUserMutation()
 
     const [open, setOpen] = useState(false)
-
+    const [selectedUserId, setSelectedUserId] = useState(null)
     const [form, setForm] = useState(emptyForm)
 
     const handleChange = (e) => {
@@ -70,12 +60,9 @@ export default function UsersScreen() {
 
         try {
             await createUser(form).unwrap()
-
             toast.success('User created successfully')
-
             setForm(emptyForm)
             setOpen(false)
-
         } catch (err) {
             toast.error(getErrorMessage(err))
         }
@@ -84,9 +71,7 @@ export default function UsersScreen() {
     const handleDeactivate = async (id) => {
         try {
             await deactivateUser(id).unwrap()
-
             toast.success('User deactivated')
-
         } catch (err) {
             toast.error(getErrorMessage(err))
         }
@@ -95,72 +80,59 @@ export default function UsersScreen() {
     const handleReactivate = async (id) => {
         try {
             await reactivateUser(id).unwrap()
-
             toast.success('User reactivated')
-
         } catch (err) {
             toast.error(getErrorMessage(err))
         }
     }
 
     const columns = [
-        {
-            key: 'name',
-            label: 'Name'
-        },
-
-        {
-            key: 'email',
-            label: 'Email'
-        },
-
+        { key: 'name', label: 'Name' },
+        { key: 'email', label: 'Email' },
         {
             key: 'role',
             label: 'Role',
-            render: (row) => (
-                <Badge
-                    status={row.role}
-                    type="role"
-                />
-            ),
+            render: (row) => <Badge status={row.role} type="role" />,
         },
-
         {
             key: 'createdAt',
             label: 'Joined',
-            render: (row) =>
-                formatDate(row.createdAt)
+            render: (row) => formatDate(row.createdAt)
         },
-
         {
             key: 'active',
             label: 'Status',
-            render: (row) => (
-                <Badge
-                    status={row.active ? 'ACTIVE' : 'INACTIVE'}
-                />
-            ),
+            render: (row) => <Badge status={row.active ? 'ACTIVE' : 'INACTIVE'} />,
         },
-
         {
             key: 'actions',
             label: 'Actions',
-            render: (row) =>
-                row.active ? (
+            render: (row) => (
+                <div className="flex items-center gap-3">
                     <button
-                        onClick={() => handleDeactivate(row.id)}
-                        className="text-[12px] font-medium text-red-400 hover:text-red-300 transition-colors"
+                        onClick={() => setSelectedUserId(row.id)}
+                        className="text-[12px] font-medium text-yellow-500 hover:text-yellow-700 transition-colors"
                     >
-                        Deactivate
+                        View
                     </button>
-                ) : (
-                    <button
-                        onClick={() => handleReactivate(row.id)}
-                        className="text-[12px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
-                    >
-                        Reactivate
-                    </button>
-                ),
+
+                    {row.active ? (
+                        <button
+                            onClick={() => handleDeactivate(row.id)}
+                            className="text-[12px] font-medium text-red-400 hover:text-red-300 transition-colors"
+                        >
+                            Deactivate
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => handleReactivate(row.id)}
+                            className="text-[12px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+                        >
+                            Reactivate
+                        </button>
+                    )}
+                </div>
+            ),
         },
     ]
 
@@ -172,20 +144,15 @@ export default function UsersScreen() {
                 action={
                     <button
                         onClick={() => setOpen(true)}
-                        className="bg-primary hover:bg-primary-hover text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
+                        className="bg-green-700 hover:bg-primary-hover text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
                     >
                         + Add User
                     </button>
                 }
             />
 
-            {isLoading && (
-                <LoadingSpinner />
-            )}
-
-            {isError && (
-                <ErrorAlert message="Failed to load users." />
-            )}
+            {isLoading && <LoadingSpinner />}
+            {isError && <ErrorAlert message="Failed to load users." />}
 
             {!isLoading && !isError && (
                 <Table
@@ -201,7 +168,6 @@ export default function UsersScreen() {
                 title="Create New User"
             >
                 <form onSubmit={handleSubmit}>
-
                     <FormField label="Full Name">
                         <Input
                             name="name"
@@ -240,30 +206,23 @@ export default function UsersScreen() {
                             value={form.role}
                             onChange={handleChange}
                         >
-                            <option value="ADMIN">
-                                Admin
-                            </option>
-
-                            <option value="FLEET_MANAGER">
-                                Fleet Manager
-                            </option>
-
-                            <option value="FIELD_STAFF">
-                                Field Staff
-                            </option>
-
-                            <option value="MAINTENANCE">
-                                Maintenance
-                            </option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="FLEET_MANAGER">Fleet Manager</option>
+                            <option value="FIELD_STAFF">Field Staff</option>
+                            <option value="MAINTENANCE_TEAM">Maintenance</option>
                         </Select>
                     </FormField>
 
                     <SubmitButton loading={creating}>
                         Create User
                     </SubmitButton>
-
                 </form>
             </Modal>
+
+            <UserDetailModal
+                userId={selectedUserId}
+                onClose={() => setSelectedUserId(null)}
+            />
         </>
     )
 }

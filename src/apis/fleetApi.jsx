@@ -264,6 +264,29 @@ export const fleetApi = createApi({
             }),
             invalidatesTags: ['Users'],
         }),
+        updateVehicleMilestoneInterval: builder.mutation({
+            query: ({ id, ...body }) => ({
+                url: `/vehicles/${id}/milestone-interval`,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: ['Vehicles'],
+        }),
+        getMaintenanceMessages: builder.query({
+            query: (flagId) => `/maintenance-flags/${flagId}/messages`,
+            providesTags: (result, error, flagId) => [{ type: 'Flags', id: `messages-${flagId}` }],
+        }),
+
+        sendMaintenanceMessage: builder.mutation({
+            query: ({ flagId, ...body }) => ({
+                url: `/maintenance-flags/${flagId}/messages`,
+                method: 'POST',
+                body,
+            }),
+            invalidatesTags: (result, error, { flagId }) => [
+                { type: 'Flags', id: `messages-${flagId}` },
+            ],
+        }),
 
     }),
 })
@@ -311,4 +334,7 @@ export const {
     useResetUserPasswordMutation,
     useSetUserMediaMutation,
     useRemoveUserMediaMutation,
+    useUpdateVehicleMilestoneIntervalMutation,
+    useGetMaintenanceMessagesQuery,
+    useSendMaintenanceMessageMutation,
 } = fleetApi

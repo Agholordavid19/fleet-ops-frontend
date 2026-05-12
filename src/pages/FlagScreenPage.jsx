@@ -18,7 +18,10 @@ export default function FlagsScreen() {
     const [notes, setNotes] = useState('')
     const [confirmId, setConfirmId] = useState(null)
 
-    const myFlags = flags?.filter((f) => f.status !== 'OPEN') ?? []
+    const myFlags =
+        flags?.filter((f) =>
+            ['ASSIGNED', 'IN_PROGRESS'].includes(f.status)
+        ) ?? []
 
     const handleUpdateProgress = async (e) => {
         e.preventDefault()

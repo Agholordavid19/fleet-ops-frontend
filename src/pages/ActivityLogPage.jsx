@@ -84,7 +84,7 @@ export default function ActivityLogPage() {
                         </div>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-primary text-gray-900 text-[12px] font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                            className="px-4 py-2 bg-pink-500 text-gray-900 text-[12px] font-semibold rounded-lg hover:opacity-90 transition-opacity"
                         >
                             Search
                         </button>

@@ -18,11 +18,11 @@ const navByRole = {
         { to: '/fleet/trips',       label: 'Trip Requests' },
     ],
     FIELD_STAFF: [
-        { to: '/staff/trips',   label: 'My Trips'    },
+        { to: '/staff/trips', label: 'Request Trip' },
+        { to: '/staff/history', label: 'History' },
         { to: '/staff/mileage', label: 'Mileage Log' },
-        { to: '/staff/complete-trips', label: 'Complete Trips' },
     ],
-    MAINTENANCE: [
+    MAINTENANCE_TEAM: [
         { to: '/maintenance/flags', label: 'My Flags' },
     ],
 }
@@ -40,9 +40,9 @@ export default function Sidebar({ onClose }) {
             <div className="px-5 pt-6 pb-5">
                 <div className="flex items-center gap-2.5">
                     <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center shrink-0">
-                        <span className="text-[10px] font-bold text-gray-900 tracking-tight">F</span>
+                        <span className="text-[10px] font-bold text-gray-900 tracking-tight">S</span>
                     </div>
-                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">FleetOps</span>
+                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">SavidOps</span>
                 </div>
             </div>
 

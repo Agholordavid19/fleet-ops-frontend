@@ -1,31 +1,55 @@
+import { useState } from 'react'
+import toast from 'react-hot-toast'
 import {
     useGetVehicleQuery,
     useGetVehicleAssignmentsQuery,
-    useGetMileageLogsByVehicleQuery
+    useGetMileageLogsByVehicleQuery,
+    useUpdateVehicleMilestoneIntervalMutation,
 } from '../apis/fleetApi'
 import Modal from '../components/Modal.jsx'
 import Badge from '../components/Badge.jsx'
 import Table from '../components/Table.jsx'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback.jsx'
-import { formatDate } from '../utils/format.js'
+import { formatDate, getErrorMessage } from '../utils/format.js'
 
 export default function VehicleDetailModal({ vehicleId, onClose }) {
+    const [milestoneInterval, setMilestoneInterval] = useState('')
+
     const {
         data: vehicle,
         isLoading,
-        isError
+        isError,
     } = useGetVehicleQuery(vehicleId, { skip: !vehicleId })
 
     const {
         data: assignments,
-        isLoading: loadingAss
+        isLoading: loadingAss,
     } = useGetVehicleAssignmentsQuery(vehicleId, { skip: !vehicleId })
 
     const {
         data: mileageLogs,
         isLoading: loadingMileage,
-        isError: mileageError
+        isError: mileageError,
     } = useGetMileageLogsByVehicleQuery(vehicleId, { skip: !vehicleId })
+
+    const [updateMilestone, { isLoading: updatingMilestone }] =
+        useUpdateVehicleMilestoneIntervalMutation()
+
+    const handleUpdateMilestone = async (e) => {
+        e.preventDefault()
+
+        try {
+            await updateMilestone({
+                id: vehicleId,
+                milestoneInterval: Number(milestoneInterval),
+            }).unwrap()
+
+            toast.success('Milestone interval updated')
+            setMilestoneInterval('')
+        } catch (err) {
+            toast.error(getErrorMessage(err))
+        }
+    }
 
     const assignmentCols = [
         {
@@ -64,17 +88,27 @@ export default function VehicleDetailModal({ vehicleId, onClose }) {
         {
             key: 'mileageAdded',
             label: 'Mileage Added',
-            render: (r) => `${r.mileageAdded ?? 0} km`,
+            render: (r) => {
+                const reported = r.reportedMileage ?? 0
+                const previous = r.previousMileage ?? 0
+                const added = r.mileageAdded ?? reported - previous
+
+                return `${added} km`
+            },
         },
         {
-            key: 'loggedByName',
+            key: 'submittedByName',
             label: 'Logged By',
-            render: (r) => r.loggedByName || r.fieldStaffName || 'N/A',
+            render: (r) =>
+                r.submittedByName ||
+                r.loggedByName ||
+                r.fieldStaffName ||
+                'N/A',
         },
         {
-            key: 'createdAt',
+            key: 'loggedAt',
             label: 'Date',
-            render: (r) => formatDate(r.createdAt || r.loggedAt),
+            render: (r) => formatDate(r.loggedAt || r.createdAt),
         },
     ]
 
@@ -116,6 +150,35 @@ export default function VehicleDetailModal({ vehicleId, onClose }) {
                             </div>
                         ))}
                     </div>
+
+                    <form
+                        onSubmit={handleUpdateMilestone}
+                        className="bg-gray-900 border border-gray-800 rounded-2xl p-4"
+                    >
+                        <p className="text-[10px] font-medium uppercase tracking-widest text-gray-600 mb-3">
+                            Update Milestone Interval
+                        </p>
+
+                        <div className="flex gap-3">
+                            <input
+                                type="number"
+                                min="1"
+                                placeholder="e.g. 10000"
+                                value={milestoneInterval}
+                                onChange={(e) => setMilestoneInterval(e.target.value)}
+                                required
+                                className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-[13px] text-gray-200 placeholder-gray-600 focus:outline-none focus:border-gray-500"
+                            />
+
+                            <button
+                                type="submit"
+                                disabled={updatingMilestone}
+                                className="px-4 py-2 bg-primary text-gray-900 text-[12px] font-semibold rounded-lg hover:opacity-90 disabled:opacity-50"
+                            >
+                                {updatingMilestone ? 'Updating...' : 'Update'}
+                            </button>
+                        </div>
+                    </form>
 
                     <div>
                         <p className="text-[10px] font-medium uppercase tracking-widest text-gray-600 mb-3">

@@ -54,9 +54,9 @@ export default function LoginScreen() {
                 {/* Wordmark */}
                 <motion.div variants={item} className="flex items-center gap-2 mb-8">
                     <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center shrink-0">
-                        <span className="text-[10px] font-bold text-gray-900 leading-none">F</span>
+                        <span className="text-[10px] font-bold text-gray-900 leading-none">S</span>
                     </div>
-                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">FleetOps</span>
+                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">SavidOps</span>
                 </motion.div>
 
                 {/* Heading */}
