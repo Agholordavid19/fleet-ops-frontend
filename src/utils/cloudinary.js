@@ -5,7 +5,7 @@ const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
  * Uploads a single file to Cloudinary asynchronously.
  * Returns { publicId, url } on success.
  */
-export async function uploadToCloudinary(file, folder = 'fleetops/users') {
+export async function uploadToCloudinary(file, folder = 'mpfleets/users') {
     const fd = new FormData()
     fd.append('file', file)
     fd.append('upload_preset', UPLOAD_PRESET)
@@ -29,6 +29,6 @@ export async function uploadToCloudinary(file, folder = 'fleetops/users') {
  * Uploads multiple files concurrently.
  * Returns an array of { publicId, url }.
  */
-export async function uploadManyToCloudinary(files, folder = 'fleetops/vehicles') {
+export async function uploadManyToCloudinary(files, folder = 'mpfleets/vehicles') {
     return Promise.all([...files].map((f) => uploadToCloudinary(f, folder)))
 }

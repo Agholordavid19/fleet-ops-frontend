@@ -111,7 +111,7 @@ export default function UsersScreen() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setSelectedUserId(row.id)}
-                        className="text-[12px] font-medium text-yellow-500 hover:text-yellow-700 transition-colors"
+                        className="text-[12px] font-semibold text-primary hover:text-primary-hover transition-colors"
                     >
                         View
                     </button>
@@ -119,14 +119,14 @@ export default function UsersScreen() {
                     {row.active ? (
                         <button
                             onClick={() => handleDeactivate(row.id)}
-                            className="text-[12px] font-medium text-red-400 hover:text-red-300 transition-colors"
+                            className="rounded-md bg-red-600 px-2.5 py-1 text-[12px] font-semibold text-white hover:bg-red-700 transition-colors"
                         >
                             Deactivate
                         </button>
                     ) : (
                         <button
                             onClick={() => handleReactivate(row.id)}
-                            className="text-[12px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+                            className="rounded-md bg-emerald-600 px-2.5 py-1 text-[12px] font-semibold text-white hover:bg-emerald-700 transition-colors"
                         >
                             Reactivate
                         </button>
@@ -144,7 +144,7 @@ export default function UsersScreen() {
                 action={
                     <button
                         onClick={() => setOpen(true)}
-                        className="bg-green-700 hover:bg-primary-hover text-gray-900 text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
+                        className="bg-primary hover:bg-primary-hover text-white text-[13px] font-semibold px-4 py-2 rounded-lg transition-all duration-150"
                     >
                         + Add User
                     </button>

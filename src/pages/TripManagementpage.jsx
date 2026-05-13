@@ -3,20 +3,26 @@ import toast from 'react-hot-toast'
 import {
     useGetAllTripRequestsQuery,
     useApproveTripMutation,
-    useRejectTripMutation
+    useRejectTripMutation,
+    useCompleteTripMutation,
 } from '../apis/fleetApi.jsx'
 import Table from '../components/Table'
 import Badge from '../components/Badge'
 import PageHeader from '../components/PageHeader'
+import Modal from '../components/Modal.jsx'
+import { FormField, Input, SubmitButton } from '../components/Form.jsx'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
-import { formatDate } from '../utils/format.js'
+import { formatDate, getErrorMessage } from '../utils/format.js'
 
 export default function TripManagementScreen() {
     const { data: trips, isLoading, isError } = useGetAllTripRequestsQuery()
     const [approveTrip] = useApproveTripMutation()
     const [rejectTrip] = useRejectTripMutation()
+    const [completeTrip, { isLoading: completing }] = useCompleteTripMutation()
     const [loadingId, setLoadingId] = useState(null)
     const [filter, setFilter] = useState('PENDING')
+    const [completionTrip, setCompletionTrip] = useState(null)
+    const [reportedMileage, setReportedMileage] = useState('')
 
     const allTrips = trips ?? []
 
@@ -51,6 +57,36 @@ export default function TripManagementScreen() {
         }
     }
 
+    const openCompleteModal = (trip) => {
+        setCompletionTrip(trip)
+        setReportedMileage('')
+    }
+
+    const handleComplete = async (e) => {
+        e.preventDefault()
+
+        const trimmedMileage = reportedMileage.trim()
+        const mileage = trimmedMileage === '' ? null : Number(trimmedMileage)
+
+        if (mileage !== null && (!Number.isFinite(mileage) || mileage < 0)) {
+            toast.error('Enter a valid odometer reading')
+            return
+        }
+
+        try {
+            await completeTrip(
+                mileage === null
+                    ? { id: completionTrip.id }
+                    : { id: completionTrip.id, reportedMileage: mileage }
+            ).unwrap()
+            toast.success('Trip completed')
+            setCompletionTrip(null)
+            setReportedMileage('')
+        } catch (err) {
+            toast.error(getErrorMessage(err))
+        }
+    }
+
     const columns = [
         { key: 'fieldStaffName', label: 'Requested By' },
         { key: 'plateNumber', label: 'Vehicle' },
@@ -61,8 +97,9 @@ export default function TripManagementScreen() {
         {
             key: 'actions',
             label: 'Actions',
-            render: (row) =>
-                row.status === 'PENDING' ? (
+            render: (row) => {
+                if (row.status === 'PENDING') {
+                    return (
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => handleApprove(row.id)}
@@ -74,14 +111,28 @@ export default function TripManagementScreen() {
                         <button
                             onClick={() => handleReject(row.id)}
                             disabled={loadingId !== null}
-                            className="text-[11px] bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
+                            className="text-[11px] bg-red-600 text-white hover:bg-red-700 px-3 py-1.5 rounded-lg font-semibold transition-all duration-150 disabled:opacity-40"
                         >
                             {loadingId === `reject-${row.id}` ? '...' : 'Reject'}
                         </button>
                     </div>
-                ) : (
-                    <span className="text-[13px] text-gray-700">—</span>
-                ),
+                    )
+                }
+
+                if (row.status === 'APPROVED') {
+                    return (
+                        <button
+                            type="button"
+                            onClick={() => openCompleteModal(row)}
+                            className="text-[11px] bg-primary text-white hover:bg-primary-hover px-3 py-1.5 rounded-lg font-semibold transition-all duration-150"
+                        >
+                            Complete Trip
+                        </button>
+                    )
+                }
+
+                return <span className="text-[13px] text-gray-700">—</span>
+            },
         },
     ]
 
@@ -101,7 +152,7 @@ export default function TripManagementScreen() {
                         onClick={() => setFilter(item)}
                         className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
                             filter === item
-                                ? 'bg-primary text-gray-900'
+                                ? 'bg-primary text-white'
                                 : 'bg-gray-800 text-gray-400 hover:text-gray-200'
                         }`}
                     >
@@ -165,11 +216,21 @@ export default function TripManagementScreen() {
                                             <button
                                                 onClick={() => handleReject(row.id)}
                                                 disabled={loadingId !== null}
-                                                className="flex-1 text-[12px] bg-red-500/10 text-red-400 hover:bg-red-500/20 py-2 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
+                                                className="flex-1 text-[12px] bg-red-600 text-white hover:bg-red-700 py-2 rounded-lg font-semibold transition-all duration-150 disabled:opacity-40"
                                             >
                                                 {loadingId === `reject-${row.id}` ? '...' : 'Reject'}
                                             </button>
                                         </div>
+                                    )}
+
+                                    {row.status === 'APPROVED' && (
+                                        <button
+                                            type="button"
+                                            onClick={() => openCompleteModal(row)}
+                                            className="w-full text-[12px] bg-primary text-white hover:bg-primary-hover py-2 rounded-lg font-semibold transition-all duration-150"
+                                        >
+                                            Complete Trip
+                                        </button>
                                     )}
                                 </div>
                             ))
@@ -185,6 +246,48 @@ export default function TripManagementScreen() {
                     </div>
                 </>
             )}
+
+            <Modal
+                open={!!completionTrip}
+                onClose={() => setCompletionTrip(null)}
+                title="Complete Trip"
+            >
+                {completionTrip && (
+                    <form onSubmit={handleComplete}>
+                        <div className="bg-gray-800/40 rounded-xl px-4 py-3.5 mb-4">
+                            <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-gray-600 mb-1">
+                                Vehicle
+                            </p>
+                            <p className="text-[13px] font-semibold text-gray-100">
+                                {completionTrip.plateNumber ?? 'Vehicle'}
+                            </p>
+                            <p className="text-[12px] text-gray-500 mt-1">
+                                {completionTrip.fieldStaffName ?? 'Assigned staff'} · {completionTrip.destination ?? 'No destination'}
+                            </p>
+                        </div>
+
+                        <FormField label="Current Odometer Reading (km, optional)">
+                            <Input
+                                type="number"
+                                min="0"
+                                step="0.1"
+                                value={reportedMileage}
+                                onChange={(e) => setReportedMileage(e.target.value)}
+                                placeholder="e.g. 4350"
+                            />
+                        </FormField>
+
+                        <p className="text-[12px] text-gray-500 leading-relaxed">
+                            This completes the approved trip and sets the vehicle back to available.
+                            Add an odometer reading if it should be recorded now.
+                        </p>
+
+                        <SubmitButton loading={completing}>
+                            Complete Trip
+                        </SubmitButton>
+                    </form>
+                )}
+            </Modal>
         </>
     )
 }

@@ -33,13 +33,22 @@ export function Textarea({ ...props }) {
     return <textarea className={inputCls + ' resize-none leading-relaxed'} rows={3} {...props} />
 }
 
-export function SubmitButton({ loading, children }) {
+const buttonVariants = {
+    primary: 'bg-primary hover:bg-primary-hover text-white',
+    danger: 'bg-red-600 hover:bg-red-700 text-white',
+    success: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+}
+
+export function SubmitButton({ loading, disabled, children, variant = 'primary', className = '' }) {
+    const variantCls = buttonVariants[variant] ?? buttonVariants.primary
+    const isDisabled = loading || disabled
+
     return (
         <motion.button
             type="submit"
-            disabled={loading}
-            whileTap={loading ? {} : { scale: 0.98 }}
-            className="w-full mt-3 bg-red-500 hover:bg-red-800 disabled:opacity-40 disabled:cursor-not-allowed text-gray-900 font-semibold text-[13px] py-2.5 rounded-lg transition-all duration-150 tracking-tight"
+            disabled={isDisabled}
+            whileTap={isDisabled ? {} : { scale: 0.98 }}
+            className={`w-full mt-3 ${variantCls} disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-[13px] py-2.5 rounded-lg transition-all duration-150 tracking-tight ${className}`}
         >
             {loading ? 'Saving…' : children}
         </motion.button>

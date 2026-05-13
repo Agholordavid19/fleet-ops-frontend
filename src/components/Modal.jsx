@@ -1,7 +1,15 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-export function ConfirmModal({ open, message, onConfirm, onCancel }) {
+const confirmVariants = {
+    danger: 'bg-red-600 hover:bg-red-700 text-white',
+    success: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+    primary: 'bg-primary hover:bg-primary-hover text-white',
+}
+
+export function ConfirmModal({ open, message, onConfirm, onCancel, variant = 'danger' }) {
+    const confirmCls = confirmVariants[variant] ?? confirmVariants.danger
+
     return (
         <Modal open={open} onClose={onCancel} title="Are you sure?">
             <p className="text-[13px] text-gray-400 leading-relaxed mb-6">{message}</p>
@@ -14,7 +22,7 @@ export function ConfirmModal({ open, message, onConfirm, onCancel }) {
                 </button>
                 <button
                     onClick={onConfirm}
-                    className="text-[13px] bg-primary hover:bg-primary-hover text-gray-900 font-semibold px-4 py-2 rounded-lg transition-all duration-150"
+                    className={`text-[13px] ${confirmCls} font-semibold px-4 py-2 rounded-lg transition-all duration-150`}
                 >
                     Confirm
                 </button>

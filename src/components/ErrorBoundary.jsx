@@ -16,7 +16,7 @@ export default class ErrorBoundary extends Component {
                         <p className="text-sm">Please refresh the page to continue.</p>
                         <button
                             onClick={() => window.location.reload()}
-                            className="mt-4 bg-primary hover:bg-primary-hover text-gray-900 text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                            className="mt-4 bg-primary hover:bg-primary-hover text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                         >
                             Refresh
                         </button>

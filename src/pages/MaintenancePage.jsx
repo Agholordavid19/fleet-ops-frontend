@@ -3,8 +3,8 @@ import toast from 'react-hot-toast'
 import {
     useGetMaintenanceFlagsQuery,
     useAssignFlagMutation,
-    useGetUsersQuery,
     useApproveFlagMutation,
+    useGetUsersQuery,
 } from '../apis/fleetApi.jsx'
 
 import Table from '../components/Table.jsx'
@@ -14,10 +14,12 @@ import PageHeader from '../components/PageHeader'
 import { FormField, SubmitButton } from '../components/Form'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
 import { formatDate, getErrorMessage } from '../utils/format.js'
+import { useAuth } from '../utils/useAuth.jsx'
 
 export default function MaintenanceScreen() {
     const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery()
-    const { data: users, isLoading: usersLoading } = useGetUsersQuery()
+    const { isAdmin } = useAuth()
+    const { data: users } = useGetUsersQuery(undefined, { skip: !isAdmin })
 
     const [assignFlag, { isLoading: assigning }] = useAssignFlagMutation()
     const [approveFlag, { isLoading: approving }] = useApproveFlagMutation()
@@ -29,9 +31,7 @@ export default function MaintenanceScreen() {
     const [newMilestoneInterval, setNewMilestoneInterval] = useState('')
     const [serviceNotes, setServiceNotes] = useState('')
 
-    const maintenanceTeam = (users ?? []).filter(
-        (user) => user.role === 'MAINTENANCE_TEAM'
-    )
+    const maintenanceTeam = (users ?? []).filter((user) => user.role === 'MAINTENANCE_TEAM' && user.active !== false)
 
     const handleAssign = async (e) => {
         e.preventDefault()
@@ -101,6 +101,7 @@ export default function MaintenanceScreen() {
                 if (row.status === 'OPEN') {
                     return (
                         <button
+                            type="button"
                             onClick={() => setSelectedFlag(row)}
                             className="text-[12px] text-amber-400 hover:text-amber-300 font-medium transition-colors duration-150"
                         >
@@ -112,6 +113,7 @@ export default function MaintenanceScreen() {
                 if (row.status === 'PENDING_APPROVAL') {
                     return (
                         <button
+                            type="button"
                             onClick={() => setApprovalFlag(row)}
                             className="text-[12px] text-emerald-500 hover:text-emerald-400 font-medium transition-colors duration-150"
                         >
@@ -120,11 +122,7 @@ export default function MaintenanceScreen() {
                     )
                 }
 
-                return (
-                    <span className="text-xs text-gray-600">
-                        Assigned
-                    </span>
-                )
+                return <span className="text-xs text-gray-600">Assigned</span>
             },
         },
     ]
@@ -175,24 +173,32 @@ export default function MaintenanceScreen() {
                         </div>
 
                         <FormField label="Assign to Maintenance Team">
-                            <select
-                                value={techId}
-                                onChange={(e) => setTechId(e.target.value)}
-                                required
-                                className="w-full h-10 px-3 rounded-lg border border-gray-700 bg-gray-800 text-sm text-gray-200 outline-none focus:border-amber-400"
-                            >
-                                <option value="">
-                                    {usersLoading
-                                        ? 'Loading technicians...'
-                                        : 'Select technician'}
-                                </option>
+                            {isAdmin ? (
+                                <select
+                                    value={techId}
+                                    onChange={(e) => setTechId(e.target.value)}
+                                    required
+                                    className="w-full h-10 px-3 rounded-lg border border-gray-700 bg-gray-800 text-sm text-gray-200 outline-none focus:border-primary/50"
+                                >
+                                    <option value="">Select a maintenance user</option>
 
-                                {maintenanceTeam.map((user) => (
-                                    <option key={user.id} value={user.id}>
-                                        {user.name || user.email} — {user.email}
-                                    </option>
-                                ))}
-                            </select>
+                                    {maintenanceTeam.map((user) => (
+                                        <option key={user.id} value={user.id}>
+                                            {user.name || user.email} - {user.email}
+                                        </option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={techId}
+                                    onChange={(e) => setTechId(e.target.value)}
+                                    required
+                                    placeholder="Maintenance team user ID"
+                                    className="w-full h-10 px-3 rounded-lg border border-gray-700 bg-gray-800 text-sm text-gray-200 outline-none focus:border-primary/50"
+                                />
+                            )}
                         </FormField>
 
                         <SubmitButton loading={assigning}>

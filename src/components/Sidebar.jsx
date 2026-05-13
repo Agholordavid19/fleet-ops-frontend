@@ -40,9 +40,9 @@ export default function Sidebar({ onClose }) {
             <div className="px-5 pt-6 pb-5">
                 <div className="flex items-center gap-2.5">
                     <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center shrink-0">
-                        <span className="text-[10px] font-bold text-gray-900 tracking-tight">S</span>
+                        <span className="text-[10px] font-bold text-white tracking-tight">M</span>
                     </div>
-                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">SavidOps</span>
+                    <span className="text-[13px] font-semibold text-gray-100 tracking-tight">MpFleets</span>
                 </div>
             </div>
 

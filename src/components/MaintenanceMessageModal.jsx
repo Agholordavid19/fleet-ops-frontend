@@ -124,7 +124,7 @@ export default function MaintenanceMessageModal({ flag, onClose }) {
                         <button
                             type="submit"
                             disabled={sending || !message.trim()}
-                            className="px-4 py-2 bg-primary text-gray-900 text-[12px] font-semibold rounded-lg hover:opacity-90 disabled:opacity-50"
+                            className="px-4 py-2 bg-primary text-white text-[12px] font-semibold rounded-lg hover:bg-primary-hover disabled:opacity-50"
                         >
                             {sending ? 'Sending...' : 'Send'}
                         </button>

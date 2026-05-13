@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-console.log('base url:', import.meta.env.VITE_API_BASE_URL)
-
 export const fleetApi = createApi({
     reducerPath: 'fleetApi',
     baseQuery: fetchBaseQuery({
@@ -55,7 +53,7 @@ export const fleetApi = createApi({
         }),
         createTripRequest: builder.mutation({
             query: (body) => ({ url: '/trip-requests', method: 'POST', body }),
-            invalidatesTags: ['Trips'],
+            invalidatesTags: ['Trips', 'Vehicles'],
         }),
         getMyTripRequests: builder.query({
             query: () => '/trip-requests/my',
@@ -63,11 +61,11 @@ export const fleetApi = createApi({
         }),
         approveTrip: builder.mutation({
             query: (id) => ({ url: `/trip-requests/${id}/approve`, method: 'PATCH' }),
-            invalidatesTags: ['Trips'],
+            invalidatesTags: ['Trips', 'Vehicles'],
         }),
         rejectTrip: builder.mutation({
             query: (id) => ({ url: `/trip-requests/${id}/reject`, method: 'PATCH' }),
-            invalidatesTags: ['Trips'],
+            invalidatesTags: ['Trips', 'Vehicles'],
         }),
 
         // ── Mileage Logs ──────────────────────────────────────
@@ -223,11 +221,15 @@ export const fleetApi = createApi({
         }),
 
         completeTrip: builder.mutation({
-            query: ({ id, ...body }) => ({
-                url: `/trip-requests/${id}/complete`,
-                method: 'PATCH',
-                body,
-            }),
+            query: ({ id, ...body }) => {
+                const hasBody = Object.keys(body).length > 0
+
+                return {
+                    url: `/trip-requests/${id}/complete`,
+                    method: 'PATCH',
+                    ...(hasBody ? { body } : {}),
+                }
+            },
             invalidatesTags: ['Trips', 'Vehicles'],
         }),
         getMileageLogsByVehicle: builder.query({

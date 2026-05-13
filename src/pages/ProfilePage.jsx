@@ -53,7 +53,7 @@ export default function ProfileScreen() {
         setPreview(URL.createObjectURL(file))
         setImgUploading(true)
         try {
-            const { publicId, url } = await uploadToCloudinary(file, 'fleetops/users')
+            const { publicId, url } = await uploadToCloudinary(file, 'mpfleets/users')
             await setProfileMedia({ publicId, url }).unwrap()
             toast.success('Profile picture updated')
         } catch {
@@ -143,7 +143,7 @@ export default function ProfileScreen() {
                                 <button
                                     onClick={handleRemoveImage}
                                     disabled={removing}
-                                    className="text-[12px] text-red-400 hover:text-red-300 transition-colors duration-150 disabled:opacity-40"
+                                    className="rounded-md bg-red-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-red-700 transition-colors duration-150 disabled:opacity-40"
                                 >
                                     Remove
                                 </button>

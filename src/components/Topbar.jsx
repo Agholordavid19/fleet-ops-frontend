@@ -13,7 +13,7 @@ const routes = {
 
 export default function Topbar({ onMenuClick }) {
     const { pathname } = useLocation()
-    const route = routes[pathname] ?? { title: 'FleetOps', subtitle: '' }
+    const route = routes[pathname] ?? { title: 'MpFleets', subtitle: '' }
 
     const dateStr = new Date().toLocaleDateString('en-GB', {
         weekday: 'short',

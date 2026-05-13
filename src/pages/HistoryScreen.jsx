@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { useGetMyTripRequestsQuery } from '../apis/fleetApi'
+import toast from 'react-hot-toast'
+import {
+    useCompleteTripMutation,
+    useGetMyTripRequestsQuery,
+} from '../apis/fleetApi'
 
 import Table from '../components/Table.jsx'
 import Badge from '../components/Badge'
 import PageHeader from '../components/PageHeader'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
-import { formatDate } from '../utils/format.js'
+import { formatDate, getErrorMessage } from '../utils/format.js'
 
 export default function HistoryScreen() {
     const {
@@ -13,17 +17,37 @@ export default function HistoryScreen() {
         isLoading,
         isError,
     } = useGetMyTripRequestsQuery()
+    const [completeTrip] = useCompleteTripMutation()
 
     const [activeTab, setActiveTab] = useState('ALL')
+    const [completingId, setCompletingId] = useState(null)
 
     const myTrips = trips ?? []
 
-    const filteredTrips =
-        activeTab === 'COMPLETED'
-            ? myTrips.filter((trip) => trip.status === 'COMPLETED')
-            : myTrips
+    const filteredTrips = myTrips.filter((trip) => {
+        if (activeTab === 'COMPLETED') return trip.status === 'COMPLETED'
 
-    const columns = [
+        if (activeTab === 'PRESENT') {
+            return ['PENDING', 'APPROVED', 'ONGOING', 'IN_PROGRESS'].includes(trip.status)
+        }
+
+        return true
+    })
+
+    const handleComplete = async (id) => {
+        setCompletingId(id)
+
+        try {
+            await completeTrip({ id }).unwrap()
+            toast.success('Trip completed')
+        } catch (err) {
+            toast.error(getErrorMessage(err))
+        } finally {
+            setCompletingId(null)
+        }
+    }
+
+    const baseColumns = [
         { key: 'plateNumber', label: 'Vehicle' },
         { key: 'destination', label: 'Destination' },
         {
@@ -43,25 +67,57 @@ export default function HistoryScreen() {
         },
     ]
 
+    const columns = activeTab === 'PRESENT'
+        ? [
+            ...baseColumns,
+            {
+                key: 'actions',
+                label: 'Actions',
+                render: (row) => {
+                    if (row.status !== 'APPROVED') {
+                        return <span className="text-[13px] text-gray-700">—</span>
+                    }
+
+                    return (
+                        <button
+                            type="button"
+                            onClick={() => handleComplete(row.id)}
+                            disabled={completingId !== null}
+                            className="text-[12px] bg-primary text-white hover:bg-primary-hover px-3 py-1.5 rounded-lg font-semibold transition-all duration-150 disabled:opacity-40"
+                        >
+                            {completingId === row.id ? 'Completing...' : 'Complete Trip'}
+                        </button>
+                    )
+                },
+            },
+        ]
+        : baseColumns
+
+    const tabs = [
+        { key: 'ALL', label: 'All Trips' },
+        { key: 'PRESENT', label: 'Present Trips' },
+        { key: 'COMPLETED', label: 'Completed Trips' },
+    ]
+
     return (
         <>
             <PageHeader
                 title="Trip History"
-                subtitle="View all your trip requests and completed trips"
+                subtitle="View your present, pending, and completed trips"
             />
 
             <div className="flex gap-2 mb-5">
-                {['ALL', 'COMPLETED'].map((tab) => (
+                {tabs.map((tab) => (
                     <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
+                        key={tab.key}
+                        onClick={() => setActiveTab(tab.key)}
                         className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
-                            activeTab === tab
-                                ? 'bg-primary text-gray-900'
+                            activeTab === tab.key
+                                ? 'bg-primary text-white'
                                 : 'bg-gray-800 text-gray-400 hover:text-gray-200'
                         }`}
                     >
-                        {tab === 'ALL' ? 'All Trips' : 'Completed Trips'}
+                        {tab.label}
                     </button>
                 ))}
             </div>
@@ -76,7 +132,7 @@ export default function HistoryScreen() {
                 <Table
                     columns={columns}
                     data={filteredTrips}
-                    emptyMessage="No trip history."
+                    emptyMessage="No trips found."
                 />
             )}
         </>

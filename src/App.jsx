@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { useAuth } from './utils/useAuth.jsx'
 
@@ -27,7 +27,6 @@ import MaintenanceTeamFlagsPage from './pages/MaintenanceTeamFlagsPage.jsx'
 
 // Profile
 import ProfileScreen from './pages/ProfilePage.jsx'
-import CompleteTripPage from "./pages/CompleteTripPage.jsx";
 
 const roleHome = {
     ADMIN: '/admin/users',
@@ -175,15 +174,6 @@ function App() {
                         element={
                             <ProtectedRoute allowedRoles={['FIELD_STAFF']}>
                                 <MileageScreen />
-                            </ProtectedRoute>
-                        }
-                    />
-
-                    <Route
-                        path="/staff/complete-trips"
-                        element={
-                            <ProtectedRoute allowedRoles={['FIELD_STAFF', 'FLEET_MANAGER', 'ADMIN']}>
-                                <CompleteTripPage />
                             </ProtectedRoute>
                         }
                     />

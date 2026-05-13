@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import {
+    useGetAllTripRequestsQuery,
     useGetMyApprovedTripRequestsQuery,
     useCompleteTripMutation
 } from '../apis/fleetApi.jsx'
@@ -9,13 +10,36 @@ import Badge from '../components/Badge.jsx'
 import PageHeader from '../components/PageHeader'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
 import { formatDate, getErrorMessage } from '../utils/format.js'
+import { useAuth } from '../utils/useAuth.jsx'
 
 export default function CompleteTripPage() {
-    const { data: trips, isLoading, isError } = useGetMyApprovedTripRequestsQuery()
+    const { role } = useAuth()
+    const isFieldStaff = role === 'FIELD_STAFF'
+
+    const {
+        data: myApprovedTrips,
+        isLoading: isLoadingMine,
+        isError: isMineError,
+    } = useGetMyApprovedTripRequestsQuery(undefined, {
+        skip: !isFieldStaff,
+    })
+
+    const {
+        data: allTrips,
+        isLoading: isLoadingAll,
+        isError: isAllError,
+    } = useGetAllTripRequestsQuery(undefined, {
+        skip: isFieldStaff,
+    })
+
     const [completeTrip] = useCompleteTripMutation()
     const [loadingId, setLoadingId] = useState(null)
 
-    const approvedTrips = trips ?? []
+    const approvedTrips = isFieldStaff
+        ? (myApprovedTrips ?? [])
+        : (allTrips ?? []).filter((trip) => trip.status === 'APPROVED')
+    const isLoading = isFieldStaff ? isLoadingMine : isLoadingAll
+    const isError = isFieldStaff ? isMineError : isAllError
 
     const handleComplete = async (id) => {
         setLoadingId(id)
@@ -55,7 +79,7 @@ export default function CompleteTripPage() {
                 <button
                     onClick={() => handleComplete(row.id)}
                     disabled={loadingId !== null}
-                    className="text-[12px] bg-primary/10 text-primary hover:bg-primary/20 px-3 py-1.5 rounded-lg font-medium transition-all duration-150 disabled:opacity-40"
+                    className="text-[12px] bg-primary text-white hover:bg-primary-hover px-3 py-1.5 rounded-lg font-semibold transition-all duration-150 disabled:opacity-40"
                 >
                     {loadingId === row.id ? 'Completing...' : 'Complete Trip'}
                 </button>

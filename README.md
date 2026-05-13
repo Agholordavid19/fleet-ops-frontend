@@ -1,11 +1,11 @@
-🚗 FleetOps — Fleet Management System
+🚗 MpFleets — Fleet Management System
 
-FleetOps is a professional role-based fleet management dashboard designed to streamline vehicle lifecycle management, trip coordination, and maintenance workflows. It leverages an event-driven architecture to ensure real-time responsiveness and operational efficiency.
+MpFleets is a professional role-based fleet management dashboard designed to streamline vehicle lifecycle management, trip coordination, and maintenance workflows. It leverages an event-driven architecture to ensure real-time responsiveness and operational efficiency.
 
 ---
 
 ## 📌 Project Overview
-FleetOps provides a centralized platform for organizations to bridge the gap between field operations and fleet administration. The system enforces strict **Role-Based Access Control (RBAC)** to ensure data integrity and process compliance.
+MpFleets provides a centralized platform for organizations to bridge the gap between field operations and fleet administration. The system enforces strict **Role-Based Access Control (RBAC)** to ensure data integrity and process compliance.
 
 ### Key Stakeholders:
 * **🛡️ Admins:** Global system configuration, user provisioning, and high-level reporting.

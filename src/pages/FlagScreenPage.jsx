@@ -154,6 +154,7 @@ export default function FlagsScreen() {
             <ConfirmModal
                 open={!!confirmId}
                 message="Mark this flag as resolved?"
+                variant="success"
                 onConfirm={() => handleResolve(confirmId)}
                 onCancel={() => setConfirmId(null)}
             />
