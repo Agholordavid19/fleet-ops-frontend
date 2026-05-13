@@ -11,7 +11,7 @@ import Table from '../components/Table.jsx'
 import Modal from '../components/Modal'
 import Badge from '../components/Badge'
 import PageHeader from "../components/Pageheader";
-import VehicleDetailModal from "../components/VehicleScreenModal.jsx";
+import VehicleDetailModal from "../components/VehicleScreenmodal.jsx";
 import { FormField, Input, SubmitButton } from '../components/Form'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
 import { getErrorMessage } from '../utils/format.js'
