@@ -45,7 +45,7 @@ export default function LoginScreen() {
     }
 
     return (
-        <div className="relative h-dvh max-w-full overflow-hidden bg-[#f5f5f7] px-4 py-4 text-[#111111] flex items-center justify-center sm:px-5 sm:py-6">
+        <div className="relative h-dvh max-w-full overflow-x-hidden overflow-y-auto bg-[#f5f5f7] px-4 py-4 text-[#111111] flex items-center justify-center sm:px-5 sm:py-6">
             <div className="pointer-events-none absolute inset-0">
                 <div className="absolute inset-x-0 top-0 h-24 bg-white" />
                 <div className="absolute left-1/2 top-[52%] h-[760px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/8" />
