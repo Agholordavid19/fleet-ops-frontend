@@ -9,7 +9,7 @@ import Table from '../components/Table.jsx'
 import Modal from '../components/Modal'
 import Badge from '../components/Badge'
 import PageHeader from "../components/Pageheader";
-import VehicleDetailModal from "../components/VehicleScreenmodal.jsx";
+import VehicleDetailModal from "../components/VehicleScreenModal.jsx";
 import { FormField, Input, Select, SubmitButton } from '../components/Form'
 import { getErrorMessage } from '../utils/format.js'
 import { useAuth } from '../utils/useAuth.jsx'
