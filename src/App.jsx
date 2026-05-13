@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { useAuth } from './utils/useAuth.jsx'
 
-import DashboardLayout from './components/DashboardLayout'
+import DashboardLayout from "./components/Dashboardlayout";
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 import LoginScreen from './auth/Login.jsx'
