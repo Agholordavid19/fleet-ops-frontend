@@ -7,7 +7,7 @@ import {
 
 import Table from '../components/Table.jsx'
 import Badge from '../components/Badge'
-import PageHeader from '../components/PageHeader'
+import PageHeader from "../components/Pageheader";
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
 import { formatDate, getErrorMessage } from '../utils/format.js'
 

@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { setCredentials } from '../store/authSlice'
 import { useAuth } from '../utils/useAuth.jsx'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
-import PageHeader from '../components/PageHeader'
+import PageHeader from "../components/Pageheader";
 import { FormField, Input, SubmitButton } from '../components/Form'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
 

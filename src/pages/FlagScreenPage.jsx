@@ -4,7 +4,7 @@ import { useGetMaintenanceFlagsQuery, useUpdateFlagProgressMutation, useResolveF
 import Table from '../components/Table.jsx'
 import Modal, { ConfirmModal } from '../components/Modal.jsx'
 import Badge from '../components/Badge.jsx'
-import PageHeader from '../components/PageHeader.jsx'
+import PageHeader from "../components/Pageheader";
 import { FormField, Textarea, SubmitButton } from '../components/Form.jsx'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback.jsx'
 import { getErrorMessage } from '../utils/format.js'

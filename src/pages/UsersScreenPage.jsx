@@ -11,7 +11,7 @@ import {
 import Table from '../components/Table'
 import Modal from '../components/Modal'
 import Badge from '../components/Badge'
-import PageHeader from '../components/PageHeader'
+import PageHeader from "../components/Pageheader";
 import UserDetailModal from '../components/UserDetailModal.jsx'
 
 import {
