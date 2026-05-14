@@ -17,7 +17,9 @@ import { formatDate, getErrorMessage } from '../utils/format.js'
 import { useAuth } from '../utils/useAuth.jsx'
 
 export default function MaintenanceScreen() {
-    const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery()
+    const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery(undefined, {
+        pollingInterval: 5000,
+    })
     const { isAdmin } = useAuth()
     const { data: users } = useGetUsersQuery(undefined, { skip: !isAdmin })
 
@@ -191,7 +193,7 @@ export default function MaintenanceScreen() {
                             ) : (
                                 <input
                                     type="number"
-                                    min="1"
+                                    min="100"
                                     value={techId}
                                     onChange={(e) => setTechId(e.target.value)}
                                     required

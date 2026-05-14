@@ -10,12 +10,14 @@ import { LoadingSpinner, ErrorAlert } from '../components/Feedback.jsx'
 import { getErrorMessage } from '../utils/format.js'
 
 export default function FlagsScreen() {
-    const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery()
+    const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery(undefined, {
+        pollingInterval: 5000,
+    })
     const [updateProgress, { isLoading: updating }] = useUpdateFlagProgressMutation()
     const [resolveFlag,   { isLoading: resolving }] = useResolveFlagMutation()
 
     const [selectedFlag, setSelectedFlag] = useState(null)
-    const [notes, setNotes] = useState('')
+    const [progressNotes, setProgressNotes] = useState('')
     const [confirmId, setConfirmId] = useState(null)
 
     const myFlags =
@@ -26,10 +28,10 @@ export default function FlagsScreen() {
     const handleUpdateProgress = async (e) => {
         e.preventDefault()
         try {
-            await updateProgress({ id: selectedFlag.id, notes }).unwrap()
+            await updateProgress({ id: selectedFlag.id, progressNotes }).unwrap()
             toast.success('Progress notes updated')
             setSelectedFlag(null)
-            setNotes('')
+            setProgressNotes('')
         } catch {
             toast.error('Failed to update notes')
         }
@@ -58,7 +60,7 @@ export default function FlagsScreen() {
             key: 'notes',
             label: 'Latest Notes',
             render: (row) => (
-                <span className="text-gray-400 text-xs">{row.notes ?? 'No notes yet'}</span>
+                <span className="text-gray-400 text-xs">{row.progressNotes ?? 'No notes yet'}</span>
             ),
         },
         {
@@ -67,7 +69,7 @@ export default function FlagsScreen() {
             render: (row) => (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => { setSelectedFlag(row); setNotes(row.notes ?? '') }}
+                        onClick={() => { setSelectedFlag(row); setProgressNotes(row.progressNotes ?? '')   }}
                         className="text-[12px] text-primary hover:text-primary-hover font-medium transition-colors duration-150"
                     >
                         Update
@@ -116,15 +118,15 @@ export default function FlagsScreen() {
                                         <Badge status={row.status} />
                                     </div>
 
-                                    {row.notes && (
+                                    {row.progressNotes && (
                                         <p className="text-[11px] text-gray-500 leading-snug border-t border-gray-800 pt-2">
-                                            {row.notes}
+                                            {row.progressNotes}
                                         </p>
                                     )}
 
                                     <div className="flex items-center gap-3 border-t border-gray-800 pt-2">
                                         <button
-                                            onClick={() => { setSelectedFlag(row); setNotes(row.notes ?? '') }}
+                                            onClick={() => { setSelectedFlag(row); setProgressNotes(row.progressNotes ?? '')   }}
                                             className="text-[12px] text-primary hover:text-primary-hover font-medium transition-colors duration-150"
                                         >
                                             Update Notes
@@ -169,8 +171,7 @@ export default function FlagsScreen() {
                         <FormField label="Progress Notes">
                             <Textarea
                                 placeholder="Describe what work has been done..."
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
+                                value={progressNotes} onChange={(e) => setProgressNotes(e.target.value)}
                                 required
                             />
                         </FormField>
