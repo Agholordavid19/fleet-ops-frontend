@@ -288,6 +288,7 @@ export const fleetApi = createApi({
             }),
             invalidatesTags: (result, error, { flagId }) => [
                 { type: 'Flags', id: `messages-${flagId}` },
+                'Flags',
             ],
         }),
 

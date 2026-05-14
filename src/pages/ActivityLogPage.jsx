@@ -23,8 +23,14 @@ function getColor(eventType) {
 function formatDateTime(iso) {
     const d = new Date(iso)
     return {
-        date: d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-        time: d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+        date: d.toLocaleDateString('en-GB', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            timeZone: 'UTC'
+        }),
+        time: d.toLocaleTimeString('en-GB', {
+            hour: '2-digit', minute: '2-digit',
+            timeZone: 'UTC'
+        }),
     }
 }
 

@@ -18,6 +18,7 @@ export default function MaintenanceMessageModal({ flag, onClose }) {
         isError,
     } = useGetMaintenanceMessagesQuery(flag?.id, {
         skip: !flag?.id,
+        pollingInterval: 3000,
     })
 
     const [sendMessage, { isLoading: sending }] =
