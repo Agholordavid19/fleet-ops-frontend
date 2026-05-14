@@ -9,6 +9,13 @@ import Modal from './Modal.jsx'
 import { LoadingSpinner, ErrorAlert } from './Feedback'
 import { formatDate, getErrorMessage } from '../utils/format.js'
 
+const ROLE_COLORS = {
+    ADMIN:            'text-purple-400 bg-purple-500/10',
+    FLEET_MANAGER:    'text-blue-400 bg-blue-500/10',
+    MAINTENANCE_TEAM: 'text-amber-400 bg-amber-500/10',
+    FIELD_STAFF:      'text-green-400 bg-green-500/10',
+}
+
 export default function MaintenanceMessageModal({ flag, onClose }) {
     const [message, setMessage] = useState('')
 
@@ -87,26 +94,33 @@ export default function MaintenanceMessageModal({ flag, onClose }) {
                                     No messages yet.
                                 </p>
                             ) : (
-                                (messages ?? []).map((msg) => (
-                                    <div
-                                        key={msg.id}
-                                        className="bg-gray-800 border border-gray-700/50 rounded-xl px-4 py-3"
-                                    >
-                                        <div className="flex items-center justify-between gap-3 mb-1">
-                                            <p className="text-[12px] font-semibold text-gray-200">
-                                                {msg.senderName || msg.createdByName || 'User'}
-                                            </p>
+                                (messages ?? []).map((msg) => {
+                                    const roleColor = ROLE_COLORS[msg.senderRole] ?? 'text-gray-400 bg-gray-700/50'
+                                    return (
+                                        <div
+                                            key={msg.id}
+                                            className="bg-gray-800 border border-gray-700/50 rounded-xl px-4 py-3"
+                                        >
+                                            <div className="flex items-center justify-between gap-3 mb-2">
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-[12px] font-semibold text-gray-200">
+                                                        {msg.senderName || msg.createdByName || 'User'}
+                                                    </p>
+                                                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${roleColor}`}>
+                                                        {msg.senderRole?.replace(/_/g, ' ') ?? 'Unknown'}
+                                                    </span>
+                                                </div>
+                                                <p className="text-[10px] text-gray-500 shrink-0">
+                                                    {formatDate(msg.sentAt || msg.createdAt)}
+                                                </p>
+                                            </div>
 
-                                            <p className="text-[10px] text-gray-500">
-                                                {formatDate(msg.createdAt || msg.sentAt)}
+                                            <p className="text-[13px] text-gray-400 leading-relaxed">
+                                                {msg.message || msg.content}
                                             </p>
                                         </div>
-
-                                        <p className="text-[13px] text-gray-400 leading-relaxed">
-                                            {msg.message || msg.content}
-                                        </p>
-                                    </div>
-                                ))
+                                    )
+                                })
                             )}
                         </div>
                     )}

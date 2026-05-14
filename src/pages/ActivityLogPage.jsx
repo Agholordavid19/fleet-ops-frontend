@@ -22,6 +22,8 @@ function getColor(eventType) {
 
 function formatDateTime(iso) {
     const d = new Date(iso)
+    console.log('Local time Lagos:', new Date().toLocaleString())
+    console.log('UTC time:', new Date().toUTCString())
     return {
         date: d.toLocaleDateString(undefined, {
             day: '2-digit', month: 'short', year: 'numeric'
