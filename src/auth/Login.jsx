@@ -125,7 +125,6 @@ export default function LoginScreen() {
                         </form>
                     </div>
                 </motion.div>
-
             </motion.div>
         </div>
     )

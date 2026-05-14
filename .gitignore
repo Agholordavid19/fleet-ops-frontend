@@ -1,6 +1,9 @@
 .env
 .env.example
 .env.production
+Rules.md
+vite-dev.err.log
+vite-dev.log
 
 # Logs
 logs
