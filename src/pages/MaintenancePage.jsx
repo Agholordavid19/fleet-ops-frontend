@@ -15,6 +15,7 @@ import { FormField, SubmitButton } from '../components/Form'
 import { LoadingSpinner, ErrorAlert } from '../components/Feedback'
 import { formatDate, getErrorMessage } from '../utils/format.js'
 import { useAuth } from '../utils/useAuth.jsx'
+import MaintenanceMessageModal from '../components/MaintenanceMessageModal.jsx'
 
 export default function MaintenanceScreen() {
     const { data: flags, isLoading, isError } = useGetMaintenanceFlagsQuery(undefined, {
@@ -28,6 +29,7 @@ export default function MaintenanceScreen() {
 
     const [selectedFlag, setSelectedFlag] = useState(null)
     const [approvalFlag, setApprovalFlag] = useState(null)
+    const [messageFlag, setMessageFlag] = useState(null)
 
     const [techId, setTechId] = useState('')
     const [newMilestoneInterval, setNewMilestoneInterval] = useState('')
@@ -114,17 +116,34 @@ export default function MaintenanceScreen() {
 
                 if (row.status === 'PENDING_APPROVAL') {
                     return (
-                        <button
-                            type="button"
-                            onClick={() => setApprovalFlag(row)}
-                            className="text-[12px] text-emerald-500 hover:text-emerald-400 font-medium transition-colors duration-150"
-                        >
-                            Review →
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setApprovalFlag(row)}
+                                className="text-[12px] text-emerald-500 hover:text-emerald-400 font-medium transition-colors duration-150"
+                            >
+                                Review →
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setMessageFlag(row)}
+                                className="text-[12px] text-blue-400 hover:text-blue-300 font-medium transition-colors duration-150"
+                            >
+                                Messages
+                            </button>
+                        </div>
                     )
                 }
 
-                return <span className="text-xs text-gray-600">Assigned</span>
+                return (
+                    <button
+                        type="button"
+                        onClick={() => setMessageFlag(row)}
+                        className="text-[12px] text-blue-400 hover:text-blue-300 font-medium transition-colors duration-150"
+                    >
+                        Messages
+                    </button>
+                )
             },
         },
     ]
@@ -193,7 +212,7 @@ export default function MaintenanceScreen() {
                             ) : (
                                 <input
                                     type="number"
-                                    min="100"
+                                    min="1"
                                     value={techId}
                                     onChange={(e) => setTechId(e.target.value)}
                                     required
@@ -234,7 +253,7 @@ export default function MaintenanceScreen() {
                         <FormField label="New Milestone Interval">
                             <input
                                 type="number"
-                                min="1"
+                                min="100"
                                 value={newMilestoneInterval}
                                 onChange={(e) => setNewMilestoneInterval(e.target.value)}
                                 placeholder="e.g. 15000"
@@ -260,6 +279,11 @@ export default function MaintenanceScreen() {
                     </form>
                 )}
             </Modal>
+
+            <MaintenanceMessageModal
+                flag={messageFlag}
+                onClose={() => setMessageFlag(null)}
+            />
         </>
     )
 }
