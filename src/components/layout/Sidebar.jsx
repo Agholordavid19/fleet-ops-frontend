@@ -1,6 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, Truck, ClipboardList, Wrench, AlertTriangle,
   Users, Building2, HardHat, Activity, BarChart3, MapPin, FileText,
@@ -87,6 +86,7 @@ export default function Sidebar() {
         </div>
         {/* Close button — mobile only */}
         <button
+          type="button"
           onClick={close}
           className="md:hidden p-1 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100"
         >
@@ -137,6 +137,7 @@ export default function Sidebar() {
           </div>
         </div>
         <button
+          type="button"
           onClick={handleLogout}
           className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-stone-500 hover:bg-stone-100 hover:text-red-600 transition-colors"
         >
@@ -154,32 +155,24 @@ export default function Sidebar() {
         {sidebarContent}
       </div>
 
-      {/* Mobile — drawer overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <>
-            <motion.div
-              key="backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/40 z-40 md:hidden"
-              onClick={close}
-            />
-            <motion.div
-              key="drawer"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
-              className="fixed top-0 left-0 h-full z-50 md:hidden"
-            >
-              {sidebarContent}
-            </motion.div>
-          </>
+      {/* Mobile — backdrop */}
+      <div
+        onClick={close}
+        className={cn(
+          'fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-200',
+          sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
         )}
-      </AnimatePresence>
+      />
+
+      {/* Mobile — drawer */}
+      <div
+        className={cn(
+          'fixed top-0 left-0 h-full z-50 md:hidden transition-transform duration-[250ms] ease-in-out',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        )}
+      >
+        {sidebarContent}
+      </div>
     </>
   )
 }

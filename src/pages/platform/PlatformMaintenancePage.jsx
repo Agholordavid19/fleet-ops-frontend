@@ -45,7 +45,7 @@ export default function PlatformMaintenancePage() {
       label: 'Action',
       render: (id, row) => row.status === 'OPEN' && !row.assignedCrewId
         ? (
-          <button onClick={(e) => { e.stopPropagation(); setAssignModal(row) }}
+          <button type="button" onClick={(e) => { e.stopPropagation(); setAssignModal(row) }}
             className="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-medium transition-colors">
             Assign Crew
           </button>
@@ -84,8 +84,8 @@ export default function PlatformMaintenancePage() {
           ))}
         </select>
         <div className="flex justify-end gap-3">
-          <button onClick={() => setAssignModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
-          <button onClick={handleAssign} disabled={assigning || !selectedCrew} className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60">
+          <button type="button" onClick={() => setAssignModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
+          <button type="button" onClick={handleAssign} disabled={assigning || !selectedCrew} className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60">
             {assigning ? 'Assigning…' : 'Assign'}
           </button>
         </div>

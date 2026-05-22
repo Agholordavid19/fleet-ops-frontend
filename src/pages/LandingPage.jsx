@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import {
   Truck, Shield, BarChart3, Wrench, AlertTriangle, Users,
   MapPin, Activity, ChevronRight, CheckCircle,
@@ -61,16 +60,6 @@ const roles = [
   },
 ]
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
-}
-
 export default function LandingPage() {
   const navigate = useNavigate()
 
@@ -87,12 +76,14 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={() => navigate('/login')}
               className="px-4 py-1.5 text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors"
             >
               Sign in
             </button>
             <button
+              type="button"
               onClick={() => navigate('/register')}
               className="px-4 py-1.5 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg transition-colors"
             >
@@ -104,11 +95,7 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-24 pb-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: 'easeOut' }}
-        >
+        <div className="animate-fade-up">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-stone-100 border border-stone-200 rounded-full text-xs font-medium text-stone-600 mb-8">
             <Shield size={11} />
             Operational intelligence for modern fleets
@@ -126,6 +113,7 @@ export default function LandingPage() {
 
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
+              type="button"
               onClick={() => navigate('/register')}
               className="flex items-center gap-2 px-6 py-3 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-xl transition-colors shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
             >
@@ -133,20 +121,19 @@ export default function LandingPage() {
               <ChevronRight size={15} />
             </button>
             <button
+              type="button"
               onClick={() => navigate('/login')}
               className="px-6 py-3 text-sm font-medium text-stone-700 bg-white border border-stone-200 hover:border-stone-300 hover:bg-stone-50 rounded-xl transition-colors"
             >
               Sign in to dashboard
             </button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Hero graphic — stat strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-          className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4"
+        <div
+          className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 animate-fade-up"
+          style={{ animationDelay: '150ms' }}
         >
           {[
             { value: '4', label: 'Role-based portals' },
@@ -159,7 +146,7 @@ export default function LandingPage() {
               <p className="text-xs text-stone-500">{label}</p>
             </div>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* Features */}
@@ -170,27 +157,21 @@ export default function LandingPage() {
             <p className="text-stone-500 max-w-lg mx-auto">One platform replaces the spreadsheets, phone calls, and paper trails that slow your operations down.</p>
           </div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-          >
-            {features.map(({ icon: Icon, title, description }) => (
-              <motion.div
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {features.map(({ icon: Icon, title, description }, i) => (
+              <div
                 key={title}
-                variants={itemVariants}
-                className="bg-stone-50 border border-stone-200 rounded-2xl p-6 hover:border-stone-300 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all duration-200"
+                className="bg-stone-50 border border-stone-200 rounded-2xl p-6 hover:border-stone-300 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all duration-200 animate-fade-up"
+                style={{ animationDelay: `${i * 80}ms` }}
               >
                 <div className="w-10 h-10 bg-stone-900 rounded-xl flex items-center justify-center mb-4">
                   <Icon size={18} className="text-white" />
                 </div>
                 <h3 className="text-sm font-semibold text-stone-900 mb-1.5">{title}</h3>
                 <p className="text-sm text-stone-500 leading-relaxed">{description}</p>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -201,18 +182,12 @@ export default function LandingPage() {
           <p className="text-stone-500 max-w-lg mx-auto">Dedicated portals ensure each role sees only what they need — no clutter, no confusion.</p>
         </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
-        >
-          {roles.map(({ label, color, items }) => (
-            <motion.div
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {roles.map(({ label, color, items }, i) => (
+            <div
               key={label}
-              variants={itemVariants}
-              className="bg-white border border-stone-200 rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
+              className="bg-white border border-stone-200 rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] animate-fade-up"
+              style={{ animationDelay: `${i * 80}ms` }}
             >
               <div className={`inline-flex px-2.5 py-1 ${color} text-white text-xs font-medium rounded-full mb-4`}>
                 {label}
@@ -225,37 +200,33 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* CTA */}
       <section className="bg-stone-900 py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="max-w-2xl mx-auto px-6 text-center"
-        >
+        <div className="max-w-2xl mx-auto px-6 text-center animate-fade-in">
           <h2 className="text-3xl font-bold text-white tracking-tight mb-4">Ready to take control of your fleet?</h2>
           <p className="text-stone-400 mb-8 leading-relaxed">Register your company and get your whole team connected — vehicles, maintenance, and operations in one place.</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
+              type="button"
               onClick={() => navigate('/register')}
               className="px-6 py-3 bg-white hover:bg-stone-100 text-stone-900 text-sm font-medium rounded-xl transition-colors"
             >
               Register your company
             </button>
             <button
+              type="button"
               onClick={() => navigate('/login')}
               className="px-6 py-3 text-stone-300 hover:text-white text-sm font-medium transition-colors"
             >
               Already registered? Sign in →
             </button>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Footer */}

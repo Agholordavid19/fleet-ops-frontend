@@ -74,7 +74,7 @@ export default function CompanyProfilePage() {
         {/* Edit form */}
         <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
           <h3 className="text-sm font-semibold text-stone-900 mb-4">Edit Profile</h3>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">Phone</label>
               <input {...register('contactPhone')} placeholder="+1 (555) 000-0000"

@@ -83,6 +83,7 @@ export default function BreakdownsPage() {
                   <div className="flex flex-col gap-2 flex-shrink-0">
                     {b.status === 'REPORTED' && (
                       <button
+                        type="button"
                         onClick={() => setDispatchModal(b)}
                         className="px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-medium rounded-lg transition-colors"
                       >
@@ -91,6 +92,7 @@ export default function BreakdownsPage() {
                     )}
                     {(b.status === 'REPLACEMENT_DISPATCHED' || b.status === 'CREW_DISPATCHED') && (
                       <button
+                        type="button"
                         onClick={() => setResolveConfirm(b)}
                         className="flex items-center gap-1 px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-700 text-xs font-medium rounded-lg transition-colors"
                       >
@@ -119,8 +121,9 @@ export default function BreakdownsPage() {
           ))}
         </select>
         <div className="flex justify-end gap-3">
-          <button onClick={() => setDispatchModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
+          <button type="button" onClick={() => setDispatchModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
           <button
+            type="button"
             onClick={handleDispatch}
             disabled={dispatching || !selectedVehicle}
             className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60"

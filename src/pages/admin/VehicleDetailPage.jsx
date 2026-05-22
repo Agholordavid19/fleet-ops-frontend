@@ -142,6 +142,7 @@ export default function VehicleDetailPage() {
     <PageWrapper title={vehicle.plateNumber} crumbs={['Admin', 'Vehicles', vehicle.plateNumber]}>
       {/* Back */}
       <button
+        type="button"
         onClick={() => navigate('/admin/vehicles')}
         className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors"
       >
@@ -165,6 +166,7 @@ export default function VehicleDetailPage() {
             )}
           </div>
           <button
+            type="button"
             onClick={handleDownloadPdf}
             className="flex items-center gap-2 px-4 py-2 border border-stone-200 hover:bg-stone-50 text-stone-700 text-sm font-medium rounded-lg transition-colors flex-shrink-0"
           >
@@ -206,6 +208,7 @@ export default function VehicleDetailPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-stone-900">Lifecycle</h2>
             <button
+              type="button"
               onClick={() => setMilestoneModal(true)}
               className="flex items-center gap-1.5 text-xs text-stone-800 hover:text-stone-800 font-medium"
             >
@@ -235,6 +238,7 @@ export default function VehicleDetailPage() {
         <div className="flex border-b border-stone-200 px-6">
           {TABS.map((tab) => (
             <button
+              type="button"
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={cn(
@@ -373,6 +377,7 @@ export default function VehicleDetailPage() {
             />
             <div className="absolute top-3 right-3 flex gap-2">
               <button
+                type="button"
                 onClick={() => handleDeleteMedia(mediaList[lightboxIdx].publicId)}
                 disabled={deletingMedia}
                 className="p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-lg transition-colors disabled:opacity-60"
@@ -381,6 +386,7 @@ export default function VehicleDetailPage() {
                 <Trash2 size={16} />
               </button>
               <button
+                type="button"
                 onClick={() => setLightboxIdx(null)}
                 className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-lg transition-colors"
               >
@@ -390,12 +396,14 @@ export default function VehicleDetailPage() {
             {mediaList.length > 1 && (
               <>
                 <button
+                  type="button"
                   onClick={() => setLightboxIdx((i) => (i - 1 + mediaList.length) % mediaList.length)}
                   className="absolute left-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/80 text-white rounded-lg"
                 >
                   <ChevronLeft size={18} />
                 </button>
                 <button
+                  type="button"
                   onClick={() => setLightboxIdx((i) => (i + 1) % mediaList.length)}
                   className="absolute right-16 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/80 text-white rounded-lg"
                 >
@@ -410,7 +418,7 @@ export default function VehicleDetailPage() {
 
       {/* Milestone Modal */}
       <Modal open={milestoneModal} onClose={() => setMilestoneModal(false)} title="Update Milestone Interval" size="sm">
-        <form onSubmit={submitMilestone(handleMilestoneUpdate)}>
+        <form onSubmit={submitMilestone(handleMilestoneUpdate)} autoComplete="on">
           <div className="mb-4">
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Interval (km)</label>
             <input

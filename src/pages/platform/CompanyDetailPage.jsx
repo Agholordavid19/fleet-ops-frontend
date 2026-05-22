@@ -54,7 +54,7 @@ export default function CompanyDetailPage() {
 
   return (
     <PageWrapper title={company?.name ?? 'Company'} crumbs={['Platform', 'Companies', company?.name ?? '']}>
-      <button onClick={() => navigate('/platform/companies')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
+      <button type="button" onClick={() => navigate('/platform/companies')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
         <ArrowLeft size={14} /> Back to Companies
       </button>
 
@@ -101,21 +101,21 @@ export default function CompanyDetailPage() {
           <div className="flex gap-3 mt-5 pt-4 border-t border-stone-100">
             {company?.status === 'PENDING' && (
               <>
-                <button onClick={() => setConfirmAction('approve')} className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
+                <button type="button" onClick={() => setConfirmAction('approve')} className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
                   <CheckCircle size={14} /> Approve
                 </button>
-                <button onClick={() => setRejectModal(true)} className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition-colors">
+                <button type="button" onClick={() => setRejectModal(true)} className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition-colors">
                   <XCircle size={14} /> Reject
                 </button>
               </>
             )}
             {company?.status === 'APPROVED' && (
-              <button onClick={() => setConfirmAction('suspend')} className="flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm font-medium rounded-lg transition-colors">
+              <button type="button" onClick={() => setConfirmAction('suspend')} className="flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm font-medium rounded-lg transition-colors">
                 <PauseCircle size={14} /> Suspend
               </button>
             )}
             {company?.status === 'SUSPENDED' && (
-              <button onClick={() => setConfirmAction('reactivate')} className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
+              <button type="button" onClick={() => setConfirmAction('reactivate')} className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
                 <PlayCircle size={14} /> Reactivate
               </button>
             )}
@@ -162,8 +162,8 @@ export default function CompanyDetailPage() {
           className="w-full rounded-lg border border-stone-200 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 resize-none mb-4"
         />
         <div className="flex justify-end gap-3">
-          <button onClick={() => setRejectModal(false)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 rounded-lg">Cancel</button>
-          <button onClick={handleReject} disabled={rejecting || !rejectReason.trim()} className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg disabled:opacity-60">
+          <button type="button" onClick={() => setRejectModal(false)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 rounded-lg">Cancel</button>
+          <button type="button" onClick={handleReject} disabled={rejecting || !rejectReason.trim()} className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg disabled:opacity-60">
             {rejecting ? 'Rejecting…' : 'Reject'}
           </button>
         </div>

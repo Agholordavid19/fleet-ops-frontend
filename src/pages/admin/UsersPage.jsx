@@ -78,12 +78,14 @@ export default function UsersPage() {
       render: (id, row) => (
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={(e) => { e.stopPropagation(); setConfirmDeactivate(row) }}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${row.active ? 'bg-red-50 hover:bg-red-100 text-red-700' : 'bg-green-50 hover:bg-green-100 text-green-700'}`}
           >
             {row.active ? <><UserX size={11} /> Deactivate</> : <><UserCheck size={11} /> Reactivate</>}
           </button>
           <button
+            type="button"
             onClick={(e) => { e.stopPropagation(); setResetModal(row) }}
             className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-stone-50 hover:bg-stone-100 text-stone-600 text-xs font-medium transition-colors"
           >
@@ -98,6 +100,7 @@ export default function UsersPage() {
     <PageWrapper title="Users" crumbs={['Admin', 'Users']}>
       <div className="flex justify-end mb-6">
         <button
+          type="button"
           onClick={() => setCreateModal(true)}
           className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors"
         >
@@ -114,7 +117,7 @@ export default function UsersPage() {
 
       {/* Create User Modal */}
       <Modal open={createModal} onClose={() => setCreateModal(false)} title="Add User" size="sm">
-        <form onSubmit={handleSubmit(handleCreate)} className="space-y-4">
+        <form onSubmit={handleSubmit(handleCreate)} autoComplete="on" className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Name <span className="text-red-500">*</span></label>
             <input {...register('name', { required: 'Required' })} placeholder="Jane Smith"
@@ -123,13 +126,13 @@ export default function UsersPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Email <span className="text-red-500">*</span></label>
-            <input {...register('email', { required: 'Required' })} type="email" placeholder="jane@company.com"
+            <input {...register('email', { required: 'Required' })} type="email" autoComplete="email" placeholder="jane@company.com"
               className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
             {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Password <span className="text-red-500">*</span></label>
-            <input {...register('password', { required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } })} type="password" placeholder="••••••••"
+            <input {...register('password', { required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } })} type="password" autoComplete="new-password" placeholder="••••••••"
               className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
             {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>}
           </div>
@@ -156,10 +159,11 @@ export default function UsersPage() {
       {/* Reset Password Modal */}
       <Modal open={!!resetModal} onClose={() => setResetModal(null)} title="Reset Password" size="sm">
         <p className="text-sm text-stone-500 mb-4">Reset password for <strong>{resetModal?.name}</strong>.</p>
-        <form onSubmit={submitReset(handleResetPassword)} className="space-y-3">
+        <form onSubmit={submitReset(handleResetPassword)} autoComplete="on" className="space-y-3">
           <input
             {...regReset('newPassword', { required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } })}
             type="password"
+            autoComplete="new-password"
             placeholder="New password (min 8 chars)"
             className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700"
           />

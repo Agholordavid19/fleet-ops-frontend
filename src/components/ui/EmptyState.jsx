@@ -1,14 +1,10 @@
-import { motion } from 'framer-motion'
 import { cn } from '../../utils/cn'
 
 export default function EmptyState({ icon: Icon, title, description, action, className }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+    <div
       className={cn(
-        'flex flex-col items-center justify-center py-16 px-6 text-center',
+        'flex flex-col items-center justify-center py-16 px-6 text-center animate-fade-in',
         className,
       )}
     >
@@ -22,6 +18,6 @@ export default function EmptyState({ icon: Icon, title, description, action, cla
         <p className="text-sm text-stone-500 max-w-sm mb-6">{description}</p>
       )}
       {action}
-    </motion.div>
+    </div>
   )
 }

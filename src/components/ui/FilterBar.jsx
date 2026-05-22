@@ -42,6 +42,7 @@ export function TabFilter({ tabs, active, onSelect }) {
     <div className="flex items-center gap-1 p-1 bg-stone-100 rounded-lg">
       {tabs.map((tab) => (
         <button
+          type="button"
           key={tab.value}
           onClick={() => onSelect(tab.value)}
           className={cn(

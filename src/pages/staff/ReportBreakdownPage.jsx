@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { MapPin, Navigation, CheckCircle, AlertTriangle } from 'lucide-react'
-import { motion } from 'framer-motion'
 import PageWrapper from '../../components/layout/PageWrapper'
 import { useReportBreakdownMutation } from '../../features/breakdowns/breakdownsApi'
 import { useGetMyApprovedTripsQuery } from '../../features/trips/tripsApi'
@@ -66,7 +65,7 @@ export default function ReportBreakdownPage() {
           </div>
           <h2 className="text-xl font-semibold text-stone-900 mb-2">Breakdown reported!</h2>
           <p className="text-sm text-stone-500 mb-6">Our team has been notified and will respond shortly.</p>
-          <button onClick={() => navigate('/staff/dashboard')} className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
+          <button type="button" onClick={() => navigate('/staff/dashboard')} className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
             Back to Dashboard
           </button>
         </div>
@@ -82,12 +81,8 @@ export default function ReportBreakdownPage() {
           <p className="text-sm text-amber-700">Report vehicle breakdowns for immediate assistance. Your location helps us respond faster.</p>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6"
-        >
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6 animate-fade-up">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">Vehicle <span className="text-red-500">*</span></label>
               <select {...register('vehicleId', { required: 'Required' })}
@@ -159,7 +154,7 @@ export default function ReportBreakdownPage() {
               </button>
             </div>
           </form>
-        </motion.div>
+        </div>
       </div>
     </PageWrapper>
   )

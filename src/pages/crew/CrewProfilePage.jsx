@@ -80,6 +80,7 @@ export default function CrewProfilePage() {
                 }
               </div>
               <button
+                type="button"
                 onClick={() => setShowPicForm((v) => !v)}
                 className="absolute -bottom-1 -right-1 w-6 h-6 bg-stone-900 rounded-full flex items-center justify-center shadow-sm hover:bg-stone-700 transition-colors"
                 title="Change photo"
@@ -113,6 +114,7 @@ export default function CrewProfilePage() {
               />
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={handleUploadPicture}
                   disabled={uploadingPic || !picUrl}
                   className="px-3 py-1.5 text-xs font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60"
@@ -121,6 +123,7 @@ export default function CrewProfilePage() {
                 </button>
                 {avatarUrl && (
                   <button
+                    type="button"
                     onClick={handleDeletePicture}
                     disabled={deletingPic}
                     className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-60"
@@ -129,6 +132,7 @@ export default function CrewProfilePage() {
                   </button>
                 )}
                 <button
+                  type="button"
                   onClick={() => { setShowPicForm(false); setPicUrl(''); setPicId('') }}
                   className="px-3 py-1.5 text-xs font-medium text-stone-500 hover:text-stone-700"
                 >
@@ -138,7 +142,7 @@ export default function CrewProfilePage() {
             </div>
           )}
 
-          <form onSubmit={submitProfile(handleProfile)} className="space-y-4">
+          <form onSubmit={submitProfile(handleProfile)} autoComplete="on" className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">Display Name</label>
               <input {...regProfile('name')} className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
@@ -156,10 +160,10 @@ export default function CrewProfilePage() {
             <Lock size={16} className="text-stone-400" />
             <h3 className="text-sm font-semibold text-stone-900">Change Password</h3>
           </div>
-          <form onSubmit={submitPw(handlePassword)} className="space-y-4">
-            <input {...regPw('currentPassword', { required: true })} type="password" placeholder="Current password"
+          <form onSubmit={submitPw(handlePassword)} autoComplete="on" className="space-y-4">
+            <input {...regPw('currentPassword', { required: true })} type="password" autoComplete="current-password" placeholder="Current password"
               className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
-            <input {...regPw('newPassword', { required: true, minLength: 8 })} type="password" placeholder="New password (min 8)"
+            <input {...regPw('newPassword', { required: true, minLength: 8 })} type="password" autoComplete="new-password" placeholder="New password (min 8)"
               className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
             <div className="flex justify-end">
               <button type="submit" disabled={changingPw} className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60">

@@ -86,6 +86,7 @@ export default function TripsPage() {
           {row.status === 'PENDING' && (
             <>
               <button
+                type="button"
                 onClick={(e) => { e.stopPropagation(); handleApprove(id) }}
                 disabled={approving}
                 className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-green-50 hover:bg-green-100 text-green-700 text-xs font-medium transition-colors"
@@ -93,6 +94,7 @@ export default function TripsPage() {
                 <CheckCircle size={12} /> Approve
               </button>
               <button
+                type="button"
                 onClick={(e) => { e.stopPropagation(); setRejectModal(row) }}
                 className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-red-50 hover:bg-red-100 text-red-700 text-xs font-medium transition-colors"
               >
@@ -102,6 +104,7 @@ export default function TripsPage() {
           )}
           {row.status === 'PENDING_COMPLETION' && (
             <button
+              type="button"
               onClick={(e) => { e.stopPropagation(); handleComplete(id) }}
               disabled={completing}
               className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-medium transition-colors"
@@ -111,6 +114,7 @@ export default function TripsPage() {
           )}
           {row.status === 'PENDING_CANCELLATION' && (
             <button
+              type="button"
               onClick={(e) => { e.stopPropagation(); handleApproveCancellation(id) }}
               disabled={approvingCancellation}
               className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium transition-colors"
@@ -165,8 +169,9 @@ export default function TripsPage() {
           className="w-full rounded-lg border border-stone-200 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 resize-none mb-4"
         />
         <div className="flex justify-end gap-3">
-          <button onClick={() => setRejectModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
+          <button type="button" onClick={() => setRejectModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
           <button
+            type="button"
             onClick={handleReject}
             disabled={rejecting || !rejectReason.trim()}
             className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg disabled:opacity-60"

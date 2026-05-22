@@ -41,11 +41,11 @@ export default function StaffDashboard() {
         <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
           <div className="px-6 py-4 border-b border-stone-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-stone-900">My Recent Trips</h2>
-            <button onClick={() => navigate('/staff/trips/my')} className="text-xs text-stone-800 hover:text-stone-800 font-medium">View all</button>
+            <button type="button" onClick={() => navigate('/staff/trips/my')} className="text-xs text-stone-800 hover:text-stone-800 font-medium">View all</button>
           </div>
           {recentTrips.length === 0
             ? <EmptyState icon={MapPin} title="No trips yet" description="Request your first trip." action={
-                <button onClick={() => navigate('/staff/trips/new')} className="px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg">Request Trip</button>
+                <button type="button" onClick={() => navigate('/staff/trips/new')} className="px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg">Request Trip</button>
               } />
             : (
               <ul className="divide-y divide-stone-100">
@@ -77,6 +77,7 @@ export default function StaffDashboard() {
             ].map((action) => (
               <button
                 key={action.label}
+                type="button"
                 onClick={() => navigate(action.to)}
                 className={`flex flex-col items-center gap-2 p-4 rounded-xl text-sm font-medium transition-colors ${action.color}`}
               >

@@ -68,6 +68,7 @@ export default function MaintenancePage() {
           onSelect={setStatusTab}
         />
         <button
+          type="button"
           onClick={() => setCreateModal(true)}
           className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors ml-4"
         >
@@ -90,7 +91,7 @@ export default function MaintenancePage() {
 
       {/* Create Modal */}
       <Modal open={createModal} onClose={() => setCreateModal(false)} title="New Maintenance Flag" size="sm">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Vehicle <span className="text-red-500">*</span></label>
             <select

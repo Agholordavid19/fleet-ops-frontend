@@ -39,6 +39,7 @@ function UserMenu({ user, onLogout }) {
   return (
     <div ref={ref} className="relative">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-stone-100 transition-colors"
       >
@@ -59,12 +60,14 @@ function UserMenu({ user, onLogout }) {
             <p className="text-xs text-stone-400 truncate">{user?.email}</p>
           </div>
           <button
+            type="button"
             onClick={() => { setOpen(false); navigate('/staff/profile') }}
             className="flex items-center gap-2 w-full px-3 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
           >
             <User size={14} /> Profile
           </button>
           <button
+            type="button"
             onClick={() => { setOpen(false); navigate('/staff/profile') }}
             className="flex items-center gap-2 w-full px-3 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
           >
@@ -72,6 +75,7 @@ function UserMenu({ user, onLogout }) {
           </button>
           <div className="border-t border-stone-100 mt-1">
             <button
+              type="button"
               onClick={() => { setOpen(false); onLogout() }}
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
             >
@@ -99,6 +103,7 @@ export default function TopBar({ title, crumbs }) {
       <div className="flex items-center gap-3">
         {/* Hamburger — mobile only */}
         <button
+          type="button"
           onClick={() => dispatch(toggleSidebar())}
           className="md:hidden p-2 rounded-lg hover:bg-stone-100 text-stone-500 hover:text-stone-700 transition-colors"
           aria-label="Open menu"
@@ -108,7 +113,7 @@ export default function TopBar({ title, crumbs }) {
         <Breadcrumb title={title} crumbs={crumbs} />
       </div>
       <div className="flex items-center gap-2">
-        <button className="p-2 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition-colors relative">
+        <button type="button" className="p-2 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition-colors relative">
           <Bell size={18} />
         </button>
         <UserMenu user={user} onLogout={handleLogout} />

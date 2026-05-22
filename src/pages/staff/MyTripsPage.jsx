@@ -57,6 +57,7 @@ export default function MyTripsPage() {
         <div className="flex items-center gap-2">
           {row.status === 'PENDING' && (
             <button
+              type="button"
               onClick={(e) => { e.stopPropagation(); setCancelTarget(row) }}
               className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-red-50 hover:bg-red-100 text-red-700 text-xs font-medium transition-colors"
             >
@@ -65,6 +66,7 @@ export default function MyTripsPage() {
           )}
           {row.status === 'APPROVED' && (
             <button
+              type="button"
               onClick={(e) => { e.stopPropagation(); setCompleteTarget(row) }}
               className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-green-50 hover:bg-green-100 text-green-700 text-xs font-medium transition-colors"
             >
@@ -107,7 +109,7 @@ export default function MyTripsPage() {
       )}
 
       <div className="flex justify-end mb-6">
-        <button onClick={() => navigate('/staff/trips/new')} className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
+        <button type="button" onClick={() => navigate('/staff/trips/new')} className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
           New Request
         </button>
       </div>
@@ -116,7 +118,7 @@ export default function MyTripsPage() {
         ? <SkeletonTable rows={5} cols={5} />
         : (trips ?? []).length === 0
         ? <EmptyState icon={MapPin} title="No trips yet" description="Submit a trip request to get started." action={
-            <button onClick={() => navigate('/staff/trips/new')} className="px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg">Request Trip</button>
+            <button type="button" onClick={() => navigate('/staff/trips/new')} className="px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg">Request Trip</button>
           } />
         : <DataTable columns={columns} data={trips} />
       }

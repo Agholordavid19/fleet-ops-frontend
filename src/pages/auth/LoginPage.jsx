@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
-import { motion } from 'framer-motion'
 import { Truck, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { useLoginMutation } from '../../features/auth/authApi'
@@ -39,12 +38,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="w-full max-w-sm"
-      >
+      <div className="w-full max-w-sm animate-fade-up">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-12 h-12 bg-stone-900 rounded-2xl flex items-center justify-center mb-4 shadow-[0_4px_12px_rgba(0,0,0,0.18)]">
@@ -56,12 +50,13 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="bg-white rounded-2xl border border-stone-200 shadow-[0_4px_12px_rgba(0,0,0,0.08)] p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-5">
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">Email</label>
               <input
                 type="email"
+                autoComplete="email"
                 placeholder="you@company.com"
                 {...register('email', { required: 'Email is required' })}
                 className="w-full h-10 px-3 rounded-lg border border-stone-200 text-sm bg-white text-stone-900 placeholder-stone-400
@@ -76,6 +71,7 @@ export default function LoginPage() {
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   placeholder="••••••••"
                   {...register('password', { required: 'Password is required' })}
                   className="w-full h-10 px-3 pr-10 rounded-lg border border-stone-200 text-sm bg-white text-stone-900 placeholder-stone-400
@@ -116,7 +112,7 @@ export default function LoginPage() {
             </a>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

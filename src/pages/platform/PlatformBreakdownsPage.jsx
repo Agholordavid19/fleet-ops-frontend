@@ -58,6 +58,7 @@ export default function PlatformBreakdownsPage() {
                   </div>
                   {b.status === 'REPORTED' && (
                     <button
+                      type="button"
                       onClick={() => setDispatchModal(b)}
                       className="px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-medium rounded-lg transition-colors flex-shrink-0"
                     >
@@ -85,8 +86,8 @@ export default function PlatformBreakdownsPage() {
         </select>
         {availableCrew.length === 0 && <p className="text-xs text-amber-600 mb-3">No crew members available right now.</p>}
         <div className="flex justify-end gap-3">
-          <button onClick={() => setDispatchModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
-          <button onClick={handleDispatch} disabled={dispatching || !selectedCrew} className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60">
+          <button type="button" onClick={() => setDispatchModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
+          <button type="button" onClick={handleDispatch} disabled={dispatching || !selectedCrew} className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60">
             {dispatching ? 'Dispatching…' : 'Dispatch'}
           </button>
         </div>

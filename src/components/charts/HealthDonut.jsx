@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
 const COLORS = {
@@ -16,14 +17,28 @@ const LABELS = {
   CRITICAL: 'Critical',
 }
 
+const TOOLTIP_STYLE = {
+  background: '#fff',
+  border: '1px solid #E7E5E4',
+  borderRadius: '8px',
+  fontSize: '12px',
+}
+
+function legendFormatter(value) {
+  return <span style={{ fontSize: 12, color: '#78716C' }}>{value}</span>
+}
+
 export default function HealthDonut({ data }) {
-  const chartData = Object.entries(data ?? {})
-    .filter(([, v]) => v > 0)
-    .map(([key, value]) => ({
-      name: LABELS[key] ?? key,
-      value,
-      color: COLORS[key] ?? '#A8A29E',
-    }))
+  const chartData = useMemo(
+    () => Object.entries(data ?? {})
+      .filter(([, v]) => v > 0)
+      .map(([key, value]) => ({
+        name: LABELS[key] ?? key,
+        value,
+        color: COLORS[key] ?? '#A8A29E',
+      })),
+    [data],
+  )
 
   if (chartData.length === 0) {
     return (
@@ -51,16 +66,9 @@ export default function HealthDonut({ data }) {
         </Pie>
         <Tooltip
           formatter={(value, name) => [value, name]}
-          contentStyle={{
-            background: '#fff',
-            border: '1px solid #E7E5E4',
-            borderRadius: '8px',
-            fontSize: '12px',
-          }}
+          contentStyle={TOOLTIP_STYLE}
         />
-        <Legend
-          formatter={(value) => <span style={{ fontSize: 12, color: '#78716C' }}>{value}</span>}
-        />
+        <Legend formatter={legendFormatter} />
       </PieChart>
     </ResponsiveContainer>
   )

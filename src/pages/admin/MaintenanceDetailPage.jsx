@@ -112,7 +112,7 @@ function MessageThread({ flagId, userId }) {
         })}
         <div ref={bottomRef} />
       </div>
-      <form onSubmit={handleSend} className="flex items-center gap-3 p-4 border-t border-stone-200">
+      <form onSubmit={handleSend} autoComplete="on" className="flex items-center gap-3 p-4 border-t border-stone-200">
         <input
           type="text"
           value={text}
@@ -183,7 +183,7 @@ export default function MaintenanceDetailPage() {
 
   return (
     <PageWrapper title="Maintenance Detail" crumbs={['Admin', 'Maintenance', flag?.plateNumber ?? '']}>
-      <button onClick={() => navigate('/admin/maintenance')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
+      <button type="button" onClick={() => navigate('/admin/maintenance')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
         <ArrowLeft size={14} /> Back to Maintenance
       </button>
 
@@ -258,6 +258,7 @@ export default function MaintenanceDetailPage() {
               {flag.status === 'QUOTE_SUBMITTED' && isAdminOrManager && (
                 <div className="flex gap-3 mt-5 pt-4 border-t border-stone-100">
                   <button
+                    type="button"
                     onClick={handleApproveQuote}
                     disabled={approvingQuote}
                     className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
@@ -265,6 +266,7 @@ export default function MaintenanceDetailPage() {
                     <CheckCircle size={14} /> Approve Quote
                   </button>
                   <button
+                    type="button"
                     onClick={() => setRejectQuoteModal(true)}
                     className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition-colors"
                   >
@@ -281,6 +283,7 @@ export default function MaintenanceDetailPage() {
               <h3 className="text-sm font-semibold text-stone-900 mb-1">Ready to Resolve</h3>
               <p className="text-sm text-stone-800 mb-4">The crew has marked this flag as done. Review and resolve it.</p>
               <button
+                type="button"
                 onClick={() => setResolveModal(true)}
                 className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors"
               >
@@ -309,8 +312,9 @@ export default function MaintenanceDetailPage() {
           className="w-full rounded-lg border border-stone-200 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 resize-none mb-4"
         />
         <div className="flex justify-end gap-3">
-          <button onClick={() => setRejectQuoteModal(false)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 rounded-lg">Cancel</button>
+          <button type="button" onClick={() => setRejectQuoteModal(false)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 rounded-lg">Cancel</button>
           <button
+            type="button"
             onClick={handleRejectQuote}
             disabled={rejectingQuote || !rejectQuoteReason.trim()}
             className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg disabled:opacity-60"
@@ -322,7 +326,7 @@ export default function MaintenanceDetailPage() {
 
       {/* Resolve Modal */}
       <Modal open={resolveModal} onClose={() => setResolveModal(false)} title="Resolve Flag">
-        <form onSubmit={submitResolve(handleResolve)} className="space-y-4">
+        <form onSubmit={submitResolve(handleResolve)} autoComplete="on" className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-2">Rating <span className="text-red-500">*</span></label>
             <StarInput value={stars} onChange={setStars} />

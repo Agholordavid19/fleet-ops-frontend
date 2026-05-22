@@ -20,6 +20,7 @@ export default function Pagination({ page, totalPages, totalElements, size, onPa
       </p>
       <div className="flex items-center gap-1">
         <button
+          type="button"
           onClick={() => onPageChange(page - 1)}
           disabled={page === 0}
           className="p-2 rounded-lg hover:bg-stone-100 text-stone-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
@@ -28,6 +29,7 @@ export default function Pagination({ page, totalPages, totalElements, size, onPa
         </button>
         {pages.map((p) => (
           <button
+            type="button"
             key={p}
             onClick={() => onPageChange(p)}
             className={cn(
@@ -41,6 +43,7 @@ export default function Pagination({ page, totalPages, totalElements, size, onPa
           </button>
         ))}
         <button
+          type="button"
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages - 1}
           className="p-2 rounded-lg hover:bg-stone-100 text-stone-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"

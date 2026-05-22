@@ -79,7 +79,7 @@ export default function FlagDetailPage() {
 
   return (
     <PageWrapper title="Flag Detail" crumbs={['Crew', 'My Flags', flag?.plateNumber ?? '']}>
-      <button onClick={() => navigate('/crew/flags')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
+      <button type="button" onClick={() => navigate('/crew/flags')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
         <ArrowLeft size={14} /> Back to Flags
       </button>
 
@@ -103,18 +103,18 @@ export default function FlagDetailPage() {
             {/* Action buttons */}
             <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-stone-100">
               {(flag?.status === 'ASSIGNED' || flag?.status === 'QUOTATION_REJECTED') && (
-                <button onClick={() => setQuotationModal(true)}
+                <button type="button" onClick={() => setQuotationModal(true)}
                   className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
                   {flag?.status === 'QUOTATION_REJECTED' ? 'Revise Quotation' : 'Submit Quotation'}
                 </button>
               )}
               {flag?.status === 'IN_PROGRESS' && (
                 <>
-                  <button onClick={() => setProgressModal(true)}
+                  <button type="button" onClick={() => setProgressModal(true)}
                     className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium rounded-lg transition-colors">
                     Update Progress
                   </button>
-                  <button onClick={handleMarkDone} disabled={markingDone}
+                  <button type="button" onClick={handleMarkDone} disabled={markingDone}
                     className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60">
                     <CheckSquare size={14} />
                     {markingDone ? 'Marking…' : 'Mark as Done'}
@@ -158,7 +158,7 @@ export default function FlagDetailPage() {
               })}
               <div ref={bottomRef} />
             </div>
-            <form onSubmit={handleSend} className="flex items-center gap-2 p-3 border-t border-stone-200">
+            <form onSubmit={handleSend} autoComplete="on" className="flex items-center gap-2 p-3 border-t border-stone-200">
               <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)} placeholder="Message…"
                 className="flex-1 h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
               <button type="submit" disabled={sending || !msgText.trim()}
@@ -172,7 +172,7 @@ export default function FlagDetailPage() {
 
       {/* Quotation Modal */}
       <Modal open={quotationModal} onClose={() => setQuotationModal(false)} title="Submit Quotation" size="sm">
-        <form onSubmit={submitQuote(handleQuotation)} className="space-y-4">
+        <form onSubmit={submitQuote(handleQuotation)} autoComplete="on" className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Estimated Cost <span className="text-red-500">*</span></label>
             <input {...regQuote('estimatedCost', { required: 'Required', min: 0 })} type="number" placeholder="0"
@@ -199,7 +199,7 @@ export default function FlagDetailPage() {
 
       {/* Progress Modal */}
       <Modal open={progressModal} onClose={() => setProgressModal(false)} title="Update Progress" size="sm">
-        <form onSubmit={submitProgress(handleProgress)} className="space-y-4">
+        <form onSubmit={submitProgress(handleProgress)} autoComplete="on" className="space-y-4">
           <textarea {...regProgress('progressNotes', { required: 'Required' })}
             defaultValue={flag?.progressNotes}
             rows={4} placeholder="Describe current progress…"

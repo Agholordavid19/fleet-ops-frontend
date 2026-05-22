@@ -12,12 +12,14 @@ export default function ConfirmModal({ open, onClose, onConfirm, title, descript
       <p className="text-sm text-stone-500 mb-6">{description}</p>
       <div className="flex justify-end gap-3">
         <button
+          type="button"
           onClick={onClose}
           className="px-4 py-2 rounded-lg text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 transition-colors"
         >
           Cancel
         </button>
         <button
+          type="button"
           onClick={onConfirm}
           disabled={isLoading}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-60 ${variantClass}`}

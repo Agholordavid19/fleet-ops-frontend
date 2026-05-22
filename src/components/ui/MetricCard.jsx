@@ -1,14 +1,10 @@
-import { motion } from 'framer-motion'
 import { cn } from '../../utils/cn'
 
 export default function MetricCard({ title, value, icon: Icon, trend, className, accent }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
+    <div
       className={cn(
-        'bg-white rounded-xl p-6 border border-stone-200',
+        'bg-white rounded-xl p-6 border border-stone-200 animate-fade-up',
         'shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)]',
         className,
       )}
@@ -32,6 +28,6 @@ export default function MetricCard({ title, value, icon: Icon, trend, className,
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }

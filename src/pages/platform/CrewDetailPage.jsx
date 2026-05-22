@@ -30,7 +30,7 @@ export default function CrewDetailPage() {
 
   return (
     <PageWrapper title={crew?.name ?? 'Crew Detail'} crumbs={['Platform', 'Crew', crew?.name ?? '']}>
-      <button onClick={() => navigate('/platform/crew')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
+      <button type="button" onClick={() => navigate('/platform/crew')} className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-800 mb-6 transition-colors">
         <ArrowLeft size={14} /> Back to Crew
       </button>
 
@@ -64,6 +64,7 @@ export default function CrewDetailPage() {
 
         <div className="flex justify-end">
           <button
+            type="button"
             onClick={() => setDeleteConfirm(true)}
             className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition-colors"
           >

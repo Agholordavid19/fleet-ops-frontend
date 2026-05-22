@@ -84,6 +84,7 @@ export default function AdminProfilePage() {
                 }
               </div>
               <button
+                type="button"
                 onClick={() => setShowPicForm((v) => !v)}
                 className="absolute -bottom-1 -right-1 w-6 h-6 bg-stone-900 rounded-full flex items-center justify-center shadow-sm hover:bg-stone-700 transition-colors"
                 title="Change photo"
@@ -110,6 +111,7 @@ export default function AdminProfilePage() {
               />
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={handleUploadPicture}
                   disabled={uploadingPic || !picUrl}
                   className="px-3 py-1.5 text-xs font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60"
@@ -118,6 +120,7 @@ export default function AdminProfilePage() {
                 </button>
                 {avatarUrl && (
                   <button
+                    type="button"
                     onClick={handleDeletePicture}
                     disabled={deletingPic}
                     className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-60"
@@ -126,6 +129,7 @@ export default function AdminProfilePage() {
                   </button>
                 )}
                 <button
+                  type="button"
                   onClick={() => { setShowPicForm(false); setPicUrl(''); setPicId('') }}
                   className="px-3 py-1.5 text-xs font-medium text-stone-500 hover:text-stone-700"
                 >
@@ -135,7 +139,7 @@ export default function AdminProfilePage() {
             </div>
           )}
 
-          <form onSubmit={submitProfile(handleProfile)} className="space-y-4">
+          <form onSubmit={submitProfile(handleProfile)} autoComplete="on" className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">Display Name</label>
               <input {...regProfile('name')}
@@ -154,15 +158,15 @@ export default function AdminProfilePage() {
             <Lock size={16} className="text-stone-400" />
             <h3 className="text-sm font-semibold text-stone-900">Change Password</h3>
           </div>
-          <form onSubmit={submitPw(handlePassword)} className="space-y-4">
+          <form onSubmit={submitPw(handlePassword)} autoComplete="on" className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">Current Password</label>
-              <input {...regPw('currentPassword', { required: 'Required' })} type="password"
+              <input {...regPw('currentPassword', { required: 'Required' })} type="password" autoComplete="current-password"
                 className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
             </div>
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1.5">New Password</label>
-              <input {...regPw('newPassword', { required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } })} type="password"
+              <input {...regPw('newPassword', { required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } })} type="password" autoComplete="new-password"
                 className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700" />
             </div>
             <div className="flex justify-end">

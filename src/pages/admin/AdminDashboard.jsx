@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Truck, MapPin, Wrench, AlertTriangle, CheckCircle } from 'lucide-react'
 import PageWrapper from '../../components/layout/PageWrapper'
 import MetricCard from '../../components/ui/MetricCard'
@@ -42,19 +43,39 @@ export default function AdminDashboard() {
   const flagList = flags ?? []
 
   const totalVehicles = vehicleList.length
-  const available = vehicleList.filter((v) => v.status === 'AVAILABLE').length
-  const activeTrips = tripList.filter((t) => t.status === 'APPROVED').length
-  const openFlags = flagList.filter((f) => ['OPEN', 'ASSIGNED', 'IN_PROGRESS'].includes(f.status)).length
-  const activeBreakdowns = (breakdowns ?? []).filter((b) => b.status !== 'RESOLVED').length
+  const available = useMemo(
+    () => vehicleList.filter((v) => v.status === 'AVAILABLE').length,
+    [vehicleList],
+  )
+  const activeTrips = useMemo(
+    () => tripList.filter((t) => t.status === 'APPROVED').length,
+    [tripList],
+  )
+  const openFlags = useMemo(
+    () => flagList.filter((f) => ['OPEN', 'ASSIGNED', 'IN_PROGRESS'].includes(f.status)).length,
+    [flagList],
+  )
+  const activeBreakdowns = useMemo(
+    () => (breakdowns ?? []).filter((b) => b.status !== 'RESOLVED').length,
+    [breakdowns],
+  )
   const utilizationRate = totalVehicles > 0 ? Math.round(((totalVehicles - available) / totalVehicles) * 100) : 0
 
-  const healthDist = vehicleList.reduce((acc, v) => {
-    if (v.healthGrade) acc[v.healthGrade] = (acc[v.healthGrade] ?? 0) + 1
-    return acc
-  }, {})
-
-  const recentTrips = [...tripList].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 10)
-  const openFlagsList = flagList.filter((f) => ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'PENDING_APPROVAL'].includes(f.status)).slice(0, 6)
+  const healthDist = useMemo(
+    () => vehicleList.reduce((acc, v) => {
+      if (v.healthGrade) acc[v.healthGrade] = (acc[v.healthGrade] ?? 0) + 1
+      return acc
+    }, {}),
+    [vehicleList],
+  )
+  const recentTrips = useMemo(
+    () => [...tripList].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 10),
+    [tripList],
+  )
+  const openFlagsList = useMemo(
+    () => flagList.filter((f) => ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'PENDING_APPROVAL'].includes(f.status)).slice(0, 6),
+    [flagList],
+  )
   const activity = activityPage?.content ?? []
 
   async function handleApprove(id) {
@@ -153,6 +174,7 @@ export default function AdminDashboard() {
                       <StatusBadge status={t.status} />
                       {t.status === 'PENDING' && (
                         <button
+                          type="button"
                           onClick={() => handleApprove(t.id)}
                           disabled={approving}
                           className="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-medium transition-colors"

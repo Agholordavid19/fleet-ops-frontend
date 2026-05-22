@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { motion } from 'framer-motion'
 import { Truck, CheckCircle } from 'lucide-react'
 import { useRegisterCompanyMutation } from '../../features/companies/companiesApi'
 
-function Field({ label, name, type = 'text', placeholder, validation, required, register, errors }) {
+function Field({ label, name, type = 'text', placeholder, validation, required, register, errors, autoComplete }) {
   return (
     <div>
       <label className="block text-sm font-medium text-stone-700 mb-1.5">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>
@@ -13,6 +12,7 @@ function Field({ label, name, type = 'text', placeholder, validation, required, 
         type={type}
         placeholder={placeholder}
         {...register(name, validation)}
+        autoComplete={autoComplete}
         className="w-full h-10 px-3 rounded-lg border border-stone-200 text-sm bg-white text-stone-900 placeholder-stone-400
           focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 transition-colors"
       />
@@ -43,12 +43,7 @@ export default function RegisterPage() {
   if (registered) {
     return (
       <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-          className="w-full max-w-sm text-center"
-        >
+        <div className="w-full max-w-sm text-center animate-fade-up">
           <div className="bg-white rounded-2xl border border-stone-200 shadow-[0_4px_12px_rgba(0,0,0,0.08)] p-10">
             <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <CheckCircle size={28} className="text-green-500" />
@@ -58,25 +53,21 @@ export default function RegisterPage() {
               Your company registration is pending approval. You'll be notified once reviewed.
             </p>
             <button
+              type="button"
               onClick={() => navigate('/login')}
               className="w-full h-10 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Back to login
             </button>
           </div>
-        </motion.div>
+        </div>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4 py-12">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="w-full max-w-lg"
-      >
+      <div className="w-full max-w-lg animate-fade-up">
         <div className="flex flex-col items-center mb-8">
           <div className="w-12 h-12 bg-stone-900 rounded-2xl flex items-center justify-center mb-4">
             <Truck size={22} className="text-white" />
@@ -86,13 +77,13 @@ export default function RegisterPage() {
         </div>
 
         <div className="bg-white rounded-2xl border border-stone-200 shadow-[0_4px_12px_rgba(0,0,0,0.08)] p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-6">
             {/* Company Info */}
             <div>
               <h3 className="text-sm font-semibold text-stone-900 uppercase tracking-wide mb-4">Company Information</h3>
               <div className="space-y-4">
                 <Field {...fieldProps} label="Company Name" name="name" placeholder="Acme Logistics" validation={{ required: 'Required' }} required />
-                <Field {...fieldProps} label="Company Email" name="email" type="email" placeholder="ops@company.com" validation={{ required: 'Required' }} required />
+                <Field {...fieldProps} label="Company Email" name="email" type="email" autoComplete="email" placeholder="ops@company.com" validation={{ required: 'Required' }} required />
                 <Field {...fieldProps} label="Phone" name="contactPhone" placeholder="+1 (555) 000-0000" />
                 <Field {...fieldProps} label="Address" name="address" placeholder="123 Fleet St, City, State" />
               </div>
@@ -105,8 +96,8 @@ export default function RegisterPage() {
               <h3 className="text-sm font-semibold text-stone-900 uppercase tracking-wide mb-4">Admin Account</h3>
               <div className="space-y-4">
                 <Field {...fieldProps} label="Admin Name" name="adminName" placeholder="Jane Smith" validation={{ required: 'Required' }} required />
-                <Field {...fieldProps} label="Admin Email" name="adminEmail" type="email" placeholder="admin@company.com" validation={{ required: 'Required' }} required />
-                <Field {...fieldProps} label="Password" name="adminPassword" type="password" placeholder="••••••••" validation={{ required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } }} required />
+                <Field {...fieldProps} label="Admin Email" name="adminEmail" type="email" autoComplete="email" placeholder="admin@company.com" validation={{ required: 'Required' }} required />
+                <Field {...fieldProps} label="Password" name="adminPassword" type="password" autoComplete="new-password" placeholder="••••••••" validation={{ required: 'Required', minLength: { value: 8, message: 'Min 8 characters' } }} required />
               </div>
             </div>
 
@@ -130,7 +121,7 @@ export default function RegisterPage() {
             <a href="/login" className="text-stone-800 hover:text-stone-800 font-medium">Sign in</a>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

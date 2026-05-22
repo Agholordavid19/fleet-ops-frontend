@@ -43,7 +43,7 @@ export default function CrewPage() {
   return (
     <PageWrapper title="Maintenance Crew" crumbs={['Platform', 'Crew']}>
       <div className="flex justify-end mb-6">
-        <button onClick={() => setCreateModal(true)} className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
+        <button type="button" onClick={() => setCreateModal(true)} className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
           <Plus size={15} /> Add Crew Member
         </button>
       </div>
@@ -56,7 +56,7 @@ export default function CrewPage() {
       }
 
       <Modal open={createModal} onClose={() => setCreateModal(false)} title="Add Crew Member" size="sm">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-4">
           {[
             { name: 'name', label: 'Name', placeholder: 'John Smith' },
             { name: 'email', label: 'Email', type: 'email', placeholder: 'john@fleet.com' },

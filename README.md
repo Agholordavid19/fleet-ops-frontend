@@ -1,12 +1,12 @@
-# 🚗 MpFleets — Fleet Management System
+# 🚗 FleetOps — Fleet Management System
 
-MpFleets is a professional role-based fleet management dashboard designed to streamline vehicle lifecycle management, trip coordination, and maintenance workflows. It leverages an event-driven architecture to ensure real-time responsiveness and operational efficiency.
+FleetOps is a professional role-based fleet management dashboard designed to streamline vehicle lifecycle management, trip coordination, and maintenance workflows. It leverages an event-driven architecture to ensure real-time responsiveness and operational efficiency.
 
 ---
 
 ## 📌 Project Overview
 
-MpFleets provides a centralized platform for organizations to bridge the gap between field operations and fleet administration. The system enforces strict **Role-Based Access Control (RBAC)** to ensure data integrity and process compliance.
+FleetOps provides a centralized platform for organizations to bridge the gap between field operations and fleet administration. The system enforces strict **Role-Based Access Control (RBAC)** to ensure data integrity and process compliance.
 
 ### Key Stakeholders
 
@@ -31,7 +31,6 @@ MpFleets provides a centralized platform for organizations to bridge the gap bet
 | **Tailwind CSS v4** | Utility-first CSS framework for responsive, consistent styling |
 | **Radix UI** | Accessible, unstyled component primitives (dialogs, dropdowns, tabs, tooltips, etc.) |
 | **Recharts** | Composable chart library powering fleet analytics visualizations |
-| **Framer Motion** | Declarative animations for smooth UI transitions |
 | **Lucide React** | Iconography for a professional dashboard feel |
 | **React Hook Form** | Performant, flexible form state management |
 | **JWT Authentication** | Secure, stateless session management via `Authorization: Bearer` headers |

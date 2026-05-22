@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Truck, Plus, Gauge, X, ImagePlus } from 'lucide-react'
 import CloudinaryUpload from '../../components/ui/CloudinaryUpload'
-import { motion } from 'framer-motion'
 import PageWrapper from '../../components/layout/PageWrapper'
 import StatusBadge from '../../components/ui/StatusBadge'
 import Modal from '../../components/ui/Modal'
@@ -26,12 +25,9 @@ function VehicleCard({ vehicle, onClick }) {
   const firstImage = vehicle.images?.[0]?.url ?? null
 
   return (
-      <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+      <div
           onClick={onClick}
-          className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] overflow-hidden cursor-pointer hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200"
+          className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] overflow-hidden cursor-pointer hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200 animate-fade-up"
       >
         <div className="h-36 bg-gradient-to-br from-stone-100 to-stone-200 relative flex items-center justify-center overflow-hidden">
           {firstImage
@@ -89,7 +85,7 @@ function VehicleCard({ vehicle, onClick }) {
             <span>{formatMileage(vehicle.currentMileage)}</span>
           </div>
         </div>
-      </motion.div>
+      </div>
   )
 }
 
@@ -192,6 +188,7 @@ export default function VehiclesPage() {
             />
           </FilterBar>
           <button
+              type="button"
               onClick={() => setModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors flex-shrink-0"
           >
@@ -209,7 +206,7 @@ export default function VehiclesPage() {
                 title="No vehicles found"
                 description="Register your first vehicle to get started."
                 action={
-                  <button onClick={() => setModalOpen(true)} className="px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg">
+                  <button type="button" onClick={() => setModalOpen(true)} className="px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg">
                     Register Vehicle
                   </button>
                 }
@@ -223,7 +220,7 @@ export default function VehiclesPage() {
         )}
 
         <Modal open={modalOpen} onClose={closeModal} title="Register Vehicle" size="md">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-1.5">

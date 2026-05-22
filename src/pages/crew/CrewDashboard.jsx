@@ -43,7 +43,7 @@ export default function CrewDashboard() {
         <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
           <div className="px-6 py-4 border-b border-stone-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-stone-900">Active Flags</h2>
-            <button onClick={() => navigate('/crew/flags')} className="text-xs text-stone-800 font-medium hover:text-stone-800">View all</button>
+            <button type="button" onClick={() => navigate('/crew/flags')} className="text-xs text-stone-800 font-medium hover:text-stone-800">View all</button>
           </div>
           {activeFlags.length === 0
             ? <EmptyState icon={Wrench} title="No active flags" description="You have no assigned maintenance flags." />

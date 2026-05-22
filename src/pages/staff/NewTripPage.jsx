@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { MapPin, CheckCircle } from 'lucide-react'
-import { motion } from 'framer-motion'
 import PageWrapper from '../../components/layout/PageWrapper'
 import { useCreateTripMutation } from '../../features/trips/tripsApi'
 import { useGetAvailableVehiclesQuery } from '../../features/vehicles/vehiclesApi'
@@ -43,10 +42,10 @@ export default function NewTripPage() {
           <h2 className="text-xl font-semibold text-stone-900 mb-2">Trip requested!</h2>
           <p className="text-sm text-stone-500 mb-6">Your trip request has been submitted and is pending approval.</p>
           <div className="flex gap-3 justify-center">
-            <button onClick={() => navigate('/staff/trips/my')} className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
+            <button type="button" onClick={() => navigate('/staff/trips/my')} className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
               View My Trips
             </button>
-            <button onClick={() => setSubmitted(false)} className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium rounded-lg transition-colors">
+            <button type="button" onClick={() => setSubmitted(false)} className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium rounded-lg transition-colors">
               New Request
             </button>
           </div>
@@ -58,13 +57,8 @@ export default function NewTripPage() {
   return (
     <PageWrapper title="New Trip Request" crumbs={['Staff', 'Trips', 'New']}>
       <div className="max-w-lg">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6"
-        >
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+        <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6 animate-fade-up">
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" noValidate className="space-y-5">
             <div>
               <label htmlFor="vehicleId" className="block text-sm font-medium text-stone-700 mb-1.5">Vehicle <span className="text-red-500">*</span></label>
               <select id="vehicleId" {...register('vehicleId', { required: 'Required' })}
@@ -127,7 +121,7 @@ export default function NewTripPage() {
               </button>
             </div>
           </form>
-        </motion.div>
+        </div>
       </div>
     </PageWrapper>
   )

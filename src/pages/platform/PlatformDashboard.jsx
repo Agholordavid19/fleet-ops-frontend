@@ -87,12 +87,14 @@ export default function PlatformDashboard() {
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <button
+                        type="button"
                         onClick={() => setConfirmApprove(c)}
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-50 hover:bg-green-100 text-green-700 text-xs font-medium transition-colors"
                       >
                         <CheckCircle size={12} /> Approve
                       </button>
                       <button
+                        type="button"
                         onClick={() => setRejectModal(c)}
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 text-xs font-medium transition-colors"
                       >
@@ -195,8 +197,9 @@ export default function PlatformDashboard() {
             focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 resize-none mb-4"
         />
         <div className="flex justify-end gap-3">
-          <button onClick={() => setRejectModal(null)} className="px-4 py-2 rounded-lg text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 transition-colors">Cancel</button>
+          <button type="button" onClick={() => setRejectModal(null)} className="px-4 py-2 rounded-lg text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 transition-colors">Cancel</button>
           <button
+            type="button"
             onClick={handleReject}
             disabled={rejecting || !rejectReason.trim()}
             className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-60"

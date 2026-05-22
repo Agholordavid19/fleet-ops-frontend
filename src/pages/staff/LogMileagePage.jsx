@@ -235,6 +235,7 @@ export default function LogMileagePage() {
             )}
             <p className="text-sm text-stone-400 mb-6">The record has been saved successfully.</p>
             <button
+                type="button"
                 onClick={() => navigate('/staff/dashboard')}
                 className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg"
             >
@@ -261,7 +262,7 @@ export default function LogMileagePage() {
           )}
 
           <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="on" className="space-y-5">
               {/* Vehicle */}
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-1.5">
