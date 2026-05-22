@@ -75,6 +75,7 @@ export const {
   useReactivateUserMutation,
   useResetUserPasswordMutation,
   useGetMyProfileQuery,
+  useLazyGetMyProfileQuery,
   useUpdateMyProfileMutation,
   useUploadMyMediaMutation,
   useDeleteMyMediaMutation,

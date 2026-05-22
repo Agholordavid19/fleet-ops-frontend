@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -64,6 +65,9 @@ export default function Sidebar() {
   const { user, role } = useAuth()
   const sidebarOpen = useSelector((state) => state.ui.sidebarOpen)
   const links = navByRole[role] ?? []
+  const [imgError, setImgError] = useState(false)
+
+  useEffect(() => { setImgError(false) }, [user?.profilePictureUrl])
 
   function handleLogout() {
     dispatch(logout())
@@ -126,8 +130,8 @@ export default function Sidebar() {
       <div className="p-4 border-t border-stone-100">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
-            {user?.profilePictureUrl
-              ? <img src={user.profilePictureUrl} alt={user.name} className="w-full h-full object-cover" />
+            {user?.profilePictureUrl && !imgError
+              ? <img src={user.profilePictureUrl} alt={user.name} className="w-full h-full object-cover" onError={() => setImgError(true)} />
               : <span className="text-xs font-semibold text-stone-600">{user?.name?.charAt(0)?.toUpperCase() ?? '?'}</span>
             }
           </div>

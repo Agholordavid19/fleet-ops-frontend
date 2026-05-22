@@ -25,6 +25,8 @@ const authSlice = createSlice({
       state.role = payload.role
       state.userType = payload.userType
       state.companyId = payload.companyId
+      state.profilePictureUrl = payload.profileImageUrl ?? null
+      state.profilePictureId = payload.profileImageId ?? null
       state.isAuthenticated = true
     },
     updateProfilePicture: (state, { payload }) => {

@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { Truck, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { useLoginMutation } from '../../features/auth/authApi'
-import { setCredentials, selectIsAuthenticated, selectUserRole } from '../../features/auth/authSlice'
+import { setCredentials, updateProfilePicture, selectIsAuthenticated, selectUserRole } from '../../features/auth/authSlice'
+import { useLazyGetMyProfileQuery } from '../../features/users/usersApi'
 import { getDefaultRouteForRole } from '../../utils/roleHelpers'
 
 export default function LoginPage() {
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const [serverError, setServerError] = useState(null)
 
   const [login, { isLoading }] = useLoginMutation()
+  const [fetchProfile] = useLazyGetMyProfileQuery()
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   useEffect(() => {
@@ -31,6 +33,11 @@ export default function LoginPage() {
       const result = await login(data).unwrap()
       dispatch(setCredentials(result))
       navigate(getDefaultRouteForRole(result.role), { replace: true })
+      setTimeout(() => {
+        fetchProfile().unwrap()
+          .then((profile) => dispatch(updateProfilePicture({ imageUrl: profile.profileImageUrl, imageId: profile.profileImageId })))
+          .catch(() => {})
+      }, 100)
     } catch (err) {
       setServerError(err?.data?.message ?? 'Invalid credentials. Please try again.')
     }

@@ -27,8 +27,11 @@ function Breadcrumb({ title, crumbs = [] }) {
 
 function UserMenu({ user, onLogout }) {
   const [open, setOpen] = useState(false)
+  const [imgError, setImgError] = useState(false)
   const navigate = useNavigate()
   const ref = useRef(null)
+
+  useEffect(() => { setImgError(false) }, [user?.profilePictureUrl])
 
   useEffect(() => {
     const handler = (e) => { if (!ref.current?.contains(e.target)) setOpen(false) }
@@ -44,8 +47,8 @@ function UserMenu({ user, onLogout }) {
         className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-stone-100 transition-colors"
       >
         <div className="w-7 h-7 rounded-full bg-stone-200 flex items-center justify-center overflow-hidden">
-          {user?.profilePictureUrl
-            ? <img src={user.profilePictureUrl} alt={user?.name} className="w-full h-full object-cover" />
+          {user?.profilePictureUrl && !imgError
+            ? <img src={user.profilePictureUrl} alt={user?.name} className="w-full h-full object-cover" onError={() => setImgError(true)} />
             : <span className="text-xs font-semibold text-stone-600">{user?.name?.charAt(0)?.toUpperCase() ?? '?'}</span>
           }
         </div>
