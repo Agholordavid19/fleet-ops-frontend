@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, Suspense } from 'react'
 import { Truck, MapPin, Wrench, AlertTriangle, CheckCircle } from 'lucide-react'
 import PageWrapper from '../../components/layout/PageWrapper'
 import MetricCard from '../../components/ui/MetricCard'
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
     <PageWrapper title="Dashboard" crumbs={['Admin', 'Dashboard']}>
       {/* Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-        {loadingVehicles
+        {loadingVehicles || loadingTrips || loadingFlags
           ? Array(5).fill(0).map((_, i) => <SkeletonMetricCard key={i} />)
           : [
             { title: 'Total Vehicles', value: totalVehicles, icon: Truck },
@@ -108,7 +108,9 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
           <h2 className="text-sm font-semibold text-stone-900 mb-1">Vehicle Health Distribution</h2>
           <p className="text-xs text-stone-400 mb-4">Fleet health by grade</p>
-          <HealthDonut data={healthDist} />
+          <Suspense fallback={<div className="w-40 h-40 rounded-full bg-stone-100 animate-pulse mx-auto" />}>
+            <HealthDonut data={healthDist} />
+          </Suspense>
         </div>
 
         {/* Utilization */}

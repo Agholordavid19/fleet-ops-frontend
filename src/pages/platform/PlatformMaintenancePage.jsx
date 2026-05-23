@@ -9,10 +9,14 @@ import Modal from '../../components/ui/Modal'
 import { TabFilter } from '../../components/ui/FilterBar'
 import { useGetPlatformMaintenanceFlagsQuery, useAssignCrewToFlagMutation, useGetPlatformCrewQuery } from '../../features/platform/platformApi'
 import { useToast } from '../../hooks/useToast'
+import { useAuth } from '../../hooks/useAuth'
+import { ROLES } from '../../utils/roleHelpers'
 import { formatRelativeTime } from '../../utils/formatters'
 
 export default function PlatformMaintenancePage() {
   const toast = useToast()
+  const { role } = useAuth()
+  const canManage = role !== ROLES.PLATFORM_ADMIN
   const [statusTab, setStatusTab] = useState('')
   const [assignModal, setAssignModal] = useState(null)
   const [selectedCrew, setSelectedCrew] = useState('')
@@ -43,7 +47,7 @@ export default function PlatformMaintenancePage() {
     {
       key: 'id',
       label: 'Action',
-      render: (id, row) => row.status === 'OPEN' && !row.assignedCrewId
+      render: (id, row) => canManage && row.status === 'OPEN' && !row.assignedCrewId
         ? (
           <button type="button" onClick={(e) => { e.stopPropagation(); setAssignModal(row) }}
             className="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-medium transition-colors">

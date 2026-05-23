@@ -18,7 +18,7 @@ import {
 } from '../../features/maintenance/maintenanceApi'
 import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../hooks/useToast'
-import { formatDateTime, formatCurrency } from '../../utils/formatters'
+import { formatCurrency } from '../../utils/formatters'
 import { cn } from '../../utils/cn'
 
 export default function FlagDetailPage() {
@@ -47,12 +47,12 @@ export default function FlagDetailPage() {
   async function handleSend(e) {
     e.preventDefault()
     if (!msgText.trim()) return
-    try { await sendMessage({ id, message: msgText.trim() }).unwrap(); setMsgText('') } catch {}
+    try { await sendMessage({ id, message: msgText.trim() }).unwrap(); setMsgText('') } catch { /* ignore */ }
   }
 
   async function handleQuotation(data) {
     try {
-      const fn = flag?.status === 'QUOTATION_REJECTED' ? reviseQuotation : submitQuotation
+      const fn = flag?.status === 'QUOTE_REJECTED' ? reviseQuotation : submitQuotation
       await fn({ id, ...data, estimatedCost: Number(data.estimatedCost) }).unwrap()
       toast.success('Quotation submitted')
       resetQuote()
@@ -100,39 +100,41 @@ export default function FlagDetailPage() {
               </div>
             )}
 
-            {/* Action buttons */}
-            <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-stone-100">
-              {(flag?.status === 'ASSIGNED' || flag?.status === 'QUOTATION_REJECTED') && (
-                <button type="button" onClick={() => setQuotationModal(true)}
-                  className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
-                  {flag?.status === 'QUOTATION_REJECTED' ? 'Revise Quotation' : 'Submit Quotation'}
-                </button>
-              )}
-              {flag?.status === 'IN_PROGRESS' && (
-                <>
-                  <button type="button" onClick={() => setProgressModal(true)}
-                    className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium rounded-lg transition-colors">
-                    Update Progress
+            {/* Action buttons — only shown to the assigned crew member */}
+            {flag?.assignedCrewId === user?.userId && (
+              <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-stone-100">
+                {(flag?.status === 'CREW_ASSIGNED' || flag?.status === 'QUOTE_REJECTED') && (
+                  <button type="button" onClick={() => setQuotationModal(true)}
+                    className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors">
+                    {flag?.status === 'QUOTE_REJECTED' ? 'Revise Quotation' : 'Submit Quotation'}
                   </button>
-                  <button type="button" onClick={handleMarkDone} disabled={markingDone}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60">
-                    <CheckSquare size={14} />
-                    {markingDone ? 'Marking…' : 'Mark as Done'}
-                  </button>
-                </>
-              )}
-            </div>
+                )}
+                {['QUOTE_APPROVED', 'IN_PROGRESS'].includes(flag?.status) && (
+                  <>
+                    <button type="button" onClick={() => setProgressModal(true)}
+                      className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium rounded-lg transition-colors">
+                      Update Progress
+                    </button>
+                    <button type="button" onClick={handleMarkDone} disabled={markingDone}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60">
+                      <CheckSquare size={14} />
+                      {markingDone ? 'Marking…' : 'Mark as Done'}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Quotation */}
-          {flag?.quotation && (
+          {flag?.latestQuotation && (
             <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
               <h3 className="text-sm font-semibold text-stone-900 mb-3">My Quotation</h3>
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div><p className="text-xs text-stone-400 mb-0.5">Estimated Cost</p><p className="font-semibold">{formatCurrency(flag.quotation.estimatedCost)}</p></div>
-                <div><p className="text-xs text-stone-400 mb-0.5">Parts Needed</p><p>{flag.quotation.partsNeeded ?? '—'}</p></div>
+                <div><p className="text-xs text-stone-400 mb-0.5">Estimated Cost</p><p className="font-semibold">{formatCurrency(flag.latestQuotation.estimatedCost)}</p></div>
+                <div><p className="text-xs text-stone-400 mb-0.5">Parts Needed</p><p>{flag.latestQuotation.partsNeeded ?? '—'}</p></div>
               </div>
-              <p className="text-sm text-stone-600 mt-3">{flag.quotation.description}</p>
+              <p className="text-sm text-stone-600 mt-3">{flag.latestQuotation.description}</p>
             </div>
           )}
         </div>
@@ -171,7 +173,7 @@ export default function FlagDetailPage() {
       </div>
 
       {/* Quotation Modal */}
-      <Modal open={quotationModal} onClose={() => setQuotationModal(false)} title="Submit Quotation" size="sm">
+      <Modal open={quotationModal} onClose={() => setQuotationModal(false)} title={flag?.status === 'QUOTE_REJECTED' ? 'Revise Quotation' : 'Submit Quotation'} size="sm">
         <form onSubmit={submitQuote(handleQuotation)} autoComplete="on" className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Estimated Cost <span className="text-red-500">*</span></label>

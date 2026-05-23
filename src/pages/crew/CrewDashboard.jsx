@@ -15,12 +15,12 @@ export default function CrewDashboard() {
   const { data: profile } = useGetMyProfileQuery()
 
   const flagList = flags ?? []
-  const assigned = flagList.filter((f) => f.status === 'ASSIGNED').length
+  const assigned = flagList.filter((f) => f.status === 'CREW_ASSIGNED').length
   const inProgress = flagList.filter((f) => f.status === 'IN_PROGRESS').length
   const pendingApproval = flagList.filter((f) => f.status === 'PENDING_APPROVAL').length
   const resolved = flagList.filter((f) => f.status === 'RESOLVED').length
 
-  const activeFlags = flagList.filter((f) => !['RESOLVED', 'QUOTATION_REJECTED'].includes(f.status))
+  const activeFlags = flagList.filter((f) => !['RESOLVED', 'QUOTE_REJECTED'].includes(f.status))
     .sort((a, b) => new Date(b.assignedAt ?? b.openedAt) - new Date(a.assignedAt ?? a.openedAt))
     .slice(0, 5)
 

@@ -100,6 +100,14 @@ export const maintenanceApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (r, e, { id }) => [{ type: 'MaintenanceMessages', id }],
     }),
+    assignCrewToFlag: builder.mutation({
+      query: ({ id, crewId }) => ({
+        url: `/api/maintenance/flags/${id}/assign`,
+        method: 'PATCH',
+        body: { crewId },
+      }),
+      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }, 'Maintenance'],
+    }),
   }),
 })
 
@@ -119,4 +127,5 @@ export const {
   useSubmitRatingMutation,
   useGetFlagMessagesQuery,
   useSendFlagMessageMutation,
+  useAssignCrewToFlagMutation,
 } = maintenanceApi

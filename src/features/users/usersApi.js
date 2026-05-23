@@ -57,6 +57,10 @@ export const usersApi = apiSlice.injectEndpoints({
       query: () => ({ url: '/api/users/me/media', method: 'DELETE' }),
       invalidatesTags: ['UserProfile'],
     }),
+    getAvailableCrew: builder.query({
+      query: () => '/api/company/crew/available',
+      providesTags: ['Crew'],
+    }),
     getMileageLogs: builder.query({
       query: (vehicleId) => `/api/mileage-logs/vehicle/${vehicleId}`,
       providesTags: (r, e, vehicleId) => [{ type: 'MileageLogs', id: vehicleId }],
@@ -79,6 +83,7 @@ export const {
   useUpdateMyProfileMutation,
   useUploadMyMediaMutation,
   useDeleteMyMediaMutation,
+  useGetAvailableCrewQuery,
   useGetMileageLogsQuery,
   useLogMileageMutation,
 } = usersApi

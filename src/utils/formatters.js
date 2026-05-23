@@ -38,9 +38,9 @@ export function formatRelativeTime(dateStr) {
   return formatDate(dateStr)
 }
 
-export function formatCurrency(amount, currency = 'USD') {
+export function formatCurrency(amount, currency = 'NGN') {
   if (amount == null) return '—'
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,

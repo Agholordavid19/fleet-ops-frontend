@@ -9,7 +9,6 @@ import { useGetPlatformBreakdownsQuery, useDispatchCrewMutation } from '../../fe
 import { useGetPlatformCrewQuery } from '../../features/platform/platformApi'
 import { useToast } from '../../hooks/useToast'
 import { formatRelativeTime } from '../../utils/formatters'
-import { cn } from '../../utils/cn'
 
 export default function PlatformBreakdownsPage() {
   const toast = useToast()
@@ -52,7 +51,13 @@ export default function PlatformBreakdownsPage() {
                     <p className="text-sm text-stone-700 mb-1">{b.description}</p>
                     <div className="flex items-center gap-1 text-xs text-stone-400">
                       <MapPin size={11} />
-                      <span>{b.locationDescription ?? `${b.latitude?.toFixed(4)}, ${b.longitude?.toFixed(4)}`}</span>
+                      <span>
+                        {b.locationDescription
+                          ? b.locationDescription
+                          : b.latitude != null && b.longitude != null
+                          ? `GPS: ${b.latitude.toFixed(4)}, ${b.longitude.toFixed(4)}`
+                          : 'Location unknown'}
+                      </span>
                     </div>
                     <p className="text-xs text-stone-400 mt-1">Reported by <span className="font-medium">{b.fieldStaffName}</span></p>
                   </div>
@@ -72,7 +77,7 @@ export default function PlatformBreakdownsPage() {
         )
       }
 
-      <Modal open={!!dispatchModal} onClose={() => setDispatchModal(null)} title="Dispatch Crew" size="sm">
+      <Modal open={!!dispatchModal} onClose={() => { setDispatchModal(null); setSelectedCrew('') }} title="Dispatch Crew" size="sm">
         <p className="text-sm text-stone-500 mb-4">Select a crew member for <strong>{dispatchModal?.vehiclePlateNumber}</strong>.</p>
         <select
           value={selectedCrew}

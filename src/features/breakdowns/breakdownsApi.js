@@ -17,12 +17,12 @@ export const breakdownsApi = apiSlice.injectEndpoints({
       refetchOnMountOrArgChange: true,
     }),
     dispatchReplacement: builder.mutation({
-      query: ({ id, replacementVehicleId }) => ({
+      query: ({ id, replacementVehicleId, staffId }) => ({
         url: `/api/breakdowns/${id}/dispatch-replacement`,
         method: 'PATCH',
-        body: { replacementVehicleId },
+        body: { replacementVehicleId, staffId },
       }),
-      invalidatesTags: ['Breakdowns', 'Vehicles'],
+      invalidatesTags: ['Breakdowns', 'Vehicles', 'Trips'],
     }),
     resolveBreakdown: builder.mutation({
       query: (id) => ({

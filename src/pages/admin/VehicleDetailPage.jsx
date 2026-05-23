@@ -62,7 +62,7 @@ export default function VehicleDetailPage() {
   const [milestoneModal, setMilestoneModal] = useState(false)
 
   const { data: vehicle, isLoading } = useGetVehicleByIdQuery(id)
-  const { data: health } = useGetVehicleHealthQuery(id)
+  useGetVehicleHealthQuery(id)
   const { data: maintenanceFlags } = useGetVehicleMaintenanceFlagsQuery(id)
   const { data: mileageLogs } = useGetMileageLogsQuery(id)
   const [updateMilestone, { isLoading: updatingMilestone }] = useUpdateMilestoneIntervalMutation()
@@ -156,7 +156,7 @@ export default function VehicleDetailPage() {
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-2xl font-mono font-bold text-stone-900">{vehicle.plateNumber}</h1>
               <StatusBadge status={vehicle.status} />
-              {vehicle.healthGrade && <StatusBadge status={vehicle.healthGrade} />}
+              {vehicle.healthGrade && vehicle.status !== 'BROKEN_DOWN' && <StatusBadge status={vehicle.healthGrade} />}
             </div>
             <p className="text-lg text-stone-600">{vehicle.make} {vehicle.model}</p>
             {vehicle.markedForSale && (

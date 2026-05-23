@@ -8,7 +8,7 @@ export default function PageWrapper({ title, crumbs, children }) {
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar title={title} crumbs={crumbs} />
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-[1280px] mx-auto px-4 py-6 md:px-8 md:py-8 animate-fade-up">
+          <div className="max-w-[1280px] mx-auto px-4 py-6 md:px-8 md:py-8">
             {children}
           </div>
         </main>

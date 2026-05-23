@@ -15,7 +15,9 @@ import {
   useApproveQuoteMutation,
   useRejectQuoteMutation,
   useResolveFlagMutation,
+  useAssignCrewToFlagMutation,
 } from '../../features/maintenance/maintenanceApi'
+import { useGetAvailableCrewQuery } from '../../features/users/usersApi'
 import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../hooks/useToast'
 import { formatDateTime, formatCurrency } from '../../utils/formatters'
@@ -141,11 +143,15 @@ export default function MaintenanceDetailPage() {
   const [rejectQuoteReason, setRejectQuoteReason] = useState('')
   const [resolveModal, setResolveModal] = useState(false)
   const [stars, setStars] = useState(0)
+  const [assignModal, setAssignModal] = useState(false)
+  const [selectedCrew, setSelectedCrew] = useState('')
 
   const { data: flag, isLoading } = useGetMaintenanceFlagByIdQuery(id)
   const [approveQuote, { isLoading: approvingQuote }] = useApproveQuoteMutation()
   const [rejectQuote, { isLoading: rejectingQuote }] = useRejectQuoteMutation()
   const [resolveFlag, { isLoading: resolving }] = useResolveFlagMutation()
+  const [assignCrew, { isLoading: assigning }] = useAssignCrewToFlagMutation()
+  const { data: availableCrew } = useGetAvailableCrewQuery()
   const { register: regResolve, handleSubmit: submitResolve } = useForm()
 
   const isAdminOrManager = ['COMPANY_ADMIN', 'FLEET_MANAGER'].includes(role)
@@ -163,6 +169,15 @@ export default function MaintenanceDetailPage() {
       toast.success('Quotation rejected')
       setRejectQuoteModal(false)
     } catch { toast.error('Failed to reject quotation') }
+  }
+
+  async function handleAssignCrew() {
+    try {
+      await assignCrew({ id, crewId: selectedCrew }).unwrap()
+      toast.success('Crew assigned')
+      setAssignModal(false)
+      setSelectedCrew('')
+    } catch { toast.error('Failed to assign crew') }
   }
 
   async function handleResolve(data) {
@@ -220,6 +235,17 @@ export default function MaintenanceDetailPage() {
               <p className="text-xs text-stone-400 mb-1">Description</p>
               <p className="text-sm text-stone-700 leading-relaxed">{flag?.description}</p>
             </div>
+            {isAdminOrManager && flag?.status === 'OPEN' && !flag?.assignedCrewId && (
+              <div className="mt-4 pt-4 border-t border-stone-100">
+                <button
+                  type="button"
+                  onClick={() => setAssignModal(true)}
+                  className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Assign Crew
+                </button>
+              </div>
+            )}
             {flag?.progressNotes && (
               <div className="mt-4 pt-4 border-t border-stone-100">
                 <p className="text-xs text-stone-400 mb-1">Progress Notes</p>
@@ -235,45 +261,69 @@ export default function MaintenanceDetailPage() {
           </div>
 
           {/* Quotation */}
-          {flag?.quotation && (
+          {flag?.latestQuotation && (
             <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
               <h2 className="text-sm font-semibold text-stone-900 mb-4">Quotation</h2>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                   <p className="text-xs text-stone-400 mb-0.5">Estimated Cost</p>
-                  <p className="text-lg font-semibold text-stone-900">{formatCurrency(flag.quotation.estimatedCost)}</p>
+                  <p className="text-lg font-semibold text-stone-900">{formatCurrency(flag.latestQuotation.estimatedCost)}</p>
                 </div>
-                {flag.quotation.partsNeeded && (
+                {flag.latestQuotation.partsNeeded && (
                   <div>
                     <p className="text-xs text-stone-400 mb-0.5">Parts Needed</p>
-                    <p className="text-sm text-stone-700">{flag.quotation.partsNeeded}</p>
+                    <p className="text-sm text-stone-700">{flag.latestQuotation.partsNeeded}</p>
                   </div>
                 )}
               </div>
               <div>
                 <p className="text-xs text-stone-400 mb-1">Description</p>
-                <p className="text-sm text-stone-700">{flag.quotation.description}</p>
+                <p className="text-sm text-stone-700">{flag.latestQuotation.description}</p>
               </div>
+            </div>
+          )}
 
-              {flag.status === 'QUOTE_SUBMITTED' && isAdminOrManager && (
-                <div className="flex gap-3 mt-5 pt-4 border-t border-stone-100">
-                  <button
-                    type="button"
-                    onClick={handleApproveQuote}
-                    disabled={approvingQuote}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
-                  >
-                    <CheckCircle size={14} /> Approve Quote
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRejectQuoteModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition-colors"
-                  >
-                    <XCircle size={14} /> Reject Quote
-                  </button>
-                </div>
-              )}
+          {/* Quote actions — gated on status + role only */}
+          {flag?.status === 'QUOTE_SUBMITTED' && isAdminOrManager && (
+            <div className="bg-white rounded-xl border border-stone-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
+              <h3 className="text-sm font-semibold text-stone-900 mb-1">Review Quotation</h3>
+              <p className="text-sm text-stone-500 mb-4">Approve or reject the submitted quotation.</p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleApproveQuote}
+                  disabled={approvingQuote}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
+                >
+                  <CheckCircle size={14} /> Approve Quote
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRejectQuoteModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-lg transition-colors"
+                >
+                  <XCircle size={14} /> Reject Quote
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Quote Rejected Panel */}
+          {flag?.status === 'QUOTE_REJECTED' && isAdminOrManager && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-stone-900 mb-1">Quotation Rejected</h3>
+              <p className="text-sm text-stone-700 mb-4">The quotation was rejected. You can reassign to a different crew member, or wait for the current crew to submit a revised quotation.</p>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setAssignModal(true)}
+                  className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Reassign Crew
+                </button>
+                <span className="text-xs text-stone-500">or</span>
+                <span className="text-xs text-stone-500 italic">Waiting for crew to revise quotation</span>
+              </div>
             </div>
           )}
 
@@ -301,6 +351,34 @@ export default function MaintenanceDetailPage() {
           <MessageThread flagId={id} userId={user?.userId} />
         </div>
       </div>
+
+      {/* Assign Crew Modal */}
+      <Modal open={assignModal} onClose={() => setAssignModal(false)} title="Assign Crew" size="sm">
+        <p className="text-sm text-stone-500 mb-4">Assign a maintenance crew member to <strong>{flag?.plateNumber}</strong>.</p>
+        <select
+          value={selectedCrew}
+          onChange={(e) => setSelectedCrew(e.target.value)}
+          className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 mb-4"
+        >
+          <option value="">Select crew member…</option>
+          {(availableCrew ?? []).map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name} — ⭐ {c.averageRating?.toFixed(1) ?? '0.0'} | {c.totalJobsCompleted ?? 0} jobs
+            </option>
+          ))}
+        </select>
+        <div className="flex justify-end gap-3">
+          <button type="button" onClick={() => setAssignModal(false)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
+          <button
+            type="button"
+            onClick={handleAssignCrew}
+            disabled={assigning || !selectedCrew}
+            className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60"
+          >
+            {assigning ? 'Assigning…' : 'Assign'}
+          </button>
+        </div>
+      </Modal>
 
       {/* Reject Quote Modal */}
       <Modal open={rejectQuoteModal} onClose={() => setRejectQuoteModal(false)} title="Reject Quotation" size="sm">

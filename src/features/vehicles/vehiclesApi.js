@@ -35,7 +35,7 @@ export const vehiclesApi = apiSlice.injectEndpoints({
       query: ({ id, url, publicId }) => ({
         url: `/api/vehicles/${id}/media`,
         method: 'POST',
-        body: { url, publicId },
+        body: { imageUrl: url, imageId: publicId },
       }),
       invalidatesTags: (r, e, { id }) => [{ type: 'Vehicles', id }],
     }),
@@ -43,7 +43,7 @@ export const vehiclesApi = apiSlice.injectEndpoints({
       query: ({ id, media }) => ({
         url: `/api/vehicles/${id}/media/bulk`,
         method: 'POST',
-        body: media,
+        body: media.map(({ url, publicId }) => ({ imageUrl: url, imageId: publicId })),
       }),
       invalidatesTags: (r, e, { id }) => [{ type: 'Vehicles', id }],
     }),

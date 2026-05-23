@@ -8,6 +8,7 @@ import Modal from '../../components/ui/Modal'
 import ConfirmModal from '../../components/ui/ConfirmModal'
 import { useGetBreakdownsQuery, useDispatchReplacementMutation, useResolveBreakdownMutation } from '../../features/breakdowns/breakdownsApi'
 import { useGetAvailableVehiclesQuery } from '../../features/vehicles/vehiclesApi'
+import { useGetCompanyUsersQuery } from '../../features/users/usersApi'
 import { useToast } from '../../hooks/useToast'
 import { formatRelativeTime } from '../../utils/formatters'
 import { cn } from '../../utils/cn'
@@ -16,10 +17,13 @@ export default function BreakdownsPage() {
   const toast = useToast()
   const [dispatchModal, setDispatchModal] = useState(null)
   const [selectedVehicle, setSelectedVehicle] = useState('')
+  const [selectedStaff, setSelectedStaff] = useState('')
   const [resolveConfirm, setResolveConfirm] = useState(null)
 
   const { data: breakdowns, isLoading } = useGetBreakdownsQuery()
   const { data: availableVehicles } = useGetAvailableVehiclesQuery()
+  const { data: companyUsers } = useGetCompanyUsersQuery()
+  const fieldStaff = (companyUsers ?? []).filter((u) => u.role === 'FIELD_STAFF')
   const [dispatchReplacement, { isLoading: dispatching }] = useDispatchReplacementMutation()
   const [resolveBreakdown, { isLoading: resolving }] = useResolveBreakdownMutation()
 
@@ -27,10 +31,11 @@ export default function BreakdownsPage() {
 
   async function handleDispatch() {
     try {
-      await dispatchReplacement({ id: dispatchModal.id, replacementVehicleId: selectedVehicle }).unwrap()
+      await dispatchReplacement({ id: dispatchModal.id, replacementVehicleId: selectedVehicle, staffId: selectedStaff }).unwrap()
       toast.success('Replacement vehicle dispatched')
       setDispatchModal(null)
       setSelectedVehicle('')
+      setSelectedStaff('')
     } catch { toast.error('Failed to dispatch replacement') }
   }
 
@@ -70,7 +75,13 @@ export default function BreakdownsPage() {
                     <p className="text-sm text-stone-700 mb-1">{b.description}</p>
                     <div className="flex items-center gap-1 text-xs text-stone-400">
                       <MapPin size={11} />
-                      <span>{b.locationDescription ?? `${b.latitude?.toFixed(4)}, ${b.longitude?.toFixed(4)}`}</span>
+                      <span>
+                        {b.locationDescription
+                          ? b.locationDescription
+                          : b.latitude != null && b.longitude != null
+                          ? `GPS: ${b.latitude.toFixed(4)}, ${b.longitude.toFixed(4)}`
+                          : 'Location unknown'}
+                      </span>
                     </div>
                     <p className="text-xs text-stone-400 mt-1">Reported by <span className="font-medium">{b.fieldStaffName}</span></p>
                     {b.replacementVehiclePlate && (
@@ -108,24 +119,36 @@ export default function BreakdownsPage() {
       }
 
       {/* Dispatch Modal */}
-      <Modal open={!!dispatchModal} onClose={() => setDispatchModal(null)} title="Dispatch Replacement Vehicle" size="sm">
-        <p className="text-sm text-stone-500 mb-4">Select a replacement vehicle for <strong>{dispatchModal?.vehiclePlateNumber}</strong>.</p>
-        <select
-          value={selectedVehicle}
-          onChange={(e) => setSelectedVehicle(e.target.value)}
-          className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700 mb-4"
-        >
-          <option value="">Select vehicle…</option>
-          {(availableVehicles ?? []).map((v) => (
-            <option key={v.id} value={v.id}>{v.plateNumber} — {v.make} {v.model}</option>
-          ))}
-        </select>
+      <Modal open={!!dispatchModal} onClose={() => { setDispatchModal(null); setSelectedVehicle(''); setSelectedStaff('') }} title="Dispatch Replacement Vehicle" size="sm">
+        <p className="text-sm text-stone-500 mb-4">Select a replacement vehicle and driver for <strong>{dispatchModal?.vehiclePlateNumber}</strong>.</p>
+        <div className="space-y-3 mb-4">
+          <select
+            value={selectedVehicle}
+            onChange={(e) => setSelectedVehicle(e.target.value)}
+            className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700"
+          >
+            <option value="">Select replacement vehicle…</option>
+            {(availableVehicles ?? []).map((v) => (
+              <option key={v.id} value={v.id}>{v.plateNumber} — {v.make} {v.model}</option>
+            ))}
+          </select>
+          <select
+            value={selectedStaff}
+            onChange={(e) => setSelectedStaff(e.target.value)}
+            className="w-full h-9 px-3 rounded-lg border border-stone-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-700"
+          >
+            <option value="">Select driver…</option>
+            {fieldStaff.map((s) => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
         <div className="flex justify-end gap-3">
-          <button type="button" onClick={() => setDispatchModal(null)} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
+          <button type="button" onClick={() => { setDispatchModal(null); setSelectedVehicle(''); setSelectedStaff('') }} className="px-4 py-2 text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg">Cancel</button>
           <button
             type="button"
             onClick={handleDispatch}
-            disabled={dispatching || !selectedVehicle}
+            disabled={dispatching || !selectedVehicle || !selectedStaff}
             className="px-4 py-2 text-sm font-medium text-white bg-stone-900 hover:bg-stone-800 rounded-lg disabled:opacity-60"
           >
             {dispatching ? 'Dispatching…' : 'Dispatch'}
