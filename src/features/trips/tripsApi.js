@@ -4,29 +4,54 @@ export const tripsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createTrip: builder.mutation({
       query: (body) => ({ url: '/api/trip-requests', method: 'POST', body }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: [{ type: 'Trips', id: 'LIST' }],
     }),
     getAllTrips: builder.query({
       query: () => '/api/trip-requests/all',
-      providesTags: ['Trips'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((trip) => ({ type: 'Trips', id: trip.id })),
+                { type: 'Trips', id: 'LIST' },
+              ]
+              : [{ type: 'Trips', id: 'LIST' }],
     }),
     getTrips: builder.query({
       query: () => '/api/trip-requests',
-      providesTags: ['Trips'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((trip) => ({ type: 'Trips', id: trip.id })),
+                { type: 'Trips', id: 'LIST' },
+              ]
+              : [{ type: 'Trips', id: 'LIST' }],
     }),
     getMyTrips: builder.query({
       query: () => '/api/trip-requests/my',
-      providesTags: ['Trips'],
-      refetchOnMountOrArgChange: true,
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((trip) => ({ type: 'Trips', id: trip.id })),
+                { type: 'Trips', id: 'LIST' },
+              ]
+              : [{ type: 'Trips', id: 'LIST' }],
     }),
     getMyApprovedTrips: builder.query({
       query: () => '/api/trip-requests/my/approved',
-      providesTags: ['Trips'],
-      refetchOnMountOrArgChange: true,
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((trip) => ({ type: 'Trips', id: trip.id })),
+                { type: 'Trips', id: 'LIST' },
+              ]
+              : [{ type: 'Trips', id: 'LIST' }],
     }),
     approveTrip: builder.mutation({
       query: (id) => ({ url: `/api/trip-requests/${id}/approve`, method: 'PATCH' }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Trips', id },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
     rejectTrip: builder.mutation({
       query: ({ id, reason }) => ({
@@ -34,23 +59,38 @@ export const tripsApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { reason },
       }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Trips', id },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
     completeTrip: builder.mutation({
       query: (id) => ({ url: `/api/trip-requests/${id}/complete`, method: 'PATCH' }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Trips', id },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
     cancelTrip: builder.mutation({
       query: (id) => ({ url: `/api/trip-requests/${id}/cancel`, method: 'PATCH' }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Trips', id },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
     approveCancellation: builder.mutation({
       query: (id) => ({ url: `/api/trip-requests/${id}/approve-cancellation`, method: 'PATCH' }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Trips', id },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
     confirmCompletion: builder.mutation({
       query: (id) => ({ url: `/api/trip-requests/${id}/confirm-completion`, method: 'PATCH' }),
-      invalidatesTags: ['Trips'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Trips', id },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
   }),
 })

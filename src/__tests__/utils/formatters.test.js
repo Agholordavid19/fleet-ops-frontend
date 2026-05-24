@@ -68,8 +68,8 @@ describe('formatCurrency', () => {
     expect(formatCurrency(null)).toBe('—')
   })
 
-  it('formats USD amounts', () => {
-    expect(formatCurrency(25000)).toBe('$25,000')
+  it('formats NGN amounts by default', () => {
+    expect(formatCurrency(25000)).toBe('₦25,000')
   })
 
   it('accepts a custom currency', () => {

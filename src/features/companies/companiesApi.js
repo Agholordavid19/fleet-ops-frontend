@@ -19,7 +19,13 @@ export const companiesApi = apiSlice.injectEndpoints({
     }),
     getPlatformCompanies: builder.query({
       query: () => '/api/platform/companies',
-      providesTags: ['Companies'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((company) => ({ type: 'Companies', id: company.id })),
+                { type: 'Companies', id: 'LIST' },
+              ]
+              : [{ type: 'Companies', id: 'LIST' }],
     }),
     getPlatformCompanyById: builder.query({
       query: (id) => `/api/platform/companies/${id}`,
@@ -27,7 +33,10 @@ export const companiesApi = apiSlice.injectEndpoints({
     }),
     approveCompany: builder.mutation({
       query: (id) => ({ url: `/api/platform/companies/${id}/approve`, method: 'PATCH' }),
-      invalidatesTags: ['Companies'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Companies', id },
+        { type: 'Companies', id: 'LIST' },
+      ],
     }),
     rejectCompany: builder.mutation({
       query: ({ id, reason }) => ({
@@ -35,15 +44,24 @@ export const companiesApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { reason },
       }),
-      invalidatesTags: ['Companies'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Companies', id },
+        { type: 'Companies', id: 'LIST' },
+      ],
     }),
     suspendCompany: builder.mutation({
       query: (id) => ({ url: `/api/platform/companies/${id}/suspend`, method: 'PATCH' }),
-      invalidatesTags: ['Companies'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Companies', id },
+        { type: 'Companies', id: 'LIST' },
+      ],
     }),
     reactivateCompany: builder.mutation({
       query: (id) => ({ url: `/api/platform/companies/${id}/reactivate`, method: 'PATCH' }),
-      invalidatesTags: ['Companies'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Companies', id },
+        { type: 'Companies', id: 'LIST' },
+      ],
     }),
   }),
 })

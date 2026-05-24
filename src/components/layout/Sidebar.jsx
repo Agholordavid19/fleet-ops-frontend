@@ -86,7 +86,7 @@ export default function Sidebar() {
           <div className="w-8 h-8 bg-stone-900 rounded-lg flex items-center justify-center">
             <Truck size={16} className="text-white" />
           </div>
-          <span className="text-[15px] font-semibold text-stone-900 tracking-tight">FleetOps</span>
+          <span className="text-[15px] font-semibold text-stone-900 tracking-tight">MpFleets</span>
         </div>
         {/* Close button — mobile only */}
         <button

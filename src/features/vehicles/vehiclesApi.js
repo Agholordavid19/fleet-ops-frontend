@@ -4,11 +4,23 @@ export const vehiclesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getVehicles: builder.query({
       query: () => '/api/vehicles',
-      providesTags: ['Vehicles'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((vehicle) => ({ type: 'Vehicles', id: vehicle.id })),
+                { type: 'Vehicles', id: 'LIST' },
+              ]
+              : [{ type: 'Vehicles', id: 'LIST' }],
     }),
     getAvailableVehicles: builder.query({
       query: () => '/api/vehicles/available',
-      providesTags: ['Vehicles'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((vehicle) => ({ type: 'Vehicles', id: vehicle.id })),
+                { type: 'Vehicles', id: 'LIST' },
+              ]
+              : [{ type: 'Vehicles', id: 'LIST' }],
     }),
     getVehicleById: builder.query({
       query: (id) => `/api/vehicles/${id}`,
@@ -21,7 +33,7 @@ export const vehiclesApi = apiSlice.injectEndpoints({
     }),
     createVehicle: builder.mutation({
       query: (body) => ({ url: '/api/vehicles', method: 'POST', body }),
-      invalidatesTags: ['Vehicles'],
+      invalidatesTags: [{ type: 'Vehicles', id: 'LIST' }],
     }),
     updateMilestoneInterval: builder.mutation({
       query: ({ id, ...body }) => ({

@@ -72,7 +72,7 @@ export default function LandingPage() {
             <div className="w-7 h-7 bg-stone-900 rounded-lg flex items-center justify-center">
               <Truck size={14} className="text-white" />
             </div>
-            <span className="text-[15px] font-semibold tracking-tight">FleetOps</span>
+            <span className="text-[15px] font-semibold tracking-tight">MpFleets</span>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -108,7 +108,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="max-w-xl mx-auto text-lg text-stone-500 leading-relaxed mb-10">
-            FleetOps connects your entire fleet — vehicles, drivers, maintenance crews, and managers — in one platform built for clarity and speed.
+            MpFleets connects your entire fleet — vehicles, drivers, maintenance crews, and managers — in one platform built for clarity and speed.
           </p>
 
           <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -236,7 +236,7 @@ export default function LandingPage() {
             <div className="w-6 h-6 bg-stone-900 rounded-md flex items-center justify-center">
               <Truck size={12} className="text-white" />
             </div>
-            <span className="text-sm font-semibold text-stone-900">FleetOps</span>
+            <span className="text-sm font-semibold text-stone-900">MpFleets</span>
           </div>
           <p className="text-xs text-stone-400">Operational intelligence for modern fleet logistics.</p>
         </div>

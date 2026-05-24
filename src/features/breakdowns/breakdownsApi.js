@@ -4,11 +4,17 @@ export const breakdownsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     reportBreakdown: builder.mutation({
       query: (body) => ({ url: '/api/breakdowns', method: 'POST', body }),
-      invalidatesTags: ['Breakdowns'],
+      invalidatesTags: [{ type: 'Breakdowns', id: 'LIST' }],
     }),
     getBreakdowns: builder.query({
       query: () => '/api/breakdowns',
-      providesTags: ['Breakdowns'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((b) => ({ type: 'Breakdowns', id: b.id })),
+                { type: 'Breakdowns', id: 'LIST' },
+              ]
+              : [{ type: 'Breakdowns', id: 'LIST' }],
       refetchOnMountOrArgChange: true,
     }),
     getBreakdownById: builder.query({
@@ -22,18 +28,32 @@ export const breakdownsApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { replacementVehicleId, staffId },
       }),
-      invalidatesTags: ['Breakdowns', 'Vehicles', 'Trips'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Breakdowns', id },
+        { type: 'Breakdowns', id: 'LIST' },
+        { type: 'Vehicles', id: 'LIST' },
+        { type: 'Trips', id: 'LIST' },
+      ],
     }),
     resolveBreakdown: builder.mutation({
       query: (id) => ({
         url: `/api/breakdowns/${id}/resolve`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['Breakdowns'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Breakdowns', id },
+        { type: 'Breakdowns', id: 'LIST' },
+      ],
     }),
     getPlatformBreakdowns: builder.query({
       query: () => '/api/platform/breakdowns',
-      providesTags: ['Breakdowns'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((b) => ({ type: 'Breakdowns', id: b.id })),
+                { type: 'Breakdowns', id: 'LIST' },
+              ]
+              : [{ type: 'Breakdowns', id: 'LIST' }],
       refetchOnMountOrArgChange: true,
     }),
     dispatchCrew: builder.mutation({
@@ -42,7 +62,10 @@ export const breakdownsApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { crewId },
       }),
-      invalidatesTags: ['Breakdowns'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Breakdowns', id },
+        { type: 'Breakdowns', id: 'LIST' },
+      ],
     }),
   }),
 })

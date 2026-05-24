@@ -4,17 +4,27 @@ export const maintenanceApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createMaintenanceFlag: builder.mutation({
       query: (body) => ({ url: '/api/maintenance/flags', method: 'POST', body }),
-      invalidatesTags: ['Maintenance'],
+      invalidatesTags: [{ type: 'Maintenance', id: 'LIST' }],
     }),
     getMaintenanceFlags: builder.query({
       query: () => '/api/maintenance/flags',
-      providesTags: ['Maintenance'],
-      refetchOnMountOrArgChange: true,
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((flag) => ({ type: 'Maintenance', id: flag.id })),
+                { type: 'Maintenance', id: 'LIST' },
+              ]
+              : [{ type: 'Maintenance', id: 'LIST' }],
     }),
     getMyMaintenanceFlags: builder.query({
       query: () => '/api/maintenance/flags/my',
-      providesTags: ['Maintenance'],
-      refetchOnMountOrArgChange: true,
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((flag) => ({ type: 'Maintenance', id: flag.id })),
+                { type: 'Maintenance', id: 'LIST' },
+              ]
+              : [{ type: 'Maintenance', id: 'LIST' }],
     }),
     getMaintenanceFlagById: builder.query({
       query: (id) => `/api/maintenance/flags/${id}`,
@@ -23,7 +33,13 @@ export const maintenanceApi = apiSlice.injectEndpoints({
     }),
     getVehicleMaintenanceFlags: builder.query({
       query: (vehicleId) => `/api/maintenance/flags/vehicle/${vehicleId}`,
-      providesTags: ['Maintenance'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((flag) => ({ type: 'Maintenance', id: flag.id })),
+                { type: 'Maintenance', id: 'LIST' },
+              ]
+              : [{ type: 'Maintenance', id: 'LIST' }],
     }),
     submitQuotation: builder.mutation({
       query: ({ id, ...body }) => ({
@@ -31,7 +47,10 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }, 'Maintenance'],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     reviseQuotation: builder.mutation({
       query: ({ id, ...body }) => ({
@@ -39,14 +58,20 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }, 'Maintenance'],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     approveQuote: builder.mutation({
       query: (id) => ({
         url: `/api/maintenance/flags/${id}/approve-quote`,
         method: 'PATCH',
       }),
-      invalidatesTags: (r, e, id) => [{ type: 'Maintenance', id }, 'Maintenance'],
+      invalidatesTags: (r, e, id) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     rejectQuote: builder.mutation({
       query: ({ id, reason }) => ({
@@ -54,7 +79,10 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { reason },
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }, 'Maintenance'],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     updateProgress: builder.mutation({
       query: ({ id, progressNotes }) => ({
@@ -62,14 +90,20 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { progressNotes },
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     markDone: builder.mutation({
       query: (id) => ({
         url: `/api/maintenance/flags/${id}/done`,
         method: 'PATCH',
       }),
-      invalidatesTags: (r, e, id) => [{ type: 'Maintenance', id }, 'Maintenance'],
+      invalidatesTags: (r, e, id) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     resolveFlag: builder.mutation({
       query: ({ id, ...body }) => ({
@@ -77,7 +111,11 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }, 'Maintenance', 'Vehicles'],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+        { type: 'Vehicles', id: 'LIST' },
+      ],
     }),
     submitRating: builder.mutation({
       query: ({ id, ...body }) => ({
@@ -85,7 +123,10 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
     getFlagMessages: builder.query({
       query: (id) => `/api/maintenance/flags/${id}/messages`,
@@ -106,7 +147,10 @@ export const maintenanceApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { crewId },
       }),
-      invalidatesTags: (r, e, { id }) => [{ type: 'Maintenance', id }, 'Maintenance'],
+      invalidatesTags: (r, e, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
   }),
 })

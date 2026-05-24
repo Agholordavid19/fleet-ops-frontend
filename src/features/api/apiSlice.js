@@ -15,7 +15,7 @@ export const apiSlice = createApi({
   keepUnusedDataFor: 60,
   tagTypes: [
     'Auth', 'Companies', 'Vehicles', 'Trips', 'Maintenance', 'Breakdowns',
-    'Users', 'Platform', 'Reports', 'Activity', 'Crew', 'MileageLogs',
+    'Users', 'Reports', 'Activity', 'Crew', 'MileageLogs',
     'MaintenanceMessages', 'VehicleHealth', 'PlatformDashboard',
     'CompanyProfile', 'UserProfile', 'CrewPerformance',
   ],

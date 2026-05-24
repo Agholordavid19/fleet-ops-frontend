@@ -4,11 +4,17 @@ export const usersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createUser: builder.mutation({
       query: (body) => ({ url: '/api/company/users', method: 'POST', body }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }],
     }),
     getCompanyUsers: builder.query({
       query: () => '/api/company/users',
-      providesTags: ['Users'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((user) => ({ type: 'Users', id: user.id })),
+                { type: 'Users', id: 'LIST' },
+              ]
+              : [{ type: 'Users', id: 'LIST' }],
     }),
     getUserById: builder.query({
       query: (id) => `/api/company/users/${id}`,
@@ -16,11 +22,17 @@ export const usersApi = apiSlice.injectEndpoints({
     }),
     deactivateUser: builder.mutation({
       query: (id) => ({ url: `/api/company/users/${id}/deactivate`, method: 'PATCH' }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Users', id },
+        { type: 'Users', id: 'LIST' },
+      ],
     }),
     reactivateUser: builder.mutation({
       query: (id) => ({ url: `/api/company/users/${id}/reactivate`, method: 'PATCH' }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Users', id },
+        { type: 'Users', id: 'LIST' },
+      ],
     }),
     resetUserPassword: builder.mutation({
       query: ({ id, newPassword }) => ({
@@ -28,6 +40,7 @@ export const usersApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { newPassword },
       }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }],
     }),
     uploadUserMedia: builder.mutation({
       query: ({ id, ...body }) => ({
@@ -67,7 +80,10 @@ export const usersApi = apiSlice.injectEndpoints({
     }),
     logMileage: builder.mutation({
       query: (body) => ({ url: '/api/mileage-logs', method: 'POST', body }),
-      invalidatesTags: ['MileageLogs', 'Vehicles'],
+      invalidatesTags: (result, error, { vehicleId }) => [
+        { type: 'MileageLogs', id: vehicleId },
+        { type: 'Vehicles', id: 'LIST' },
+      ],
     }),
   }),
 })

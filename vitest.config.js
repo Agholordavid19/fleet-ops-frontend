@@ -15,6 +15,9 @@ export default defineConfig({
     setupFiles: './src/test/setup.js',
     css: false,
     testTimeout: 15000,
+    env: {
+      VITE_API_BASE_URL: 'http://localhost:8082',
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],

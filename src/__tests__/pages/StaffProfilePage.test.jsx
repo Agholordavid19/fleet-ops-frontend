@@ -30,8 +30,8 @@ describe('StaffProfilePage — rendering', () => {
     // name appears in sidebar + profile card — use getAllByText
     expect(screen.getAllByText('Alice Staff').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('alice@fleet.com')).toBeInTheDocument()
-    // 'Field Staff' appears exactly once in the sidebar
-    expect(screen.getByText('Field Staff')).toBeInTheDocument()
+    // 'Field Staff' appears in sidebar and profile card once data loads
+    expect(screen.getAllByText('Field Staff').length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows the initial avatar letter when no profile picture exists', async () => {

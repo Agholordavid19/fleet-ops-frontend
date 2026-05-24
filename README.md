@@ -12,6 +12,13 @@ MpFleet is a role-based fleet management platform that replaces WhatsApp message
   <img src="./screenshots/Dashboard.png" width="48%">
   <img src="./screenshots/maintenance-detail.jpg" width="48%">
 </p>
+
+
+<br/>
+
+<p align="center">
+  <img src="./screenshots/img.png" width="70%">
+</p>
 ---
 
 ## What it does

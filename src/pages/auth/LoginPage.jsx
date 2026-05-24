@@ -51,7 +51,7 @@ export default function LoginPage() {
           <div className="w-12 h-12 bg-stone-900 rounded-2xl flex items-center justify-center mb-4 shadow-[0_4px_12px_rgba(0,0,0,0.18)]">
             <Truck size={22} className="text-white" />
           </div>
-          <h1 className="text-2xl font-semibold text-stone-900 tracking-tight">FleetOps</h1>
+          <h1 className="text-2xl font-semibold text-stone-900 tracking-tight">MpFleets</h1>
           <p className="text-sm text-stone-500 mt-1">Sign in to your account</p>
         </div>
 

@@ -9,7 +9,13 @@ export const platformApi = apiSlice.injectEndpoints({
     }),
     getPlatformCrew: builder.query({
       query: () => '/api/platform/crew',
-      providesTags: ['Crew'],
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((crew) => ({ type: 'Crew', id: crew.id })),
+                { type: 'Crew', id: 'LIST' },
+              ]
+              : [{ type: 'Crew', id: 'LIST' }],
     }),
     getPlatformCrewById: builder.query({
       query: (id) => `/api/platform/crew/${id}`,
@@ -21,16 +27,24 @@ export const platformApi = apiSlice.injectEndpoints({
     }),
     createCrew: builder.mutation({
       query: (body) => ({ url: '/api/platform/crew', method: 'POST', body }),
-      invalidatesTags: ['Crew'],
+      invalidatesTags: [{ type: 'Crew', id: 'LIST' }],
     }),
     deleteCrew: builder.mutation({
       query: (id) => ({ url: `/api/platform/crew/${id}`, method: 'DELETE' }),
-      invalidatesTags: ['Crew'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Crew', id },
+        { type: 'Crew', id: 'LIST' },
+      ],
     }),
     getPlatformMaintenanceFlags: builder.query({
       query: () => '/api/platform/maintenance/flags',
-      providesTags: ['Maintenance'],
-      refetchOnMountOrArgChange: true,
+      providesTags: (result) =>
+          result
+              ? [
+                ...result.map((flag) => ({ type: 'Maintenance', id: flag.id })),
+                { type: 'Maintenance', id: 'LIST' },
+              ]
+              : [{ type: 'Maintenance', id: 'LIST' }],
     }),
     assignCrewToFlag: builder.mutation({
       query: ({ id, crewId }) => ({
@@ -38,7 +52,10 @@ export const platformApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { crewId },
       }),
-      invalidatesTags: ['Maintenance'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Maintenance', id },
+        { type: 'Maintenance', id: 'LIST' },
+      ],
     }),
   }),
 })
