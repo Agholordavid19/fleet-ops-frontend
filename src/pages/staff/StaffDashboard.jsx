@@ -28,7 +28,7 @@ export default function StaffDashboard() {
         {loadingVehicles || loadingTrips
           ? Array(4).fill(0).map((_, i) => <SkeletonMetricCard key={i} />)
           : [
-            { title: 'Available Vehicles', value: vehicleCount, icon: Truck },
+            { title: 'Available Vehicles', value: vehicleCount, icon: Truck, valueColor: 'text-green-600', onClick: () => navigate('/staff/vehicles/available') },
             { title: 'Pending Trips', value: pendingTrips, icon: MapPin },
             { title: 'Approved Trips', value: approvedTrips, icon: CheckCircle, accent: true },
             { title: 'Completed', value: completedTrips, icon: CheckCircle },

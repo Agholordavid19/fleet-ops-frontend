@@ -75,27 +75,9 @@ export default function VehicleDetailPage() {
   const [pendingImages, setPendingImages] = useState([])
 
   const mediaList = vehicle?.images ?? []
-
-  // async function handleDownloadPdf() {
-  //   const response = await fetch(
-  //     `${import.meta.env.VITE_API_BASE_URL}/api/vehicles/${id}/lifecycle.pdf`,
-  //     { headers: { Authorization: `Bearer ${token}` } }
-  //   )
-  //   if (!response.ok) {
-  //     toast.error('Failed to download PDF')
-  //     return
-  //   }
-  //   const blob = await response.blob()
-  //   const url = window.URL.createObjectURL(blob)
-  //   window.open(url, '_blank')
-  // }
-
   async function handleDownloadPdf() {
     try {
       const url = `${import.meta.env.VITE_API_BASE_URL}/api/vehicles/${id}/lifecycle.pdf`
-
-      console.log('PDF URL:', url)
-      console.log('Token exists:', !!token)
 
       const response = await fetch(url, {
         method: 'GET',
@@ -114,8 +96,7 @@ export default function VehicleDetailPage() {
       const fileUrl = window.URL.createObjectURL(blob)
       window.open(fileUrl, '_blank')
     } catch (error) {
-      console.error('PDF download failed:', error)
-      toast.error('Could not connect to backend to download PDF')
+      toast.error('Could not connect to backend to download PDF'+ error)
     }
   }
 

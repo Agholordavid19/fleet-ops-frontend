@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Building2, Truck, Wrench, AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
 import PageWrapper from '../../components/layout/PageWrapper'
 import MetricCard from '../../components/ui/MetricCard'
@@ -15,6 +16,7 @@ import { formatRelativeTime } from '../../utils/formatters'
 import Modal from '../../components/ui/Modal'
 
 export default function PlatformDashboard() {
+  const navigate = useNavigate()
   const toast = useToast()
   const { data: summary, isLoading: loadingSummary } = useGetPlatformDashboardQuery()
   const { data: companies, isLoading: loadingCompanies } = useGetPlatformCompaniesQuery()
@@ -55,7 +57,7 @@ export default function PlatformDashboard() {
     { title: 'Total Companies', value: summary?.totalCompanies, icon: Building2 },
     { title: 'Active Companies', value: summary?.activeCompanies, icon: CheckCircle, accent: true },
     { title: 'Open Maintenance Flags', value: summary?.totalOpenFlags, icon: Wrench },
-    { title: 'Total Breakdowns', value: summary?.totalBreakdowns, icon: AlertTriangle },
+    { title: 'Total Breakdowns', value: summary?.totalBreakdowns, icon: AlertTriangle, valueColor: 'text-red-600', onClick: () => navigate('/platform/breakdowns') },
   ]
 
   return (

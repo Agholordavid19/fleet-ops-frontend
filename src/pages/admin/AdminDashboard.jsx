@@ -1,4 +1,5 @@
 import { useMemo, Suspense } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Truck, MapPin, Wrench, AlertTriangle, CheckCircle } from 'lucide-react'
 import PageWrapper from '../../components/layout/PageWrapper'
 import MetricCard from '../../components/ui/MetricCard'
@@ -30,6 +31,7 @@ function ActivityIcon({ type }) {
 }
 
 export default function AdminDashboard() {
+  const navigate = useNavigate()
   const toast = useToast()
   const { data: vehicles, isLoading: loadingVehicles } = useGetVehiclesQuery()
   const { data: trips, isLoading: loadingTrips } = useGetTripsQuery()
@@ -95,10 +97,10 @@ export default function AdminDashboard() {
           ? Array(5).fill(0).map((_, i) => <SkeletonMetricCard key={i} />)
           : [
             { title: 'Total Vehicles', value: totalVehicles, icon: Truck },
-            { title: 'Available', value: available, icon: CheckCircle, accent: true },
-            { title: 'Active Trips', value: activeTrips, icon: MapPin },
+            { title: 'Available', value: available, icon: CheckCircle, accent: true, valueColor: 'text-green-600', onClick: () => navigate('/admin/vehicles') },
+            { title: 'Active Trips', value: activeTrips, icon: MapPin, valueColor: 'text-blue-600', onClick: () => navigate('/admin/trips') },
             { title: 'Open Flags', value: openFlags, icon: Wrench },
-            { title: 'Breakdowns', value: activeBreakdowns, icon: AlertTriangle },
+            { title: 'Breakdowns', value: activeBreakdowns, icon: AlertTriangle, valueColor: 'text-red-600', onClick: () => navigate('/admin/breakdowns') },
           ].map((m) => <MetricCard key={m.title} {...m} />)
         }
       </div>
